@@ -1,7 +1,73 @@
-<ng-container >
-    <div class="flex items-center justify-center h-20">
-        <a style="cursor: pointer;" matTooltip="Đi tới Portal App">
-            <img class="w-8" src="../../../assets/image/logo.png" >
-        </a>
+<div
+  class="relative flex flex-col flex-0 justify-center w-full h-16 overflow-hidden z-49 shadow dark:shadow-none print:hidden"
+>
+  <div
+    class="relative dark flex flex-auto justify-center w-full px-4 md:px-8 bg-gray-200"
+  >
+    <!-- logo -->
+    <ng-container>
+      <div class="flex items-center">
+        <img
+          src="../../../assets/image/logo.png"
+          alt="Company Logo"
+          class="w-48 h-6 object-contain"
+        />
+      </div>
+    </ng-container>
+
+    <!-- search bar -->
+    <div class="flex items-center pl-2 ml-auto space-x-0.5">
+      <app-search [appearance]="'bar'"></app-search>
     </div>
-</ng-container>
+
+    <!-- user icon -->
+
+    <div
+      [matMenuTriggerFor]="userActions"
+      class="h-name-user"
+      style="
+        margin-right: 16px;
+        flex-direction: row;
+        display: flex;
+        cursor: pointer;
+        align-items: center;
+      "
+    >
+      <span class="relative" *ngIf="user$.value ? true : false">
+        <img
+          mat-icon-button
+          class="w-8 h-8 rounded-full ng-star-inserted"
+          style="width: 32px !important; height: 32px !important"
+        />
+      </span>
+      <div class="u-name ml-4">
+        <!-- <div>{{ user$.value?.hoten }}</div> -->
+        <div>Họ và tên</div>
+        <!-- <div style="color: #7B7B7B;">{{ user$.value?.chucdanh }}</div> -->
+      </div>
+    </div>
+    <mat-menu class="menuPopup" [xPosition]="'before'" #userActions="matMenu">
+      <div
+        mat-menu-item
+        style="
+          display: flex;
+          height: 72px;
+          align-items: center;
+          margin-bottom: 12px;
+        "
+      >
+        <div style="display: flex; align-items: center; flex-direction: column">
+          <!-- <span style="line-height: 16px">{{ user$.value?.hoten }}</span> -->
+          <span style="line-height: 16px">họ và tên</span>
+          <!-- <span style="line-height: 16px; color: grey">Phòng ban: {{ user$.value?.tenphongban }}</span> -->
+        </div>
+      </div>
+
+      <mat-divider class="my-2"></mat-divider>
+      <button mat-menu-item (click)="signOut()">
+        <i class="fal fa-sign-out mr-2" style="font-size: 24px"></i>
+        <span>Sign out</span>
+      </button>
+    </mat-menu>
+  </div>
+</div>
