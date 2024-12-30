@@ -7,6 +7,7 @@
     <!-- logo -->
     <ng-container>
       <div class="flex items-center">
+       
         <img
           src="../../../assets/image/logo.png"
           alt="Company Logo"
@@ -22,7 +23,7 @@
 
     <!-- user icon -->
 
-    <div
+    <!-- <div
       [matMenuTriggerFor]="userActions"
       class="h-name-user"
       style="
@@ -41,9 +42,7 @@
         />
       </span>
       <div class="u-name ml-4">
-        <!-- <div>{{ user$.value?.hoten }}</div> -->
         <div>Họ và tên</div>
-        <!-- <div style="color: #7B7B7B;">{{ user$.value?.chucdanh }}</div> -->
       </div>
     </div>
     <mat-menu class="menuPopup" [xPosition]="'before'" #userActions="matMenu">
@@ -57,9 +56,7 @@
         "
       >
         <div style="display: flex; align-items: center; flex-direction: column">
-          <!-- <span style="line-height: 16px">{{ user$.value?.hoten }}</span> -->
           <span style="line-height: 16px">họ và tên</span>
-          <!-- <span style="line-height: 16px; color: grey">Phòng ban: {{ user$.value?.tenphongban }}</span> -->
         </div>
       </div>
 
@@ -68,6 +65,20 @@
         <i class="fal fa-sign-out mr-2" style="font-size: 24px"></i>
         <span>Sign out</span>
       </button>
-    </mat-menu>
+    </mat-menu> -->
+    <button mat-icon-button matTooltip="My Account" [matMenuTriggerFor]="userAccountMenu">
+      <mat-icon>account_circle</mat-icon>
+  </button>
+  <mat-menu #userAccountMenu [overlapTrigger]="false" yPosition="below">
+      <button mat-menu-item routerLink="#">
+          <mat-icon>person</mat-icon><span>Name</span>
+      </button>
+      
+      <mat-divider></mat-divider>
+      <button mat-menu-item routerLink="#" (click)="signOut()">
+          <mat-icon>exit_to_app</mat-icon>Logout
+      </button>
+  </mat-menu>
   </div>
+
 </div>
