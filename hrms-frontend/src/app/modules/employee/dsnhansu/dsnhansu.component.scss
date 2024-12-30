@@ -1,0 +1,28 @@
+:host ::ng-deep {
+  .p-tree {
+    padding: 0px !important;
+  }
+  .mat-mdc-tab-group {
+    width: 100% !important;
+    .mat-mdc-tab-header .mat-mdc-tab-label-container {
+      margin: 0px 0px !important;
+    }
+    .mat-mdc-tab-body-content {
+      padding: 16px 0px !important;
+    }
+  }
+
+  .p-column-filter-menu-button,
+  .p-column-filter-clear-button {
+    display: none !important;
+  }
+
+  .p-inputtext.p-component {
+    background-color: #f9f9f9 !important; 
+    border: 1px solid gray !important; 
+    border-radius: 5px !important; 
+    padding: 6px 8px !important; 
+    font-size: 14px !important; 
+    color: #333 !important; 
+  }
+}

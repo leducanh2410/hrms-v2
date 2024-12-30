@@ -1,0 +1,45 @@
+<div class="flex flex-col max-h-screen w-[900px] h-[60vh]">
+    <div class="flex items-center justify-between w-full py-2 px-4 flex-0 bg-primary">
+        <div class="text-lg font-medium text-white head-modal ">
+            <span>Chọn cột hiển thị</span>
+        </div>
+        <button class="flex right w-10 h-10 text-xl rounded-full bg-blue-700 items-center justify-center" mat-icon-button mat-dialog-close (click)="closeDialog()">
+            <i class="fa-light fa-xmark icon-size-5 text-white"></i>
+        </button>
+    </div>
+    <div class="flex flex-col w-full h-full" mat-dialog-content>
+        <div class="flex h-2 bg-card"></div>
+        <p-table class="w-full overflow-y-auto" [value]="columns" [(selection)]="columnsSelected" dataKey="field"  
+            [globalFilterFields]="['columnName']" responsiveLayout="stack" 
+            scrollHeight="calc(80vh - 8.5rem)">
+            <ng-template pTemplate="header">    
+                <tr>
+                    <th  class="w-1/8 text-center border border-gray-200">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th>
+                    <th class="font-bold border border-gray-200">Tên trường dữ liệu</th>
+                </tr>
+                <tr>
+                    <th class="w-1/8 border border-gray-200"></th>
+                    <th class="w-x border border-gray-200">
+                        <p-columnFilter type="text" field="columnName" [matchMode]="'contains'" display="row"></p-columnFilter>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-column>
+                <tr >
+                    <td class="w-1/8 text-center border border-gray-200">
+                        <p-tableCheckbox [value]="column"></p-tableCheckbox>
+                    </td>
+                    <td class="w-x border border-gray-200">{{column.columnName}}</td>
+
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    <div mat-dialog-actions [align]="'end'" class="py-2 pr-4">
+        <button  mat-flat-button (click)="onSave()" color="primary">Chọn</button>
+
+    </div>
+
+</div>
