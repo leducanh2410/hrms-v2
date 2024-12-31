@@ -40,6 +40,8 @@ import { ButtonModule } from 'primeng/button';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { StoreModule } from '@ngrx/store';
 import { HeaderComponent } from '../../../layout/header/header.component';
+import { FormdonviTreeComponent } from '../../../../assets/lib/formdonvi-tree/src/public-api';
+
 
 
 @Component({
@@ -249,7 +251,7 @@ export class DsnhansuComponent implements OnInit, OnDestroy {
   }
 
   onSelectOrg() {
-    const dialogRef = this._matDialog.open(DialogDsNhansuColumnSelectComponent, {
+    const dialogRef = this._matDialog.open(FormdonviTreeComponent, {
         disableClose: false,
         // width: '900px',
         // height: '80vh',
