@@ -47,7 +47,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { InputTextModule } from 'primeng/inputtext';
 import { DanhsachhdldComponent } from './danhsachhdld/danhsachhdld.component';
 import { NsdenhanDialogComponent } from './danhsachhdld/nsdenhan-dialog/nsdenhan-dialog.component';
-import { NsthaydoivtcdDialogComponent } from './danhsachhdld/nsthaydoivtcd-dialog/nsthaydoivtcd-dialog.component';
+import { NsthaydoivtcdDialogComponent } from './danhsachhdld/taohdld-dialog/taohdld-dialog.component';
 import { HesophucapDialogComponent } from './danhsachhdld/hesophucap-dialog/hesophucap-dialog.component';
 
 const routes: Route[] = [

@@ -1,5 +1,6 @@
 import {
   Component,
+  CUSTOM_ELEMENTS_SCHEMA,
   ElementRef,
   Inject,
   QueryList,
@@ -29,7 +30,7 @@ import { NsdenhanDialogComponent } from './nsdenhan-dialog/nsdenhan-dialog.compo
 import { ThongtincanhbaoUI } from '../model/ThongtincanhbaoUI';
 import { NsDanhsachHdld } from '../model/NsDanhsachHdld';
 import { ParamNsHdldBean } from '../model/NsHdldParam';
-import { NsthaydoivtcdDialogComponent } from './nsthaydoivtcd-dialog/nsthaydoivtcd-dialog.component';
+import { TaoHdldDialogComponent } from './taohdld-dialog/taohdld-dialog.component';
 import { MatSelectChange } from '@angular/material/select';
 import { DanhMucURL } from '../../../services/employe/danhmucURL';
 import { ThamsoluongformComponent } from '../../employee/hosonhansu/pages/qtrluong/luongdialog/thamsoluongform/thamsoluongform.component';
@@ -44,7 +45,12 @@ import { DropdownModule } from 'primeng/dropdown';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -58,6 +64,11 @@ import {
   MatDrawerContainer,
   MatDrawerContent,
 } from '@angular/material/sidenav';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatIconModule } from '@angular/material/icon';
+import { InputTextModule } from 'primeng/inputtext';
+import { CalendarModule } from 'primeng/calendar';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 @Component({
   selector: 'app-danhsachhdld',
@@ -80,8 +91,15 @@ import {
     ListEmployeeComponent,
     MatDrawerContainer,
     MatDrawerContent,
-    MatDrawer
+    MatDrawer,
+    MatTabsModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    InputTextModule,
+    CalendarModule,
+    InputTextareaModule,
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class DanhsachhdldComponent {
   @ViewChild('fileInput', { static: false })
@@ -90,6 +108,10 @@ export class DanhsachhdldComponent {
 
   drawerMode: 'over' | 'side' = 'side';
   drawerOpened: boolean = true;
+
+  selectedTabIndex: number = 0; // Tab mặc định là 0 (Hợp đồng)
+
+  insuranceForm: FormGroup;
 
   titleForm: String;
   placeHolderTenDanhsach: String;
@@ -137,7 +159,8 @@ export class DanhsachhdldComponent {
     private http: CommonApiService,
     private mb: MessageBox,
     private _matDialog: MatDialog,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private fb: FormBuilder
   ) {
     const appUser = this.store.select((state) => state.appUser);
     appUser.subscribe((res: any) => {
@@ -147,6 +170,25 @@ export class DanhsachhdldComponent {
         this.donviId = this.user_info.iddonvi;
       }
     });
+
+    this.insuranceForm = this.fb.group({
+      insuranceNumber: [''],
+      insuranceCode: [''],
+      insuranceName: [''],
+      insuranceStartDate: [''],
+      insuranceEndDate: [''],
+      insuranceNote: [''],
+      isActive: [false],
+      isInInsurance: [false],
+    });
+  }
+
+  handleButtonClick(action: string): void {
+    console.log(`Action performed: ${action}`);
+  }
+
+  onTabChange(index: number): void {
+    this.selectedTabIndex = index;
   }
 
   ngOnInit(): void {
@@ -1013,7 +1055,7 @@ export class DanhsachhdldComponent {
   }
 
   onChonNs2() {
-    const dialogRef = this._matDialog.open(NsthaydoivtcdDialogComponent, {
+    const dialogRef = this._matDialog.open(TaoHdldDialogComponent, {
       width: '1300px',
       disableClose: true,
       data: {
@@ -1094,5 +1136,22 @@ export class DanhsachhdldComponent {
 
   onClose() {
     this.matDialogRef.close();
+  }
+
+  onTaoHopDong() {
+    const dialogRef = this._matDialog.open(TaoHdldDialogComponent, {
+      width: '1300px',
+      disableClose: true,
+      data: {
+        donviId: this.donviId,
+      },
+    });
+  }
+
+  onXoaHopDong() {
+    let dialog = this.mb.showDefault(
+      'Bạn có chắc muốn xóa hợp đồng này?',
+      Buttons.YesNo
+    );
   }
 }

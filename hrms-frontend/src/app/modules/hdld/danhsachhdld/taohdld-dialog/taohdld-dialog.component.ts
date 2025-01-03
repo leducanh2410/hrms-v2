@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Inject, Output } from '@angular/core';
+import {
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  EventEmitter,
+  forwardRef,
+  Inject,
+  Output,
+} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -15,18 +22,69 @@ import moment from 'moment';
 import { Moment } from 'moment';
 import { Subject, takeUntil } from 'rxjs';
 import { FormdonviTreeComponent } from '../../../../../assets/lib/formdonvi-tree/src/public-api';
-import { FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  NG_VALUE_ACCESSOR,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { TableModule } from 'primeng/table';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ButtonModule } from 'primeng/button';
+import { CalendarModule } from 'primeng/calendar';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { CommonModule } from '@angular/common';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-nsthaydoivtcd-dialog',
-  templateUrl: './nsthaydoivtcd-dialog.component.html',
-  styleUrls: ['./nsthaydoivtcd-dialog.component.scss'],
-  imports: [FormsModule, MatFormFieldModule, MatDatepickerModule, TableModule],
+  selector: 'app-taohdld-dialog',
+  templateUrl: './taohdld-dialog.component.html',
+  styleUrls: ['./taohdld-dialog.component.scss'],
+  imports: [
+    FormsModule,
+    MatFormFieldModule,
+    MatDatepickerModule,
+    TableModule,
+    ReactiveFormsModule,
+    DropdownModule,
+    InputTextModule,
+    InputTextareaModule,
+    CheckboxModule,
+    ButtonModule,
+    CalendarModule,
+    InputNumberModule,
+    FormsModule,
+    CommonModule,
+    AutoCompleteModule,
+    MatIconModule
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class NsthaydoivtcdDialogComponent {
+export class TaoHdldDialogComponent {
+  phapNhanOptions = [
+    { label: 'Công ty A', value: 1 },
+    { label: 'Công ty B', value: 2 },
+  ];
+
+  pheDuyetOptions = [
+    { label: 'Duyệt', value: 1 },
+    { label: 'Chờ duyệt', value: 2 },
+    { label: 'Không duyệt', value: 3 },
+  ];
+
+  selectedDate: Date;
+  selectedPheDuyet: number;
+
   donviId: any;
   tenDonvi: string;
   donviList: any[];
@@ -41,12 +99,13 @@ export class NsthaydoivtcdDialogComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    public matDialogRef: MatDialogRef<NsthaydoivtcdDialogComponent>,
+    public matDialogRef: MatDialogRef<TaoHdldDialogComponent>,
     private messageService: MessageService,
     private http: CommonApiService,
     private _matDialog: MatDialog,
     private store: Store<AppState>,
-    private mb: MessageBox
+    private mb: MessageBox,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
