@@ -18,33 +18,32 @@ import { MatMenuModule } from '@angular/material/menu';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { StoreModule } from '@ngrx/store';
 
-
 const routes: Route[] = [
-    {
-        path: '',
-        component: DsnhansuComponent,
-    },
+  {
+    path: '',
+    component: DsnhansuComponent,
+  },
 ];
 @NgModule({
-    declarations: [DsnhansuComponent, DialogDsNhansuColumnSelectComponent],
-    imports: [
-        RouterModule.forChild(routes),
-        CommonModule,
-        MatButtonModule,
-        MatFormFieldModule,
-        MatInputModule,
-        FormsModule,
-        TableModule,
-        CheckboxModule,
-        MatInputModule,
-        TreeModule,
-        MatDialogModule,
-        ButtonModule,
-        InputSwitchModule,
-        TooltipModule,
-        MatMenuModule,
-        NgxExtendedPdfViewerModule,
-        StoreModule
-    ],
+  declarations: [],
+  imports: [
+    RouterModule.forChild(routes),
+    CommonModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    TableModule,
+    CheckboxModule,
+    MatInputModule,
+    TreeModule,
+    MatDialogModule,
+    ButtonModule,
+    InputSwitchModule,
+    TooltipModule,
+    MatMenuModule,
+    NgxExtendedPdfViewerModule,
+    StoreModule,
+  ],
 })
 export class DsnhansuModule {}

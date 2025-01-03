@@ -1,0 +1,81 @@
+<div class="flex h-full items-center justify-center">
+  <!-- table thong ke-->
+  <div
+    class="flex flex-col gap-4 w-3/4 max-w-md mx-auto absolute left-5 top-5 !important"
+  >
+    <mat-table
+      [dataSource]="thongKe"
+      class="!border-spacing-4 !border-collapse !border !border-slate-500 !w-[250px] !top-1"
+    >
+      <!-- Column 1: Icon + Text -->
+      <ng-container matColumnDef="column1">
+        <mat-header-cell *matHeaderCellDef class="!bg-blue-900 !text-white">
+          Thống kê
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="flex items-center gap-2">
+          <ng-container *ngIf="element.icon; else textOnly">
+            <mat-icon class="text-blue-500">{{ element.icon }}</mat-icon>
+            <span>{{ element.column1 }}</span>
+          </ng-container>
+          <ng-template #textOnly>
+            {{ element.column1 }}
+          </ng-template>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Column 2: Text -->
+      <ng-container matColumnDef="column2">
+        <mat-header-cell *matHeaderCellDef class="!bg-blue-900 !text-white">
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{ element.column2 }}
+        </mat-cell>
+      </ng-container>
+
+      <!-- Table Rows -->
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns" class="border-t">
+      </mat-row>
+    </mat-table>
+
+    <mat-table
+      [dataSource]="thongTinCaNhan"
+      class="!border-spacing-4 !border-collapse !border !border-slate-500 !w-[250px] !top-1"
+    >
+      <!-- Column 1: Icon + Text -->
+      <ng-container matColumnDef="column1">
+        <mat-header-cell *matHeaderCellDef class="!bg-blue-900 !text-white">
+          Thông tin cá nhân
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="flex items-center gap-2">
+          <ng-container *ngIf="element.icon; else textOnly">
+            <span>{{ element.column1 }}</span>
+          </ng-container>
+          <ng-template #textOnly>
+            {{ element.column1 }}
+          </ng-template>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Column 2: Text -->
+      <ng-container matColumnDef="column2">
+        <mat-header-cell *matHeaderCellDef class="!bg-blue-900 !text-white">
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{ element.column2 }}
+        </mat-cell>
+      </ng-container>
+
+      <!-- Table Rows -->
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns" class="border-t">
+      </mat-row>
+    </mat-table>
+  </div>
+
+  <!-- table thong tin ca nhan -->
+  <!-- <div class="border-collapse border border-slate-500  w-3/4 max-w-md mx-auto relative top-5 left-5 bottom-5">
+            
+                
+             </div>  -->
+</div>

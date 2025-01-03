@@ -98,16 +98,16 @@ export const AuthConfig = {
 /**
  * environment.
  */
- export const Environment = {
-    production: true,
-    expiration: 20,
-    appId: 'SMARTEVN',
-    appVersion: 'v2.1.4',
-    AppHome: window.location.origin,
-    Org_code: 'EVN',
-    KyHDLD_TheoLo: true,
-    Url_Origin: false,
-};
+//  export const Environment = {
+//     production: true,
+//     expiration: 20,
+//     appId: 'SMARTEVN',
+//     appVersion: 'v2.1.4',
+//     AppHome: window.location.origin,
+//     Org_code: 'EVN',
+//     KyHDLD_TheoLo: true,
+//     Url_Origin: false,
+// };
 
 
 

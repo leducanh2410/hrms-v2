@@ -1,12 +1,37 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { TreeNode } from 'primeng/api';
+import { TreeModule } from 'primeng/tree';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'lib-formphongban',
   templateUrl: './formphongban.component.html',
   styleUrls: [
     './formphongban.component.css'
+  ],
+  imports: [
+    TreeModule,
+    MatCheckboxModule,
+    MatTooltipModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatIconModule,
+    MatInputModule,
+    FormsModule,
+    CommonModule
   ]
 })
 export class FormphongbanComponent implements OnInit {

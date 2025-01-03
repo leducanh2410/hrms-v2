@@ -1,0 +1,7 @@
+.mat-expansion-panel .mat-expansion-panel-content .mat-expansion-panel-body {
+    display: none;
+}
+
+:host ::ng-deep .mat-expansion-panel-body {
+    padding: 0px;
+}

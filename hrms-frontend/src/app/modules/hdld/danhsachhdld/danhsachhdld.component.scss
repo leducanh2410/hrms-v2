@@ -1,0 +1,26 @@
+.no-input-style .ui-inputtext {
+    display: none;
+}
+
+.highlighted-row {
+    background-color: yellow; /* Đặt màu nền cho dòng */
+}
+
+.selected {
+    background-color: lightblue; /* Màu nền xanh */
+}
+
+.tooltip-disabled {
+    pointer-events: auto;
+  }
+
+.filter-container {
+    display: flex;
+    width: 100%;
+}
+
+.filter-input {
+    flex: 1;
+    width: 100%;
+    box-sizing: border-box;
+}

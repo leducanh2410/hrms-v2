@@ -49,7 +49,7 @@ export class AuthInterceptor implements HttpInterceptor {
         );
     }
     get accessToken(): string {
-        return this._cookie.get('accessToken' ?? '');
+        return this._cookie.get('accessToken') ?? null;
     }
 
     private addTokenHeader(request: HttpRequest<any>, token: string) {

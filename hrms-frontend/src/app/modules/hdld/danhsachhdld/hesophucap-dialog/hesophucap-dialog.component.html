@@ -1,0 +1,32 @@
+<div class="flex flex-col max-w-310 md:min-w-310 overflow-hidden max-h-screen -m-6">
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-12 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="flex">
+            <button mat-icon-button [tabIndex]="-1" (click)="onClose()">
+                <i class="fa-light fa-xmark icon-size-6"></i>
+            </button>
+        </div>
+    </div>
+
+    <div #mainns class="flex flex-col flex-auto h-modal" style="height: 450px;">
+        <p-table #dtns id="table" [value]="phucapList" dataKey="ngachluongId" responsiveLayout="scroll"  scrollHeight="{{mainns.offsetHeight - 54}}px"  [scrollable]="true">
+            <ng-template pTemplate="header">
+                <tr>                    
+                    <th *ngFor="let item of columns; let firstCol = first" class="w-16 text-center" [style.width]="firstCol ? '30%' : '7%'" style="text-align: center;"><span class="w-full">{{item}}</span></th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-phucap let-index="rowIndex">
+                <tr>
+                    <td *ngFor="let cell of phucap.lPhucapHesoList; let firstCol = first" class="flex justify-center items-center w-16" (dblclick)="onSelectHeso(cell)" [style.width]="firstCol ? '30%' : '7%'" style="text-align: center;">
+                        <div class="w-full">
+                            <span>{{cell.strHesopc}}</span>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+    </div>
+
+</div>

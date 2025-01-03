@@ -1,0 +1,320 @@
+<form
+  id="rightForm"
+  (ngSubmit)="rightForm.form.valid && saveAndClose()"
+  #rightForm="ngForm"
+  class="flex flex-col max-w-310 md:min-w-310 overflow-hidden max-h-screen -m-6"
+>
+  <!-- Header -->
+  <div
+    class="flex flex-0 items-center justify-between h-12 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary"
+  >
+    <div class="text-lg font-medium head-modal">
+      <span>Chi tiết đào tạo dài hạn</span>
+    </div>
+    <button mat-icon-button [tabIndex]="-1" (click)="close()">
+      <i class="fa-light fa-xmark icon-size-5"></i>
+    </button>
+  </div>
+
+  <div
+    #mainns
+    class="flex flex-col flex-auto h-modal max-h-128 overflow-y-auto"
+  >
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-8 w-full min-w-0 p-6 overflow-y-auto"
+    >
+      <div class="flex flex-col justify-center col-span-1">
+        <div class="mat-field-label">
+          Trường đào tạo<span class="font-bold text-red-500 text-md">*</span>
+        </div>
+        <p-autoComplete
+          [disabled]="stateForm"
+          [ngClass]="{
+            invalid:
+              rightForm.submitted &&
+              (truongDt == null ||
+                truongDt.noidaotao == '' ||
+                (this.truongDt.noidaotao == null &&
+                  this.truongDt.truongdtId == null))
+          }"
+          name="truongdt"
+          [style]="{ width: '100%' }"
+          [(ngModel)]="truongDt"
+          [suggestions]="filteredTruongDt"
+          (completeMethod)="search($event)"
+          field="name"
+          [dropdown]="true"
+          dataKey="id"
+          [required]
+          [virtualScroll]="true"
+          [completeOnFocus]="true"
+          [itemSize]="45"
+        >
+        </p-autoComplete>
+      </div>
+      <div class="flex flex-col justify-center col-span-1">
+        <div class="mat-field-label">
+          Ngành đào tạo<span class="font-bold text-red-500 text-md">*</span>
+        </div>
+        <p-autoComplete
+          [disabled]="stateForm"
+          [ngClass]="{
+            invalid:
+              rightForm.submitted &&
+              (nganhDt == null ||
+                nganhDt.tenNnghe == '' ||
+                (this.nganhDt.tenNnghe == null &&
+                  this.nganhDt.nganhngheId == null))
+          }"
+          name="nganhnghe"
+          [style]="{ width: '100%' }"
+          [(ngModel)]="nganhDt"
+          [suggestions]="filteredNganhDt"
+          (completeMethod)="searchNgNghe($event)"
+          field="name"
+          [dropdown]="true"
+          dataKey="id"
+          [required]
+          [virtualScroll]="true"
+          [completeOnFocus]="true"
+          [itemSize]="45"
+        >
+        </p-autoComplete>
+      </div>
+      <div class="flex flex-col justify-center">
+        <div class="mat-field-label">
+          Trình độ<span class="font-bold text-red-500 text-md">*</span>
+        </div>
+        <p-dropdown
+          [disabled]="stateForm"
+          panelStyleClass="max-w-full"
+          [style]="{ width: '100%' }"
+          [options]="listTrinhDo"
+          [filter]="true"
+          filterBy="name"
+          placeholder="&nbsp;"
+          [required]="true"
+          optionLabel="name"
+          optionValue="id"
+          name="trinhdo"
+          appendTo="body"
+          [(ngModel)]="data.trinhdoId"
+          (onChange)="changeTrinhdo($event.value)"
+        >
+        </p-dropdown>
+      </div>
+      <div class="flex flex-col justify-center">
+        <div class="mat-field-label">Học vị</div>
+        <p-dropdown
+          [disabled]="stateForm"
+          panelStyleClass="max-w-full"
+          [style]="{ width: '100%' }"
+          [options]="listHocVi"
+          [showClear]="true"
+          optionLabel="name"
+          placeholder="&nbsp;"
+          optionValue="id"
+          name="hocvi"
+          appendTo="body"
+          [filter]="true"
+          filterBy="name"
+          (onChange)="changeHocvi($event.value)"
+          [(ngModel)]="data.hocviId"
+        >
+        </p-dropdown>
+      </div>
+      <div class="flex flex-col justify-center">
+        <div class="mat-field-label">Hình thức đào tạo</div>
+        <p-dropdown
+          [disabled]="stateForm"
+          panelStyleClass="max-w-full"
+          [style]="{ width: '100%' }"
+          [options]="listHinhThucDaoTao"
+          placeholder="&nbsp;"
+          [showClear]="true"
+          optionLabel="name"
+          optionValue="id"
+          name="hthucdtao"
+          appendTo="body"
+          [filter]="true"
+          filterBy="name"
+          (onChange)="changeHthucdtao($event.value)"
+          [(ngModel)]="data.hthucdtaoId"
+        >
+        </p-dropdown>
+      </div>
+      <div class="flex items-start">
+        <div class="flex items-center">
+          <label
+            style="line-height: normal"
+            class="mat-field-label"
+            for="ngoaingu"
+            >Là ngành đào tạo ngoại ngữ</label
+          >
+          <p-checkbox
+            [disabled]="stateForm"
+            class="pl-2 self-center"
+            name="groupname"
+            [binary]="true"
+            inputId="ngoaingu"
+            [(ngModel)]="data.dtngoaingu"
+          ></p-checkbox>
+        </div>
+      </div>
+      <div class="flex items-center">
+        <mat-form-field class="fuse-mat-no-subscript w-full">
+          <mat-label class="">Thời gian từ ngày</mat-label>
+          <input
+            matInput
+            [matDatepicker]="tungay"
+            name="tungay"
+            [(ngModel)]="data.ngaybd"
+            [readonly]="stateForm"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="tungay"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #tungay [disabled]="stateForm"></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="flex items-center">
+        <mat-form-field class="fuse-mat-no-subscript w-full">
+          <mat-label class="">Đến ngày</mat-label>
+          <input
+            matInput
+            [matDatepicker]="denngay"
+            name="denngay"
+            [min]="data?.ngaybd"
+            [(ngModel)]="data.ngaykt"
+            [readonly]="stateForm"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="denngay"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #denngay [disabled]="stateForm"></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="flex items-center">
+        <mat-form-field appearance="fill" class="w-full -pl-2">
+          <mat-label class="">Năm tốt nghiệp</mat-label>
+          <input
+            #namTotnghiep="ngModel"
+            type="number"
+            matInput
+            placeholder=""
+            name="namTotnghiep"
+            [(ngModel)]="data.namTotnghiep"
+            [readonly]="stateForm"
+            required
+          />
+        </mat-form-field>
+      </div>
+      <div class="flex flex-col justify-center">
+        <div class="mat-field-label">Loại bằng tốt nghiệp</div>
+        <p-dropdown
+          [disabled]="stateForm"
+          [style]="{ width: '100%' }"
+          [options]="listBangCap"
+          optionLabel="name"
+          optionValue="id"
+          name="nganhang"
+          appendTo="body"
+          [filter]="true"
+          filterBy="name"
+          [(ngModel)]="data.xeploaiId"
+          placeholder="&nbsp;"
+          (onChange)="changeBangcap($event.value)"
+        >
+        </p-dropdown>
+      </div>
+      <div class="flex flex-col justify-center sm:col-span-2">
+        <div class="mat-field-label">Văn bằng đính kèm</div>
+        <p-fileUpload
+          #fileForm
+          accept="image/*,.doc,.docx,.pdf,.xls,.xlsx"
+          class="w-full text-base"
+          chooseLabel="Chọn"
+          cancelLabel="Hủy"
+          [customUpload]="true"
+          (onClear)="removeAllFiles($event)"
+          [maxFileSize]="102400000"
+          (onSelect)="myUploader($event, fileForm)"
+          [disabled]="stateForm"
+        >
+          <ng-template pTemplate="content">
+            <ul *ngIf="data.fileList">
+              <div *ngFor="let file of data.fileList">
+                <div
+                  *ngIf="!file.deleted"
+                  class="flex items-center justify-between w-full md:w-auto mt-2"
+                >
+                  <div class="fuse-mat-no-subscript w-2/5">
+                    <div class="mat-field-label truncate">
+                      {{ file.fileName }}
+                    </div>
+                  </div>
+
+                  <div class="fuse-mat-no-subscript w-1/5">
+                    <div class="mat-field-label">{{ file.fileSize }} bytes</div>
+                  </div>
+
+                  <div class="flex justify-end w-1/5">
+                    <!-- <p-button icon="pi pi-times" (click)></p-button> -->
+                    <button
+                      pButton
+                      icon="fa-light fa-trash-can"
+                      type="button"
+                      (click)="deleteFile(file)"
+                      [disabled]="stateForm"
+                    ></button>
+                  </div>
+                </div>
+              </div>
+            </ul>
+          </ng-template>
+          <ng-template let-file pTemplate="file">
+            <div
+              class="flex items-center justify-between w-full md:w-auto mt-2"
+            >
+              <div class="fuse-mat-no-subscript w-2/5">
+                <div class="mat-field-label truncate">{{ file.name }}</div>
+              </div>
+
+              <div class="fuse-mat-no-subscript w-1/5">
+                <div class="mat-field-label">{{ file.size }} bytes</div>
+              </div>
+
+              <div class="flex justify-end w-1/5">
+                <!-- <p-button icon="pi pi-times" (click)></p-button> -->
+                <button
+                  pButton
+                  icon="pi pi-times"
+                  type="button"
+                  (click)="removeFile(file, fileForm, $event)"
+                ></button>
+              </div>
+            </div>
+          </ng-template>
+        </p-fileUpload>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="flex flex-0 items-center justify-end h-12 mr-2 pr-3 sm:pr-5 pl-6 sm:pl-8 mt-2 text-on-primary"
+  >
+    <div mat-dialog-actions class="h-toolbar flex justify-end">
+      <button
+        type="submit"
+        class="mx-1 button-green"
+        mat-flat-button
+        [disabled]="stateForm"
+      >
+        <i class="fa-light fa-check icon-size-5"></i>
+        <span class="ml-2">Lưu</span>
+      </button>
+    </div>
+  </div>
+</form>

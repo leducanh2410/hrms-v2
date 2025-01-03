@@ -14,14 +14,12 @@ import { ImageModule } from 'primeng/image';
 
 @NgModule({
   declarations: [
-    FileviewComponent
   ],
   imports: [
     CommonModule,
     NgxExtendedPdfViewerModule,
     HttpClientModule,
     AgVirtualScrollModule,
-    Ng2SearchPipeModule,
     MatDialogModule,
     ImageviewModule,
     ImageModule,

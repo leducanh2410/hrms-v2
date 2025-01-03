@@ -1,0 +1,204 @@
+<!-- Header -->
+<div
+  class="flex flex-0 py-1 head-tool w-[100vw] border-b bg-white dark:bg-transparent"
+>
+  <div class="flex items-center w-full">
+    <button
+      class="min-w-0 sm:min-w-20 sm:mx-2"
+      mat-button
+      (click)="khoitaohoso()"
+    >
+      <i class="fa-light fa-plus-large"></i>
+      <span class="ml-2 hidden sm:inline-block">Khởi tạo mới hồ sơ</span>
+    </button>
+    <button
+      class="min-w-0 sm:min-w-20 sm:mx-2"
+      mat-button
+      (click)="suathongtin()"
+      [disabled]="!nsInfo || !nsInfo.nsID"
+    >
+      <i class="fa-light fa-pen-to-square"></i>
+      <span class="ml-2 hidden sm:inline-block"
+        >Sửa thông tin khởi tạo hồ sơ</span
+      >
+    </button>
+    <button
+      class="min-w-0 sm:min-w-20 sm:mx-2"
+      mat-button
+      (click)="xoahoso()"
+      [disabled]="!nsInfo || !nsInfo.nsID"
+    >
+      <i class="fa-light fa-trash-can"></i>
+      <span class="ml-2 hidden sm:inline-block">Xóa hồ sơ</span>
+    </button>
+    <button
+      class="min-w-0 sm:min-w-20 sm:mx-2"
+      mat-button
+      [matMenuTriggerFor]="menu"
+      [disabled]="!nsInfo || !nsInfo.nsID"
+    >
+      <i class="fa-light fa-file-word"></i>
+      <span class="ml-2 hidden sm:inline-block">Xem, Tải sơ yếu lý lịch</span>
+    </button>
+    <mat-menu #menu="matMenu">
+      <div mat-menu-item>
+        <p class="w-36">SYLL mẫu EVN</p>
+        <div>
+          <button mat-icon-button (click)="viewFile(1)">
+            <i class="fa-light fa-eye icon-size-5"></i>
+          </button>
+          <button class="ml-2" mat-icon-button (click)="download(1)">
+            <i class="fa-light fa-download icon-size-5"></i>
+          </button>
+        </div>
+      </div>
+      <div mat-menu-item>
+        <p class="w-36">SYLL mẫu 2cBNV</p>
+        <div>
+          <button mat-icon-button (click)="viewFile(2)">
+            <i class="fa-light fa-eye icon-size-5"></i>
+          </button>
+          <button class="ml-2" mat-icon-button (click)="download(2)">
+            <i class="fa-light fa-download icon-size-5"></i>
+          </button>
+        </div>
+      </div>
+      <div mat-menu-item>
+        <p class="w-36">SYLL mẫu 2cTCTW</p>
+        <div>
+          <button class="" mat-icon-button (click)="viewFile(3)">
+            <i class="fa-light fa-eye icon-size-5"></i>
+          </button>
+          <button class="ml-2" mat-icon-button (click)="download(3)">
+            <i class="fa-light fa-download icon-size-5"></i>
+          </button>
+        </div>
+      </div>
+    </mat-menu>
+  </div>
+  <div class="flex items-center min-w-max justify-end">
+    <button class="mx-2" mat-flat-button (click)="onChonNhansu()">
+      <i class="fa-light fa-user"></i>
+      <span class="ml-2 hidden sm:inline-block">Chọn nhân sự</span>
+    </button>
+  </div>
+</div>
+<!-- Main -->
+<div
+  class="flex-auto py-2 px-2 shadow overflow-y-auto border-b w-full"
+  cdkScrollable
+>
+  <div #main class="flex flex-col sm:flex-row w-panel mx-auto relative">
+    <div class="flex flex-col justify-center items-center sm:min-w-50">
+      <app-imageview
+        *ngIf="isHienthiTtin"
+        [source]="nsInfo?.anhNs"
+        [type]="'base64'"
+        [width]="72"
+        [height]="96"
+      ></app-imageview>
+      <div class="flex items-center">
+        <button class="" mat-icon-button (click)="toggleMenu()">
+          <i class="fal fa-bars icon-size-5"></i>
+        </button>
+        <p-fileUpload
+          #fileForm
+          accept="image/*"
+          class="text-base !bg-none !whitespace-nowrap"
+          chooseLabel="Cập nhật ảnh"
+          chooseStyleClass="text-white"
+          chooseIcon=""
+          cancelLabel="Hủy"
+          [maxFileSize]="512000"
+          (onSelect)="myUploader($event, fileForm)"
+          mode="basic"
+          [auto]="true"
+          [disabled]="!nsInfo"
+        >
+        </p-fileUpload>
+        <button class="sm:hidden" mat-icon-button (click)="toggle()">
+          <i *ngIf="!isHienthiTtin" class="fal fa-angle-down icon-size-5"></i>
+          <i *ngIf="isHienthiTtin" class="fal fa-angle-up icon-size-5"></i>
+        </button>
+        <button class="hidden sm:block" mat-icon-button (click)="toggle()">
+          <i *ngIf="!isHienthiTtin" class="fal fa-angle-down icon-size-5"></i>
+          <i *ngIf="isHienthiTtin" class="fal fa-angle-up icon-size-5"></i>
+        </button>
+      </div>
+    </div>
+    <div
+      *ngIf="isHienthiTtin"
+      #thongtinchung
+      class="grid grid-rows-11 sm:grid-rows-none sm:grid-cols-7 gap-x-2 w-full min-w-0 overflow-hidden"
+    >
+      <div class="flex items-center h-8 sm:col-span-2">
+        <div class="w-1/2 sm:w-24 text-right mr-2 whitespace-nowrap">
+          Tên khai sinh:
+        </div>
+        <div>{{ nsInfo?.tenkhaisinh }}</div>
+      </div>
+      <div class="flex items-center h-8 sm:col-span-2">
+        <div class="w-1/2 sm:w-40 text-right mr-2 whitespace-nowrap">
+          Số hiệu:
+        </div>
+        <div>{{ nsInfo?.sohieu }}</div>
+      </div>
+      <div class="flex items-center h-8 sm:col-span-3">
+        <div class="w-1/2 sm:w-40 text-right mr-2 whitespace-nowrap">
+          Hợp đồng lao động:
+        </div>
+        <div>{{ nsInfo?.tenHD }}</div>
+      </div>
+      <div class="flex items-center h-8 sm:col-span-2">
+        <div class="w-1/2 sm:w-24 text-right mr-2 whitespace-nowrap">
+          Giới tính:
+        </div>
+        <div>
+          {{ nsInfo?.gioitinh == null ? "" : nsInfo.gioitinh ? "Nam" : "Nữ" }}
+        </div>
+      </div>
+      <div class="flex items-center h-8 sm:col-span-2">
+        <div class="w-1/2 sm:w-40 text-right mr-2 whitespace-nowrap">
+          Ngày sinh:
+        </div>
+        <div>{{ nsInfo?.ngaysinh | date : "dd/MM/yyyy" : "UTC+8" }}</div>
+      </div>
+      <div class="flex items-center h-8 sm:col-span-3">
+        <div class="w-1/2 sm:w-40 text-right mr-2 whitespace-nowrap">
+          Ngành nghề CNKT:
+        </div>
+        <div>{{ nsInfo?.nghecnkt }}</div>
+      </div>
+      <div class="flex items-center h-8 sm:col-span-2">
+        <div class="w-1/2 sm:w-24 text-right mr-2 whitespace-nowrap">
+          Phòng ban:
+        </div>
+        <div>{{ nsInfo?.phongban }}</div>
+      </div>
+      <div class="flex items-center h-8 sm:col-span-2">
+        <div class="w-1/2 sm:w-40 text-right mr-2 whitespace-nowrap">
+          Ngày vào đơn vị:
+        </div>
+        <div>{{ nsInfo?.ngayvaodonvi | date : "dd/MM/yyyy" }}</div>
+      </div>
+      <div class="flex items-center h-8 sm:col-span-3">
+        <div class="w-1/2 sm:w-40 text-right mr-2 whitespace-nowrap">
+          Tên đăng nhập HRMS:
+        </div>
+        <div>{{ nsInfo?.userName }}</div>
+      </div>
+      <div class="flex items-center h-8 sm:col-span-2">
+        <div class="w-1/2 sm:w-24 text-right mr-2 whitespace-nowrap">
+          Chức danh:
+        </div>
+        <span>{{ nsInfo?.vitrichucdanh }}</span>
+      </div>
+      <div class="flex items-center h-8 sm:col-span-2">
+        <div class="w-1/2 sm:w-40 text-right mr-2 whitespace-nowrap">
+          Ngày vào đvi ký HĐLĐ:
+        </div>
+        <div>{{ nsInfo?.ngayvaodonviHdld | date : "dd/MM/yyyy" }}</div>
+      </div>
+    </div>
+  </div>
+</div>

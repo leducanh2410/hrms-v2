@@ -7,10 +7,12 @@ import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { User } from '../../core/user/user.types';
 import {MatDividerModule} from '@angular/material/divider';
 import { CommonModule } from '@angular/common';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatListModule} from '@angular/material/list';
 @Component({
   selector: 'app-header',
   imports: [MatToolbarModule, MatIconModule, SearchComponent, MatMenuModule, MatDividerModule,
-    CommonModule
+    CommonModule, MatSidenavModule, MatListModule
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',

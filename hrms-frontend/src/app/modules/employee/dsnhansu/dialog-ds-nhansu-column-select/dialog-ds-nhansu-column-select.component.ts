@@ -18,12 +18,13 @@ import { APP_ACTION } from '../../../../ngxstore/actions/app.actions';
 import { TableModule } from 'primeng/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { StoreModule } from '@ngrx/store';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-dialog-ds-nhansu-column-select',
   templateUrl: './dialog-ds-nhansu-column-select.component.html',
   styleUrls: ['./dialog-ds-nhansu-column-select.component.scss'],
-  imports: [TableModule, MatFormFieldModule, StoreModule],
+  imports: [TableModule, MatFormFieldModule, StoreModule, MatInputModule],
 })
 export class DialogDsNhansuColumnSelectComponent implements OnInit {
   private _unsubscribeAll: Subject<any> = new Subject<any>();

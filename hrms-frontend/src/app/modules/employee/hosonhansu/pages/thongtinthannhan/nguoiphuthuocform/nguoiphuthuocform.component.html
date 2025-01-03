@@ -1,0 +1,182 @@
+<form (ngSubmit)="saveAndClose()" #registerForm="ngForm"
+    class="flex flex-col max-w-310 md:min-w-310 overflow-hidden max-h-screen -m-6">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-12 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium head-modal">
+            <span>Cập nhật thông tin người phụ thuộc</span>
+        </div>
+        <button type="button" mat-icon-button [tabIndex]="-1" (click)="close()">
+            <i class="fa-light fa-xmark icon-size-5"></i>
+        </button>
+    </div>
+
+    <div #mainns class="flex flex-col flex-auto h-modal  overflow-y-auto">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-8 w-full min-w-0 p-6 overflow-y-auto">
+            <div class="flex items-start">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label class="">Thời điểm bắt đầu tính giảm trừ </mat-label>
+                    <input [(ngModel)]="data.giadinh.thangbatdau" [required]="true" [max]="maxDate"
+                        [disabled]="isLockform" (dateInput)="startDate($event)" (dateChange)="startDate($event)"
+                        name="thangbatdau" matInput [matDatepicker]="thangbatdau" name="thangbatdau" />
+                    <mat-datepicker-toggle matSuffix [for]="thangbatdau"></mat-datepicker-toggle>
+                    <mat-datepicker #thangbatdau></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="flex flex-col">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label class="">Thời điểm kết thúc tính giảm trừ </mat-label>
+                    <input [(ngModel)]="data.giadinh.thangketthuc" matInput [matDatepicker]="thangketthuc"
+                        [disabled]="isLockform" [min]="minDate" (dateInput)="endDate($event)"
+                        (dateChange)="endDate($event)" name="thangketthuc" [ngModelOptions]="{standalone: true}" />
+                    <mat-datepicker-toggle matSuffix [for]="thangketthuc"></mat-datepicker-toggle>
+                    <mat-datepicker #thangketthuc></mat-datepicker>
+                </mat-form-field>
+                <div class="flex align-items-center gap-1 mt-3">
+                    <p-checkbox name="group1" [binary]="true" [required]="true" value="true" [disabled]="isLockform"
+                        [(ngModel)]="data.giadinh.hientai" [ngModelOptions]="{standalone: true}"></p-checkbox>
+                    <label for="ny">Đang áp dụng</label>
+                </div>
+            </div>
+            <div class="flex items-center">
+                <mat-form-field appearance="fill" class="w-full -pl-2  ">
+                    <mat-label class=" sm:w-1/4 leading-none -mr-1">Họ và tên </mat-label>
+                    <input matInput [required]="true" placeholder="" name="hoten" [disabled]="isLockform"
+                        [(ngModel)]="data.giadinh.tennguoipt" />
+                </mat-form-field>
+            </div>
+            <div class="flex items-center">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label class="">Ngày sinh </mat-label>
+                    <input [required]="true" [(ngModel)]="data.giadinh.ngaysinh" matInput [matDatepicker]="ngaysinh"
+                        [disabled]="isLockform" [max]="minDate" (dateInput)="birthday($event)"
+                        (dateChange)="birthday($event)" name="ngaysinh" />
+                    <mat-datepicker-toggle matSuffix [for]="ngaysinh"></mat-datepicker-toggle>
+                    <mat-datepicker #ngaysinh></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="flex flex-col justify-center">
+                <div class="flex flex-col justify-center">
+                    <div class="mat-field-label">Quốc tịch </div>
+                    <p-dropdown panelStyleClass="max-w-full" [style]="{ width: '100%'}" [options]="listQuoctich"
+                        [disabled]="isLockform" optionValue="id" optionLabel="name" name="quoctich" appendTo="body"
+                        [filter]="true" [(ngModel)]="data.giadinh.quocgiaId">
+                    </p-dropdown>
+                </div>
+            </div>
+            <mat-form-field>
+                <mat-label>Quan hệ với người nộp thuế </mat-label>
+                <mat-select name="quanhe" [required]="true" [(ngModel)]="data.giadinh?.lQhenguoiphuthuoc.id"
+                    [disabled]="isLockform">
+                    <mat-option *ngFor="let item of listQhegd" [value]="item.id">
+                        {{item.quanhe}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+
+
+
+            <div class="flex flex-row items-center sm:col-span-2">
+                <div class="flex align-items-center gap-1">
+                    <p-checkbox [binary]="true" value="isCoCMT"  [(ngModel)] = "isCoCMT" name="CMT" (onChange)="onCheckCMT($event)"
+                        [disabled]="isLockform"></p-checkbox>
+                    <label for="ny">NPT chưa có CCCD/Số định danh điện tử/Hộ chiếu</label>
+                </div>
+            </div>
+
+            <ng-container *ngIf="!isCoCMT; else a ">
+                <div class="flex items-center">
+                    <mat-form-field appearance="fill" class="w-full -pl-2  ">
+                        <mat-label class=" sm:w-1/4 leading-none -mr-1">Số CMND/CCCD/hộ chiếu </mat-label>
+                        <input matInput placeholder="" name="cmndorcccd" [(ngModel)]="data.giadinh.cmndorcccd"
+                            [disabled]="isLockform" />
+                    </mat-form-field>
+                </div>
+
+                <div class="flex items-center">
+                    <mat-form-field appearance="fill" class="w-full -pl-2  ">
+                        <mat-label class=" sm:w-1/4 leading-none -mr-1">Mã số thuế
+                            (nếu có) </mat-label>
+                        <input matInput placeholder="" name="mstcanhan" [(ngModel)]="data.giadinh.mstcanhan"
+                            [disabled]="isLockform" />
+                    </mat-form-field>
+                </div>
+            </ng-container>
+            <ng-template #a>
+                <div class="flex items-center">
+                    <mat-form-field appearance="fill" class="w-full -pl-2  ">
+                        <mat-label class=" sm:w-1/4 leading-none -mr-1">Số </mat-label>
+                        <input matInput [disabled]="!isCoCMT" placeholder="" name="so" [(ngModel)]="data.giadinh.so"
+                            [disabled]="isLockform" />
+                    </mat-form-field>
+                </div>
+                <div class="flex items-center">
+                    <mat-form-field appearance="fill" class="w-full -pl-2  ">
+                        <mat-label class=" sm:w-1/4 leading-none -mr-1">Quyển số </mat-label>
+                        <input matInput [disabled]="!isCoCMT" placeholder="" name="quyenso" [disabled]="isLockform"
+                            [(ngModel)]="data.giadinh.quyenso" />
+                    </mat-form-field>
+                </div>
+
+                <div class="flex flex-col justify-center">
+                    <div class="flex flex-col justify-center">
+                        <div class="mat-field-label">Quốc gia </div>
+                        <p-dropdown [disabled]="!isCoCMT" panelStyleClass="max-w-full" [style]="{ width: '100%'}"
+                            [disabled]="isLockform" [options]="listQuoctich" name="quocgia" optionValue="id"
+                            optionLabel="name" name="nganhang" appendTo="body" [filter]="true"
+                            [(ngModel)]="data.giadinh.ks_quocgiaId">
+                        </p-dropdown>
+                    </div>
+                </div>
+                <div class="flex flex-col justify-center">
+                    <div class="flex flex-col justify-center">
+                        <div class="mat-field-label">Tỉnh/Thành phố </div>
+                        <p-dropdown [disabled]="!isCoCMT" panelStyleClass="max-w-full" [style]="{ width: '100%'}"
+                            [disabled]="isLockform" [options]="listThanhpho" placeholder="&nbsp;" name="thanhpho"
+                            optionValue="ttphoId" optionLabel="tenTtpho" (onChange)="getDsQuanhuyen($event.value); "
+                            name="ttphoId" appendTo="body" [filter]="true" [(ngModel)]="data.giadinh.ttphoId">
+                        </p-dropdown>
+                    </div>
+                </div>
+                <div class="flex flex-col justify-center">
+                    <div class="flex flex-col justify-center">
+                        <div class="mat-field-label">Quận/Huyện </div>
+                        <p-dropdown [disabled]="!isCoCMT" panelStyleClass="max-w-full" [style]="{ width: '100%'}"
+                            [disabled]="isLockform" [options]="listQuanhuyen" name="quanhuyen" optionValue="id"
+                            optionLabel="name" name="qhuyenId" appendTo="body" [filter]="true"
+                            [(ngModel)]="data.giadinh.qhuyenId">
+                        </p-dropdown>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <mat-form-field appearance="fill" class="w-full -pl-2  ">
+                        <mat-label class=" sm:w-1/4 leading-none -mr-1">Phường/Xã </mat-label>
+                        <input matInput [disabled]="!isCoCMT" placeholder="" name="phuongxa" [disabled]="isLockform"
+                            [(ngModel)]="data.giadinh.phuongxa" name="phuongxa" />
+                    </mat-form-field>
+                </div>
+            </ng-template>
+
+
+
+
+
+
+
+        </div>
+    </div>
+
+    <div class="flex flex-0 items-center justify-end h-12 sm:pr-5 pl-6 sm:pl-8 mt-2 text-on-primary">
+        <div mat-dialog-actions class="h-toolbar flex justify-end">
+            <button class="mx-1 button-green" mat-flat-button type="submit" [disabled]="isLockform">
+                <i class="fa-light fa-check icon-size-5"></i>
+                <span class="ml-2">Lưu</span>
+            </button>
+            <button type="button" class="mx-1 button-blue" mat-flat-button (click)="nhapTiep()">
+                <i class="fa-light fa-arrow-right icon-size-5"></i>
+                <span class="ml-2">Nhập tiếp</span>
+            </button>
+        </div>
+    </div>
+</form>

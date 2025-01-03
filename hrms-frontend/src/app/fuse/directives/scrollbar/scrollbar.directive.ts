@@ -5,7 +5,7 @@ import { Platform } from '@angular/cdk/platform';
 import { debounceTime, fromEvent, Subject, takeUntil } from 'rxjs';
 import PerfectScrollbar from 'perfect-scrollbar';
 import { merge } from 'lodash-es';
-import { ScrollbarGeometry, ScrollbarPosition } from '@fuse/directives/scrollbar/scrollbar.types';
+import { ScrollbarGeometry, ScrollbarPosition } from '../../directives/scrollbar/scrollbar.types';
 
 /**
  * Wrapper directive for the Perfect Scrollbar: https://github.com/mdbootstrap/perfect-scrollbar
@@ -74,7 +74,7 @@ export class FuseScrollbarDirective implements OnChanges, OnInit, OnDestroy
         if ( 'fuseScrollbar' in changes )
         {
             // Interpret empty string as 'true'
-            this.fuseScrollbar = coerceBooleanProperty(changes.fuseScrollbar.currentValue);
+            this.fuseScrollbar = coerceBooleanProperty(changes['fuseScrollbar'].currentValue);
 
             // If enabled, init the directive
             if ( this.fuseScrollbar )
@@ -92,7 +92,7 @@ export class FuseScrollbarDirective implements OnChanges, OnInit, OnDestroy
         if ( 'fuseScrollbarOptions' in changes )
         {
             // Merge the options
-            this._options = merge({}, this._options, changes.fuseScrollbarOptions.currentValue);
+            this._options = merge({}, this._options, changes['fuseScrollbarOptions'].currentValue);
 
             // Return if not initialized
             if ( !this._ps )

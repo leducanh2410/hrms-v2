@@ -1,0 +1,144 @@
+<form
+    #ngForm="ngForm"
+    name="formGroup"
+    class="flex flex-col max-w-310 md:min-w-310 overflow-hidden max-h-screen -m-6"
+>
+    <!-- Phần thanh tiêu đề -->
+    <div
+        class="flex flex-0 items-center justify-between h-12 px-4 bg-primary text-on-primary"
+    >
+        <div class="text-lg font-medium head-modal">
+            <span>Cập nhật đi nước ngoài</span>
+        </div>
+        <button
+            class="relative -right-1"
+            mat-icon-button
+            [tabIndex]="-1"
+            (click)="close()"
+        >
+            <i class="fa-light fa-xmark icon-size-5"></i>
+        </button>
+    </div>
+
+    <!-- Phần body chứa các input -->
+    <div
+        #mainns
+        class="flex flex-col flex-auto h-modal max-h-800 overflow-y-auto"
+    >
+        <!-- Phần xử lý chọn quyết định -->
+        <div class="p-4">
+            <app-chonquyetdinh
+            [(quyetdinh)]="quyetdinh"
+            [isDisableForm]="false"
+            [donviId]="donviId"
+            ></app-chonquyetdinh>
+        </div>
+        
+        <!-- Phần xử lý thông tin đi nước ngoài -->
+        <div
+            class="grid grid-cols-2 sm:grid-cols-2 gap-y-4 gap-x-4 w-full min-w-0 p-4 pb-0"
+        >
+            <!-- Nước ngoài -->
+            <div class="flex flex-col justify-between">
+                <label
+                    class="sm:w-1/4 leading-none -mr-1 mt-[2px] mb-2 font-medium"
+                    >Nước ngoài <span class="text-[#dc2626]">*</span></label
+                >
+                <p-multiSelect
+                    [options]="listQuocgia"
+                    [showToggleAll]="true"
+                    [(ngModel)]="nuocngoai.selectedCountries"
+                    optionLabel="name"
+                    [ngModelOptions]="{standalone: true}"
+                    display="chip"
+                    [showClear]="true"
+                    [filter]="true"
+                    placeholder="Chọn quốc gia"
+                    (onChange)="onChangeQuocGia($event)"
+                    [matTooltip]="selectedCountryNames"
+                    required
+                ></p-multiSelect>
+            </div>
+
+            <!-- Kinh phí -->
+            <div class="flex flex-col justify-between">
+                <label
+                    class="sm:w-1/4 leading-none -mr-1 mt-[2px] mb-2 font-medium"
+                    >Kinh phí</label
+                >
+                <div class="p-inputgroup max-h-[42px]">
+                    <p-inputNumber
+                        name="kinhphi"
+                        [(ngModel)]="nuocngoai.kinhphi"
+                        [maxlength]="21"
+                    ></p-inputNumber>
+                    <span class="p-inputgroup-addon">VNĐ</span>
+                </div>
+            </div>
+
+            <!-- Ngày bắt đầu -->
+            <mat-form-field>
+                <mat-label>Ngày bắt đầu <span class="text-[#dc2626]">*</span></mat-label>
+                <input
+                    matInput
+                    [matDatepicker]="ngayBatDau"
+                    name="ngayBatDau"
+                    [(ngModel)]="nuocngoai.ngaybd"
+                />
+                <mat-datepicker-toggle
+                    matSuffix
+                    [for]="ngayBatDau"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #ngayBatDau></mat-datepicker>
+            </mat-form-field>
+
+            <!-- Ngày kết thúc -->
+            <mat-form-field>
+                <mat-label>Ngày kết thúc </mat-label>
+                <input
+                    matInput
+                    [matDatepicker]="ngayKetThuc"
+                    name="ngayKetThuc"
+                    [(ngModel)]="nuocngoai.ngaykt"
+                />
+                <mat-datepicker-toggle
+                    matSuffix
+                    [for]="ngayKetThuc"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #ngayKetThuc></mat-datepicker>
+            </mat-form-field>
+
+            <!-- Mục đích, lý do -->
+            <mat-form-field
+                appearance="fill"
+                class="flex flex-col justify-center sm:col-span-2"
+            >
+                <mat-label class="sm:w-1/4 leading-none -mr-1"
+                    >Mục đích, lý do</mat-label
+                >
+                <textarea
+                    matInput
+                    [(ngModel)]="nuocngoai.lydo"
+                    name="lydo"
+                    style="height: 100px"
+                ></textarea>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <!-- Button lưu ở cuối trang -->
+    <div
+        class="footer-actions flex flex-0 items-center justify-end h-18 pr-6 sm:pr-4 text-on-primary"
+    >
+        <div mat-dialog-actions class="h-toolbar flex justify-end">
+            <button
+                class="button-green"
+                mat-flat-button
+                (click)="saveAndClose()"
+            >
+                <i class="fa-light fa-check icon-size-5"></i>
+                <span class="ml-2">Lưu</span>
+            </button>
+        </div>
+    </div>
+</form>

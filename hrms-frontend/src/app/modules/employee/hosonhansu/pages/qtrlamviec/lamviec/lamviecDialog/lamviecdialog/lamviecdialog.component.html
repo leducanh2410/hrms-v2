@@ -1,0 +1,401 @@
+<form
+  id="rightForm"
+  (ngSubmit)="rightForm.form.valid && onSave()"
+  #rightForm="ngForm"
+  class="flex flex-col max-w-310 md:min-w-310 overflow-hidden max-h-screen -m-6"
+>
+  <!-- Header -->
+  <div
+    class="flex flex-0 items-center justify-between h-12 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary"
+  >
+    <div class="text-lg font-medium head-modal">
+      <span>Cập nhật quá trình làm việc</span>
+    </div>
+    <button mat-icon-button [tabIndex]="-1" (click)="onClose()">
+      <i class="fa-light fa-xmark icon-size-5"></i>
+    </button>
+  </div>
+
+  <div
+    #mainns
+    class="flex flex-col flex-auto h-modal max-h-130 overflow-y-auto"
+  >
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-8 w-full min-w-0 p-6 overflow-y-auto"
+    >
+      <div class="flex flex-col justify-center col-span-2">
+        <label
+          *ngIf="isQuaTrinhAnhHuong"
+          class="mat-field-label font-bold text-blue-500 text-lg"
+          >{{ strLabelThongBao }}</label
+        >
+      </div>
+
+      <div class="flex flex-col justify-center">
+        <div class="mb-1">
+          <p-checkbox
+            class="pl-2 self-center mr-1"
+            name="chucdanhhientai"
+            [binary]="true"
+            inputId="isnow"
+            [(ngModel)]="data.isNow"
+            (onChange)="checkChucdanhdangNamgiu()"
+            [disabled]="disableChkChucdanhnamgiu"
+          ></p-checkbox>
+          <label class="mat-field-label" for="isnow"
+            >Là chức danh đang nắm giữ</label
+          >
+        </div>
+      </div>
+      <div class="flex flex-col justify-center">
+        <div class="mb-1">
+          <p-checkbox
+            class="pl-2 self-center mr-1"
+            name="truockhivao"
+            [binary]="true"
+            inputId="truockhivao"
+            [(ngModel)]="data.truockhivao"
+            (onChange)="checkTruockhivaodvi()"
+            [disabled]="isQuaTrinhAnhHuong || data.truockhivao == true"
+          ></p-checkbox>
+          <label class="mat-field-label" for="truockhivao"
+            >Đây là quá trình làm việc trước khi vào đơn vị hiện tại</label
+          >
+        </div>
+      </div>
+      <div class="flex flex-col justify-center">
+        <div class="mat-field-label">
+          Ngày bắt đầu<span class="font-bold text-red-500 text-lg">*</span>
+        </div>
+        <mat-form-field class="fuse-mat-no-subscript w-full">
+          <input
+            matInput
+            [matDatepicker]="tungay"
+            name="tungay"
+            [(ngModel)]="data.tungay"
+            required
+            [readonly]="isQuaTrinhAnhHuong"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="tungay"
+          ></mat-datepicker-toggle>
+          <mat-datepicker
+            #tungay
+            [disabled]="isQuaTrinhAnhHuong"
+          ></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="flex flex-col justify-center">
+        <div class="mat-field-label">
+          Ngày kết thúc<span
+            class="font-bold text-red-500 text-lg"
+            *ngIf="!data.isNow && !data.truockhivao"
+            >*</span
+          >
+        </div>
+        <mat-form-field class="fuse-mat-no-subscript w-full">
+          <input
+            matInput
+            [matDatepicker]="denngay"
+            name="denngay"
+            [(ngModel)]="data.denngay"
+            [disabled]="data.isNow"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="denngay"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #denngay></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <div class="flex flex-col justify-center sm:col-span-2">
+        <!-- <div class="mat-field-label">Tên khai sinh<span class="font-bold text-red-500 text-lg">*</span> :</div> -->
+        <div class="mat-field-label">
+          Đơn vị<span class="font-bold text-red-500 text-lg">*</span>
+        </div>
+        <mat-form-field class="fuse-mat-no-subscript w-full">
+          <input
+            matInput
+            type="text"
+            id="tendonvi"
+            name="tendonvi"
+            [(ngModel)]="data.tendonvi"
+            [readonly]="isQuaTrinhAnhHuong"
+            required
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="flex flex-col sm:col-span-2">
+        <div class="mat-field-label">Phòng ban</div>
+        <mat-form-field appearance="fill" class="w-full">
+          <input
+            matInput
+            type="text"
+            id="tenbophan"
+            name="tenbophan"
+            [(ngModel)]="data.tenbophan"
+            readonly
+          />
+          <button
+            class="mx-1 -mr-2"
+            type="button"
+            color="primary"
+            (click)="onChonphongban()"
+            [disabled]="data.truockhivao || data.isNow"
+            mat-flat-button
+          >
+            <span>Chọn</span>
+          </button>
+        </mat-form-field>
+      </div>
+
+      <div class="flex flex-col justify-center sm:col-span-2">
+        <div class="mat-field-label">
+          Chức danh<span class="font-bold text-red-500 text-lg">*</span>
+        </div>
+        <p-dropdown
+          panelStyleClass="max-w-full"
+          [style]="{ width: '100%' }"
+          [options]="listChucdanh"
+          optionLabel="name"
+          optionValue="id"
+          name="vtricdanh"
+          appendTo="body"
+          [filter]="true"
+          filterBy="name"
+          [(ngModel)]="data.vtricdanhId"
+          *ngIf="!isVisiableVtriCdanh"
+          (onChange)="onChangeChucdanh()"
+          [required]="true"
+          [disabled]="isQuaTrinhAnhHuong"
+          placeholder="&nbsp;"
+        >
+        </p-dropdown>
+
+        <mat-form-field
+          appearance="fill"
+          class="w-full"
+          *ngIf="isVisiableVtriCdanh"
+        >
+          <input
+            matInput
+            type="text"
+            id="chucdanh"
+            name="chucdanh"
+            [(ngModel)]="data.vtricdanh"
+            *ngIf="isVisiableVtriCdanh"
+            [readonly]="isQuaTrinhAnhHuong"
+          />
+        </mat-form-field>
+
+        <div class="my-2">
+          <p-checkbox
+            class="pl-2 self-center mr-1"
+            name="isKiemNghiem"
+            [binary]="true"
+            inputId="isKiemNghiem"
+            [(ngModel)]="data.isKiemNghiem"
+            [disabled]="isQuaTrinhGoc"
+          ></p-checkbox>
+          <label class="mat-field-label" for="isKiemNghiem"
+            >Là chức danh kiêm nhiệm</label
+          >
+        </div>
+      </div>
+
+      <div class="flex items-end sm:col-span-2">
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label class="">Nghề CNKT</mat-label>
+          <input
+            matInput
+            class="form-control"
+            id="nghecnkt"
+            name="nghecnkt"
+            [(ngModel)]="data.nghecnkt"
+            readonly
+          />
+          <button
+            class="mx-1 -mr-2"
+            type="button"
+            color="primary"
+            (click)="onChonNgheCNKT()"
+            [disabled]="this.disableBtnCNKT"
+            mat-flat-button
+          >
+            <span>Chọn</span>
+          </button>
+        </mat-form-field>
+      </div>
+
+      <div class="flex flex-col justify-center sm:col-span-2">
+        <!-- <div class="mat-field-label">Tên khai sinh<span class="font-bold text-red-500 text-lg">*</span> :</div> -->
+        <div class="mat-field-label">Mô tả công việc</div>
+        <mat-form-field class="fuse-mat-no-subscript w-full">
+          <input
+            matInput
+            type="text"
+            id="mota"
+            name="mota"
+            [(ngModel)]="data.mota"
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="flex flex-col justify-center sm:col-span-2">
+        <div class="mb-1">
+          <p-checkbox
+            class="pl-2 self-center mr-1"
+            name="isWaitingfor"
+            [binary]="true"
+            inputId="isWaitingfor"
+            [(ngModel)]="data.isWaitingfor"
+          ></p-checkbox>
+          <label class="mat-field-label" for="isWaitingfor"
+            >Không có nhu cầu sử dụng (dôi dư)</label
+          >
+        </div>
+      </div>
+
+      <div class="flex flex-col justify-center sm:col-span-2">
+        <label class="underline underline-offset-1"
+          >Tổng thời gian đóng BHXH tính đến ngày bắt đầu quá trình làm việc
+        </label>
+      </div>
+
+      <div class="flex flex-col justify-center">
+        <div class="mat-field-label">Số năm</div>
+        <mat-form-field class="fuse-mat-no-subscript w-full">
+          <input
+            matInput
+            inputNumberFormat
+            maxlength="2"
+            type="text"
+            style="text-align: right"
+            min="0"
+            id="bhxhSoNam"
+            name="bhxhSoNam"
+            [(ngModel)]="data.bhxhSoNam"
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="flex flex-col justify-center">
+        <div class="mat-field-label">Số tháng</div>
+        <mat-form-field class="fuse-mat-no-subscript w-full">
+          <input
+            matInput
+            inputNumberFormat
+            maxlength="3"
+            type="text"
+            style="text-align: right"
+            min="0"
+            max="120"
+            id="bhxhSoThang"
+            name="bhxhSoThang"
+            [(ngModel)]="data.bhxhSoThang"
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="flex flex-col justify-center">
+        <div class="mat-field-label">Trong đó tính NNĐH, số năm</div>
+        <mat-form-field class="fuse-mat-no-subscript w-full">
+          <input
+            matInput
+            inputNumberFormat
+            maxlength="2"
+            type="text"
+            style="text-align: right"
+            min="0"
+            id="bhxhSoNamDocHai"
+            name="bhxhSoNamDocHai"
+            [(ngModel)]="data.bhxhSoNamDocHai"
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="flex flex-col justify-center">
+        <div class="mat-field-label">Số tháng</div>
+        <mat-form-field class="fuse-mat-no-subscript w-full">
+          <input
+            matInput
+            inputNumberFormat
+            maxlength="3"
+            type="text"
+            style="text-align: right"
+            min="0"
+            max="120"
+            id="bhxhSoThangDocHai"
+            name="bhxhSoThangDocHai"
+            [(ngModel)]="data.bhxhSoThangDocHai"
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="flex flex-col justify-center sm:col-span-2">
+        <div class="mat-field-label">File đính kèm</div>
+        <p-fileUpload
+          #fileForm
+          accept="image/*,.doc,.docx,.pdf,.xls,.xlsx"
+          class="w-full text-base"
+          chooseLabel="Chọn"
+          cancelLabel="Hủy"
+          [customUpload]="true"
+          [maxFileSize]="102400000"
+          (onSelect)="myUploader($event, fileForm)"
+        >
+          <ng-template pTemplate="content">
+            <div>
+              <div
+                *ngIf="data.fileAttach && !data.fileAttach.deleted"
+                class="flex items-center justify-between w-full md:w-auto mt-2"
+              >
+                <div class="fuse-mat-no-subscript w-2/5">
+                  <div class="mat-field-label truncate">
+                    {{ data.fileAttach.fileName }}
+                  </div>
+                </div>
+
+                <div class="fuse-mat-no-subscript w-1/5">
+                  <div class="mat-field-label">
+                    {{ data.fileAttach.fileSize }} bytes
+                  </div>
+                </div>
+
+                <div class="flex justify-end w-1/5">
+                  <button
+                    type="button"
+                    class="mr-2"
+                    (click)="taiFiledinhkem(data)"
+                  >
+                    <i
+                      class="fa-light fa-download icon-size-5"
+                      matTooltip="Tải"
+                    ></i>
+                  </button>
+
+                  <button
+                    pButton
+                    icon="fa-light fa-trash-can"
+                    type="button"
+                    (click)="deleteFile(data.fileAttach)"
+                  ></button>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </p-fileUpload>
+      </div>
+    </div>
+  </div>
+
+  <div mat-dialog-actions class="h-toolbar flex justify-end">
+    <button type="submit" class="mx-1 button-green mr-8" mat-flat-button>
+      <i class="fa-light fa-check icon-size-5"></i>
+      <span class="ml-2">Lưu</span>
+    </button>
+  </div>
+</form>

@@ -1,0 +1,159 @@
+<div class="flex justify-between items-center">
+    <p-divider align="left">
+        <div class="inline-flex align-items-center justify-between">
+            <b class="text-blue-600">Đi nước ngoài</b>
+        </div>
+    </p-divider>
+    <div class="flex">
+        <button
+            style="margin-right: 20px"
+            color="primary"
+            class="mx-1"
+            mat-flat-button
+            (click)="xuatExcelNuocNgoai()"
+            [disabled]="checkNhanSuValid"
+        >
+            <i class="fa-regular fa-file-excel" matTooltip="Xuất excel"></i>
+        </button>
+        <button
+            style="margin-right: 20px"
+            color="primary"
+            class="mx-1"
+            mat-flat-button
+            (click)="themNuocNgoai()"
+            [disabled]="checkNhanSuValid"
+        >
+            <i class="fa-light fa-circle-plus" matTooltip="Thêm mới"></i>
+        </button>
+    </div>
+</div>
+
+<p-table
+    [value]="dsNuocNgoai"
+    responsiveLayout="stack"
+    [breakpoint]="'960px'"
+    [tableStyle]="{ width: '100%', height: '300px' }"
+>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th style="width: 15%" class="text-center">Ngày bắt đầu</th>
+            <th style="width: 15%" class="text-center">Ngày kết thúc</th>
+            <th style="width: 22.5%" class="text-center">Nước đến</th>
+            <th style="width: 17.5%" class="text-center">Mục đích, lý do</th>
+            <th style="width: 20%" class="text-center">Số QĐ</th>
+            <th style="width: 10%" class="text-center">Thao tác</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-nuocngoai let-i="rowIndex">
+        <tr class="border-b border-gray-200">
+            <td class="text-center">
+                <span class="p-column-title"></span>
+                {{ nuocngoai.ngayBdau | date : "dd/MM/yyyy" }}
+            </td>
+            <td class="text-center">
+                <span class="p-column-title"></span>
+                {{ nuocngoai.ngayKthuc | date : "dd/MM/yyyy" }}
+            </td>
+            <td class="text-left">
+                <span class="p-column-title"></span>
+                <ng-container
+                    *ngFor="
+                        let country of nuocngoai.selectedCountries;
+                        let last = last
+                    "
+                >
+                    {{ country.name }}
+                    <ng-container *ngIf="!last">, </ng-container>
+                </ng-container>
+            </td>
+            <td class="text-left">
+                <span class="p-column-title"></span> {{ nuocngoai.lydo }}
+            </td>
+            <td class="text-left">
+                <div class="w-full flex gap-3 justify-between items-center">
+                    <!-- thông tin quyết định -->
+                    <div class="w-full">
+                        <div class="w-full relative">
+                            <ng-container *ngIf="nuocngoai.fileName; else notFileName">
+                                <p
+                                class="w-[120px] whitespace-nowrap text-ellipsis overflow-hidden ..."
+                                [matTooltip]="nuocngoai.soQD"
+                                >{{ nuocngoai.soQD }}</p
+                            >
+                            </ng-container>
+                            <ng-template #notFileName>
+                                <p
+                                class="w-full whitespace-nowrap text-ellipsis overflow-hidden ..."
+                                [matTooltip]="nuocngoai.soQD"
+                                >{{ nuocngoai.soQD }}</p
+                            >
+                            </ng-template>
+                        </div>
+                        <p class="mt-3 text-sm">
+                            Ngày ký:
+                            {{ nuocngoai.ngayKy | date : "dd/MM/yyyy" }}
+                        </p>
+                    </div>
+
+                    <!-- view file & download file -->
+                    <div>
+                        <div
+                            class="flex text-right w-[56px]"
+                            *ngIf="nuocngoai.fileName; else notTrue"
+                        >
+                            <div>
+                                <button
+                                    type="button"
+                                    class="mr-2"
+                                    (click)="viewFileQD(nuocngoai.qdinhId)"
+                                >
+                                    <i
+                                        class="fa-light fa-eye icon-size-5"
+                                        [matTooltip]="nuocngoai.fileName"
+                                    ></i>
+                                </button>
+                                <button
+                                    type="button"
+                                    class="mr-2"
+                                    (click)="downloadFileQD(nuocngoai.qdinhId)"
+                                >
+                                    <i
+                                        class="fa-light fa-file-arrow-down icon-size-5"
+                                        matTooltip="Download"
+                                    ></i>
+                                </button>
+                            </div>
+                        </div>
+                        <ng-template #notTrue></ng-template>
+                    </div>
+                </div>
+            </td>
+            <td class="text-center">
+                <span class="p-column-title">Thao tác</span>
+                <div>
+                    <button
+                        type="button"
+                        class="mr-2"
+                        (click)="updateNuocNgoai(nuocngoai)"
+                    >
+                        <i
+                            class="fa-light fa-pencil icon-size-5"
+                            matTooltip="Sửa"
+                        ></i>
+                    </button>
+
+                    <button
+                        type="button"
+                        class="mr-2"
+                        (click)="deleteNuocNgoai(nuocngoai)"
+                    >
+                        <i
+                            class="fa-light fa-trash-can icon-size-5"
+                            matTooltip="Xóa"
+                        ></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>

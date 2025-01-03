@@ -1,0 +1,69 @@
+::ng-deep .p-dropdown.p-component.p-dropdown-clearable {
+    width: 100% !important;
+    border-radius: 6px !important;
+}
+
+::ng-deep .p-dropdown {
+    max-height: 44px !important;
+    .p-dropdown-panel {
+        max-width: 100% !important;
+    }
+}
+
+::ng-deep .p-multiselect {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 42px !important;
+    .p-multiselect-label {
+        max-height: 42px !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        height: 42px;
+        display: flex;
+        align-items: center;
+    }
+}
+
+::ng-deep p-multiSelect.ng-invalid:not(form) > div {
+    border: 1px solid #d40000 !important;
+}
+
+::ng-deep
+    p-multiSelect.ng-invalid.ng-touched.ui-inputwrapper-focus:not(form)
+    > div {
+    box-shadow: 0 0 0 0.05em #f40000;
+    border: 1px solid #d40000;
+}
+
+::ng-deep
+    p-multiSelect.ng-invalid.ng-untouched.ui-inputwrapper-focus:not(form)
+    > div {
+    box-shadow: 0 0 0 0.05em #f40000;
+    border: 1px solid #d40000;
+}
+
+::ng-deep .p-inputtext {
+    min-height: 42px !important;
+    border-top-left-radius: 6px !important;
+    border-bottom-left-radius: 6px !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+#mainns {
+    flex: 1 1 auto;
+    overflow-y: auto;
+}
+
+.footer-actions {
+    position: sticky;
+    bottom: 0;
+    background: white;
+    z-index: 10; 
+}

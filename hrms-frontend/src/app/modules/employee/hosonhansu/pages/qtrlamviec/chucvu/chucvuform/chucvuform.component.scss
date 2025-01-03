@@ -1,0 +1,37 @@
+:host ::ng-deep {
+    // .p-datatable .p-datatable-thead > tr > th {
+    //     padding: 8px 2px !important;
+    // }
+    // .p-datatable .p-datatable-tbody > tr > td {
+    //     border: 1px solid #eeeeee !important;
+    //     border-width: 0 1px 1px 0 !important;
+    //     // transition: none !important;
+    //     border-collapse: collapse !important;
+    // }
+    // .p-datatable-scrollable .p-datatable-tbody>tr>td {
+    //     flex: none !important;
+    // }
+
+    // mat-year-view {
+    //     .mat-calendar-body-label{
+    //         display: none !important;
+    //     }
+    //     .mat-calendar-body {
+    //         display: grid;
+    //         grid-template-columns: repeat(3, 1fr) !important;
+    //         grid-template-rows: repeat(4, 1fr) !important;
+    //     }
+    // }
+
+    .dropdown-chucvu .p-dropdown {
+        width: '100%';
+        border: 0px;
+    }
+
+
+    .dropdown-chucvu .p-dropdown-label {
+        width: 210px;
+    }
+
+
+}

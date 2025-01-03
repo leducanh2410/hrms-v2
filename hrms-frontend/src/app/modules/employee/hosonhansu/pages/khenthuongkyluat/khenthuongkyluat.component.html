@@ -1,0 +1,224 @@
+<div class="h-full absolute inset-0 flex flex-col min-w-0 overflow-hidden bg-gray-100 w-full" cdkScrollable>
+    <div class="sm:p-2 overflow-x-hidden overflow-y-auto bg-gray-100 w-full">
+        <div class="w-full px-4 pb-4 flex flex-col border-1 border-gray-300 rounded bg-white">
+            <div class="flex justify-between items-center">
+                <p-divider align="left">
+                    <div class="inline-flex align-items-center justify-between">
+                        <b class="text-blue-600">Khen thưởng</b>
+                    </div>
+                </p-divider>
+                <div class="flex">
+                    <button [disabled]="!nhansu" style="margin-right: 20px;" color="primary" class="mx-1"
+                        mat-flat-button (click)="xuatExcelKhenThuong()">
+                        <i class="fa-regular fa-file-excel" matTooltip="Xuất excel"></i>
+                    </button>
+                    <button [disabled]="!nhansu" style="margin-right: 20px;" color="primary" class="mx-1"
+                        mat-flat-button (click)="addKhenThuong()"><i class="fa-light fa-circle-plus"
+                            matTooltip="Thêm mới"></i>
+                    </button>
+                </div>
+            </div>
+
+            <p-table [value]="dsKhenthuong" [tableStyle]="{ width: '100%'}">
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th class="text-center" style="width: 7%;">Năm KT</th>
+                        <th class="text-center" style="width: 15%">Hình thức khen thưởng</th>
+                        <th class="text-center" style="width: 36%;">Nội dung</th>
+                        <th class="text-center" style="width: 15%">File khen thưởng</th>
+                        <th class="text-center" style="width: 20%">Quyết định</th>
+                        <th class="text-center" style="width: 7%">Thao tác</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-product let-columns="columns" let-i="rowIndex">
+                    <tr class="border-b border-gray-200">
+                        <td class="text-center" style="width: 7%;">
+                            {{ product.namKt }}
+                        </td>
+                        <td style="width: 15%">
+                            {{ product.tenKT }}
+                        </td>
+                        <td style="width: 36%">
+                            {{ product.lydo }}
+                        </td>
+                        <td class="text-center" style="width: 36%;">
+                            <div *ngIf="product.fileKhenThuong" class="flex flex-col" style="width: 100%;">
+                                <div class="flex flex-row justify-center">
+                                    <button type="button" class="mr-10" (click)="viewFileBangKhen(product.nsKthuongId)">
+                                        <i class="fa-light fa-eye icon-size-5" matTooltip="Xem"></i>
+                                    </button>
+                                    <button type="button" (click)="downloadFileBangKhen(product.nsKthuongId)">
+                                        <i class="fa-light fa-file-arrow-down icon-size-5" matTooltip="Download"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                        <td style="width:20%">
+                            <div *ngIf="product.nsQdndung" class="flex flex-row" style="width: 100%;">
+                                <div class="flex flex-col justify-between" style="width: 100%;">
+                                    {{ product?.nsQdndung?.soQd }}
+                                    <p class="text-sm">Ngày ký: {{ product.nsQdndung.ngayKy | date:'dd/MM/yyyy' }}</p>
+                                </div>
+                                <div *ngIf="product.nsQdndung.fileName" class="flex flex-row justify-between">
+                                    <button type="button" class="mr-5"
+                                        (click)="viewFileQD(product.nsQdndung.qdinhId)">
+                                        <i class="fa-light fa-eye icon-size-5" matTooltip="Xem"></i>
+                                    </button>
+                                    <button type="button" class="mr-2"
+                                        (click)="downloadFileQD(product.nsQdndung.qdinhId)">
+                                        <i class="fa-light fa-file-arrow-down icon-size-5"
+                                            matTooltip="Download"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-center" style="width:7%">
+                            <div class="flex flex-row justify-between pl-3 pr-3">
+                                <button type="button" class="mr-2" (click)="updateKhenThuong(product)">
+                                    <i class="fa-light fa-pencil icon-size-5" matTooltip="Sửa"></i>
+                                </button>
+                                <button type="button" (click)="deleteKhenthuong(product.nsKthuongId)">
+                                    <i class="fa-light fa-trash-can icon-size-5" matTooltip="Xóa"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+
+
+            <div class="flex justify-between items-center">
+                <p-divider align="left">
+                    <div class="inline-flex align-items-center justify-between">
+                        <b class="text-blue-600">Kỷ luật</b>
+                    </div>
+                </p-divider>
+                <div class="flex">
+                    <button [disabled]="!nhansu" style="margin-right: 20px;" color="primary" class="mx-1"
+                        mat-flat-button (click)="xuatExcelKyLuat()">
+                        <i class="fa-regular fa-file-excel" matTooltip="Xuất excel"></i>
+                    </button>
+                    <button [disabled]="!nhansu" style="margin-right: 20px;" color="primary" class="mx-1"
+                        mat-flat-button (click)="addKyLuat()">
+                        <i class="fa-light fa-circle-plus" matTooltip="Thêm mới"></i>
+                    </button>
+                </div>
+            </div>
+
+            <p-table [value]="dsKyluat" [tableStyle]="{'min-width': '50rem','width': '100%'}">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="text-center" style="width: 18%">Hình thức kỷ luật</th>
+                        <th class="text-center" style="width: 10%">Ngày hiệu lực</th>
+                        <th class="text-center" style="width: 10%">Ngày hết hiệu lực</th>
+                        <th class="text-center" style="width: 35%">Lý do</th>
+                        <th class="text-center" style="width: 20%">Quyết định</th>
+                        <th class="text-center" style="width: 7%">Thao tác</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-product let-columns="columns" let-i="rowIndex">
+                    <tr class="border-b border-gray-200">
+                        <td style="width: 18%">
+                            {{product?.tenKL }}
+                        </td>
+                        <td class="text-center" style="width: 10%">
+                            {{ product?.ngayHieuluc | date:'dd/MM/yyyy' }}
+                        </td>
+                        <td class="text-center" style="width: 10%">
+                            {{ product?.ngayketthuc | date:'dd/MM/yyyy' }}
+                        </td>
+                        <td style="width: 35%">
+                            {{ product?.lydo}}
+                        </td>
+                        <td style="width: 20%">
+                            <div *ngIf="product.qdinh" class="flex flex-row " style="width: 100%;">
+                                <div class="flex flex-col justify-between" style="width: 100%;">
+                                    {{ product?.qdinh?.soQd }}
+                                    <p class="text-sm">Ngày ký: {{ product.qdinh.ngayKy | date:'dd/MM/yyyy' }}</p>
+                                    
+                                </div>
+                                <div *ngIf="product.qdinh.fileName" class="flex flex-row justify-between">
+                                    <button type="button" class="mr-5" (click)="viewFileQD(product.qdinh.qdinhId)">
+                                        <i class="fa-light fa-eye icon-size-5" matTooltip="Xem"></i>
+                                    </button>
+                                    <button type="button" class="mr-2" (click)="downloadFileQD(product.qdinh.qdinhId)">
+                                        <i class="fa-light fa-file-arrow-down icon-size-5"
+                                            matTooltip="Download"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </td>
+                        <td class="text-center" style="width: 7%">
+                            <div class="flex flex-row justify-between pl-3 pr-3">
+                                <button type="button" class="mr-2" (click)="updateKyLuat(product)">
+                                    <i class="fa-light fa-pencil icon-size-5" matTooltip="Sửa"></i>
+                                </button>
+
+                                <button type="button" (click)="deleteKyluat(product.nsKluatId)">
+                                    <i class="fa-light fa-trash-can icon-size-5" matTooltip="Xóa"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+            </p-table>
+
+            <div class="flex justify-between items-center">
+                <p-divider align="left">
+                    <div class="inline-flex align-items-center justify-between">
+                        <b class="text-blue-600">Sáng kiến</b>
+                    </div>
+                </p-divider>
+                <div class="flex">
+                    <button [disabled]="!nhansu" style="margin-right: 20px;" color="primary" class="mx-1"
+                        mat-flat-button (click)="xuatExcelSangkien()">
+                        <i class="fa-regular fa-file-excel" matTooltip="Xuất excel"></i>
+                    </button>
+                </div>
+            </div>
+
+            <p-table [value]="dsSangkien" [tableStyle]="{'min-width': '50rem','width': '100%'}">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="text-center" style="width: 7%">Năm</th>
+                        <th class="text-center" style="width: 66%">Nội dung</th>
+                        <th class="text-center" style="width: 27%">Quyết định</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-product let-columns="columns" let-i="rowIndex">
+                    <tr class="border-b border-gray-200">
+                        <td style="width: 7%">
+                            {{product?.nam }}
+                        </td>
+                        <td style="width: 66%">
+                            {{ product?.ndungSkien }}
+                        </td>
+                        <td style="width: 27%">
+                            <div *ngIf="product.nsQdndung" class="flex flex-row " style="width: 100%;">
+                                <div class="flex flex-col justify-between" style="width: 100%;">
+                                    {{ product?.nsQdndung?.soQd }}
+                                    <p class="text-sm">Ngày ký: {{ product.nsQdndung.ngayKy | date:'dd/MM/yyyy' }}</p>
+                                    
+                                </div>
+                                <div *ngIf="product.nsQdndung.fileName" class="flex flex-row justify-between">
+                                    <button type="button" class="mr-5"
+                                        (click)="viewFileQD(product.nsQdndung.qdinhId)">
+                                        <i class="fa-light fa-eye icon-size-5" matTooltip="Xem"></i>
+                                    </button>
+                                    <button type="button" class="mr-2"
+                                        (click)="downloadFileQD(product.nsQdndung.qdinhId)">
+                                        <i class="fa-light fa-file-arrow-down icon-size-5"
+                                            matTooltip="Download"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

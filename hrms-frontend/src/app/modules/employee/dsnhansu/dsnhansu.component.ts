@@ -39,7 +39,6 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { StoreModule } from '@ngrx/store';
-import { HeaderComponent } from '../../../layout/header/header.component';
 import { FormdonviTreeComponent } from '../../../../assets/lib/formdonvi-tree/src/public-api';
 
 
@@ -65,7 +64,6 @@ import { FormdonviTreeComponent } from '../../../../assets/lib/formdonvi-tree/sr
     MatMenuModule,
     NgxExtendedPdfViewerModule,
     StoreModule,
-    HeaderComponent
   ],
   providers: []
 })

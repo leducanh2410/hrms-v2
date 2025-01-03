@@ -1,0 +1,396 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden bg-gray-100">
+  <div class="flex-auto sm:p-2 shadow overflow-y-auto w-full" cdkScrollable>
+    <div class="w-panel mx-auto">
+      <mat-accordion class="flex-auto mt-4">
+        <mat-expansion-panel ngClass="mb-2" expanded="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="truncate"
+              >Quá trình hưởng lương
+            </mat-panel-title>
+            <button
+              [disabled]="!model"
+              style="margin-right: 20px"
+              color="primary"
+              class="mx-1"
+              mat-flat-button
+              (click)="xuatExcel()"
+            >
+              <i class="fa-regular fa-file-excel" matTooltip="Xuất excel"></i>
+            </button>
+            <button
+              [disabled]="!model"
+              *ngIf="nsInfo?.isNghiviec == null || nsInfo?.isNghiviec == false"
+              style="margin-right: 20px"
+              color="primary"
+              class="mx-1"
+              mat-flat-button
+              (click)="themluong()"
+            >
+              <i
+                class="fa-light fa-circle-plus"
+                matTooltip="Thêm mới quá trình lương"
+              ></i>
+            </button>
+          </mat-expansion-panel-header>
+
+          <p-table
+            [value]="data"
+            responsiveLayout="stack"
+            [breakpoint]="'960px'"
+            [tableStyle]="{ width: '100%' }"
+          >
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th style="width: 8%" class="text-black border">
+                  Ngày hiệu lực
+                </th>
+                <th style="width: 6%" class="text-black border">Ngạch lương</th>
+                <th style="width: 4%" class="text-black border">Bậc lương</th>
+                <th style="width: 5%" class="text-black border">Hệ số</th>
+                <th style="width: 8%" class="text-black border">Mốc tính NL</th>
+                <th style="width: 8%" class="text-black border">Dự kiến NL</th>
+                <th style="width: 13%" class="text-black border">
+                  Lương khoán (VNĐ)
+                </th>
+                <th style="width: 5%" class="text-black border">Tỷ lệ hưởng</th>
+                <th style="width: 5%" class="text-black border">Đang hưởng</th>
+                <th style="width: 8%" class="text-black border">
+                  Ngày kết thúc
+                </th>
+                <th style="width: 24%" class="text-black border">Số QĐ</th>
+
+                <th style="width: 7%" class="text-center text-black border">
+                  Thao tác
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template
+              pTemplate="body"
+              let-product
+              let-columns="columns"
+              let-i="rowIndex"
+            >
+              <tr class="border-b border-gray-200">
+                <td style="width: 8%; word-break: break-word">
+                  <span class="p-column-title">Ngày hiệu lực</span
+                  >{{ product.ngayhieuluc | date : "dd/MM/yyyy" }}
+                </td>
+                <td style="width: 6%; word-break: break-word">
+                  <span class="p-column-title">Ngạch lương</span
+                  >{{ product.bangluong }}
+                </td>
+                <td style="width: 4%; word-break: break-word">
+                  <span class="p-column-title">Bậc lương</span
+                  >{{ product.bacluong }}
+                </td>
+                <!-- <td [ngClass]="{'text-blue-600':product.status != null && product.status != 0}" style="width: 5%"><p-tag [value]="product.inventoryStatus" [severity]="getSeverity(product.inventoryStatus)"></p-tag></td> -->
+                <td style="width: 5%">
+                  <span class="p-column-title">Hệ số</span>{{ product.heSo }}
+                </td>
+                <td style="width: 8%; word-break: break-word">
+                  <span class="p-column-title">Mốc tính NL</span>
+                  {{ product.thoiGianCanCuNangL | date : "dd/MM/yyyy" }}
+                </td>
+                <td style="width: 8%; word-break: break-word">
+                  <span class="p-column-title">Dự kiến NL</span>
+                  {{ product.moctinhnl | date : "dd/MM/yyyy" }}
+                </td>
+                <td style="width: 13%; word-break: break-word">
+                  <span class="p-column-title">Lương khoán (VNĐ)</span>
+                  {{ product.luongkhoan | numberFormat }}
+                </td>
+                <td style="width: 5%">
+                  <span class="p-column-title">Tỷ lệ hưởng</span>
+                  {{ product.tile }}
+                </td>
+                <td style="width: 5%">
+                  <span class="p-column-title">Đang hưởng</span>
+                  {{ product.isDanghuong ? "X" : "" }}
+                </td>
+                <td style="width: 8%; word-break: break-word">
+                  <span class="p-column-title">Ngày kết thúc</span>
+                  {{ product.ngayketthuc | date : "dd/MM/yyyy" }}
+                </td>
+                <td style="width: 24%">
+                  <div
+                    *ngIf="product.soQd"
+                    class="flex flex-row"
+                    style="width: 100%"
+                  >
+                    <div
+                      class="flex flex-col justify-between"
+                      style="width: 100%"
+                    >
+                      {{ product?.soQd }}
+                      <p class="text-sm">
+                        Ngày ký: {{ product.ngayky | date : "dd/MM/yyyy" }}
+                      </p>
+                    </div>
+
+                    <div
+                      *ngIf="product.fileQdinh"
+                      class="flex flex-row justify-between"
+                    >
+                      <button
+                        type="button"
+                        class="mr-5"
+                        *ngIf="product.fileQdinh"
+                        (click)="viewFileQD(product.nsQdnoidungId)"
+                      >
+                        <i
+                          class="fa-light fa-eye icon-size-5"
+                          matTooltip="Xem"
+                        ></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="mr-2"
+                        *ngIf="product.fileQdinh"
+                        (click)="downloadFileQD(product.nsQdnoidungId)"
+                      >
+                        <i
+                          class="fa-light fa-file-arrow-down icon-size-5"
+                          matTooltip="Download"
+                        ></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+
+                <td style="width: 7%" class="text-center">
+                  <span class="p-column-title">Thao tác</span>
+                  <div>
+                    <button
+                      type="button"
+                      class="mr-2"
+                      (click)="sualuong(product)"
+                    >
+                      <i
+                        class="fa-light fa-pencil icon-size-5"
+                        matTooltip="Sửa"
+                      ></i>
+                    </button>
+
+                    <button
+                      type="button"
+                      class="mr-2"
+                      (click)="delete(product.nsLuongId)"
+                    >
+                      <i
+                        class="fa-light fa-trash-can icon-size-5"
+                        matTooltip="Xóa"
+                      ></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel ngClass="mb-2">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="truncate"
+              >Quá trình phụ cấp
+            </mat-panel-title>
+            <button
+              [disabled]="!model"
+              (click)="xuatExcelPhucap()"
+              style="margin-right: 20px"
+              color="primary"
+              class="mx-1"
+              mat-flat-button
+            >
+              <i class="fa-regular fa-file-excel" matTooltip="Xuất excel"></i>
+            </button>
+            <button
+              [disabled]="!model"
+              *ngIf="nsInfo?.isNghiviec == null || nsInfo?.isNghiviec == false"
+              (click)="themphucap()"
+              style="margin-right: 20px"
+              color="primary"
+              class="mx-1"
+              mat-flat-button
+            >
+              <i
+                class="fa-light fa-circle-plus"
+                matTooltip="Thêm mới quá trình phụ cấp"
+              ></i>
+            </button>
+          </mat-expansion-panel-header>
+
+          <p-table
+            [value]="dataPhucap"
+            responsiveLayout="stack"
+            [breakpoint]="'960px'"
+            [tableStyle]="{ width: '100%' }"
+          >
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th style="width: 8%; text-align: center" class="text-black border">Ngày hiệu lực</th>
+                <th style="width: 17%; text-align: center" class="text-black border">Loại phụ cấp</th>
+                <th style="width: 10%; text-align: center" class="text-black border">Hệ số</th>
+                <th style="width: 10%; text-align: center" class="text-black border">
+                  Phụ cấp tiền mặt (VNĐ)
+                </th>
+                <th style="width: 10%; text-align: center" class="text-black border">Ngày kết thúc</th>
+                <th style="width: 6%; text-align: center" class="text-black border">Đang hưởng</th>
+                <th style="width: 32%; text-align: center" class="text-black border">Số QĐ</th>
+
+                <th style="width: 7%" class="text-center text-black border" >Thao tác</th>
+              </tr>
+            </ng-template>
+            <ng-template
+              pTemplate="body"
+              let-product
+              let-columns="columns"
+              let-i="rowIndex"
+            >
+              <tr class="border-b border-gray-200">
+                <td style="width: 8%; word-break: break-word">
+                  <span class="p-column-title">Ngày hiệu lực</span
+                  >{{ product.ngayhl | date : "dd/MM/yyyy" }}
+                </td>
+                <td style="width: 17%; word-break: break-word">
+                  <span class="p-column-title">Loại phụ cấp</span
+                  >{{ product.loaiPhucap }}
+                </td>
+                <td
+                  style="width: 10%; word-break: break-word; text-align: right"
+                >
+                  <span class="p-column-title">Hệ số</span>{{ product.strHeso }}
+                </td>
+                <!-- <td [ngClass]="{'text-blue-600':product.status != null && product.status != 0}" style="width: 5%"><p-tag [value]="product.inventoryStatus" [severity]="getSeverity(product.inventoryStatus)"></p-tag></td> -->
+                <td
+                  style="width: 10%; word-break: break-word; text-align: right"
+                >
+                  <span class="p-column-title">Phụ cấp tiền mặt (VNĐ)</span
+                  >{{ product.strTienmat }}
+                </td>
+                <td style="width: 10%; word-break: break-word">
+                  <span class="p-column-title">Ngày kết thúc</span>
+                  {{ product.ngaykt | date : "dd/MM/yyyy" }}
+                </td>
+                <td
+                  style="width: 6%; word-break: break-word; text-align: center"
+                >
+                  <span class="p-column-title">Đang hưởng</span>
+                  {{ product.isDanghuong ? "X" : "" }}
+                </td>
+                <td style="width: 32%">
+                  <div
+                    *ngIf="product.soQd"
+                    class="flex flex-row"
+                    style="width: 100%"
+                  >
+                    <div
+                      class="flex flex-col justify-between"
+                      style="width: 100%"
+                    >
+                      {{ product?.soQd }}
+                      <p class="text-sm">
+                        Ngày ký: {{ product.ngayky | date : "dd/MM/yyyy" }}
+                      </p>
+                    </div>
+                    <div
+                      *ngIf="product.fileAttach"
+                      class="flex flex-row justify-between"
+                    >
+                      <button
+                        type="button"
+                        *ngIf="product.fileAttach"
+                        (click)="viewFileQD(product.nsQdnoidungId)"
+                        class="mr-5"
+                      >
+                        <i
+                          class="fa-light fa-eye icon-size-5"
+                          matTooltip="Xem"
+                        ></i>
+                      </button>
+                      <button
+                        type="button"
+                        *ngIf="product.fileAttach"
+                        (click)="downloadFileQD(product.nsQdnoidungId)"
+                        class="mr-2"
+                      >
+                        <i
+                          class="fa-light fa-file-arrow-down icon-size-5"
+                          matTooltip="Download"
+                        ></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+
+                <td style="width: 7%" class="text-center">
+                  <span class="p-column-title">Thao tác</span>
+                  <div>
+                    <button
+                      type="button"
+                      (click)="suaphucap(product)"
+                      class="mr-2"
+                    >
+                      <i
+                        class="fa-light fa-pencil icon-size-5"
+                        matTooltip="Sửa"
+                      ></i>
+                    </button>
+
+                    <button
+                      type="button"
+                      (click)="deletePhucap(product.nsPhucapId)"
+                      class="mr-2"
+                    >
+                      <i
+                        class="fa-light fa-trash-can icon-size-5"
+                        matTooltip="Xóa"
+                      ></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel ngClass="mb-2">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="truncate"
+              >Quá trình hưởng lương điều chỉnh, lương chức danh
+            </mat-panel-title>
+
+            <button
+              [disabled]="!model"
+              (click)="xuatExcelLuongdieuchinh()"
+              style="margin-right: 20px"
+              color="primary"
+              class="mx-1"
+              mat-flat-button
+            >
+              <i class="fa-regular fa-file-excel" matTooltip="Xuất excel"></i>
+            </button>
+            <button
+              [disabled]="!model"
+              *ngIf="nsInfo?.isNghiviec == null || nsInfo?.isNghiviec == false"
+              (click)="themluongDieuchinh()"
+              style="margin-right: 20px"
+              color="primary"
+              class="mx-1"
+              mat-flat-button
+            >
+              <i
+                class="fa-light fa-circle-plus"
+                matTooltip="Thêm mới quá trình lương điều chỉnh"
+              ></i>
+            </button>
+          </mat-expansion-panel-header>
+
+          <app-qtrluongdieuchinh
+            #qtrluongdieuchinh
+            [nsInfo]="nsInfo"
+          ></app-qtrluongdieuchinh>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+</div>

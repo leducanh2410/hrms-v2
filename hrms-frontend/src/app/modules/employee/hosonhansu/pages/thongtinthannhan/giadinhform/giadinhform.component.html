@@ -1,0 +1,88 @@
+<form name="registerForm" [formGroup]="registerForm" class="flex flex-col max-w-310 md:min-w-310 overflow-hidden max-h-screen -m-6">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-12 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium head-modal">
+            <span>Cập nhật thông tin thân nhân</span>
+        </div>
+        <button mat-icon-button [tabIndex]="-1" (click)="close()">
+            <i class="fa-light fa-xmark icon-size-5"></i>
+        </button>
+    </div>
+
+    <div #mainns class="flex flex-col flex-auto max-h-180 overflow-hidden">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-8 w-full min-w-0 p-6 overflow-y-auto">
+            <mat-form-field class="flex flex-col justify-center sm:col-span-2">
+                <mat-label >Quan hệ </mat-label>
+                <mat-select name="lqhegdinh" required [(ngModel)]="data.giadinh.lqhegdinh" formControlName="lqhegdinh" [compareWith]="compareObjectsLQuanhe">
+                    <mat-option *ngFor="let item of listQhegd" [value]="item">
+                        {{item.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field> 
+            
+                <mat-form-field >
+                    <mat-label >Họ và tên </mat-label>
+                    <input matInput placeholder="" formControlName="hoten" name="hoten" [(ngModel)]="data.giadinh.hoten" required/>
+                </mat-form-field>
+          
+            
+                <mat-form-field >
+                    <mat-label >Ngày sinh</mat-label>
+                    <input matInput [matDatepicker]="ngaysinh" name="ngaysinh" [(ngModel)]="data.giadinh.ngaysinh" [ngModelOptions]="{standalone: true}"/>
+                    <mat-datepicker-toggle matSuffix [for]="ngaysinh"></mat-datepicker-toggle>
+                    <mat-datepicker #ngaysinh></mat-datepicker>
+                </mat-form-field>
+          
+            
+                <mat-form-field >
+                    <mat-label >Số CCCD</mat-label>
+                    <input matInput placeholder="" name="cccd" [(ngModel)]="data.giadinh.cccd" [ngModelOptions]="{standalone: true}"/>
+                </mat-form-field>
+            
+           
+                <mat-form-field >
+                    <mat-label >Số điện thoại</mat-label>
+                    <input matInput placeholder="" name="dienthoai" [(ngModel)]="data.giadinh.dienthoai" [ngModelOptions]="{standalone: true}"/>
+                </mat-form-field>
+            
+            
+                <!-- <mat-form-field appearance="fill"  class="sm:col-span-2" >
+                    <mat-label >Chức danh công tác/ nơi làm việc</mat-label>
+                    <textarea  matInput name="ktbanthan" rows="1"
+                    [(ngModel)]="data.giadinh.congtac" [ngModelOptions]="{standalone: true}"></textarea>
+                </mat-form-field> -->
+
+                
+                <div class="flex flex-col justify-center sm:col-span-2">
+                    <div class="mat-field-label">Chức danh công tác/ nơi làm việc</div>
+                    <div class="flex flex-row border rounded-md border-slate-300">
+                        <textarea rows="5" class="w-full h-20 p-3" pInputTextareaname="ktbanthan" rows="1"
+                        [(ngModel)]="data.giadinh.congtac" [ngModelOptions]="{standalone: true}"></textarea>
+                    </div>
+                </div>
+
+                <div class="flex flex-col justify-center sm:col-span-2">
+                    <div class="mat-field-label">Nơi ở</div>
+                    <div class="flex flex-row border rounded-md border-slate-300">
+                        <textarea rows="5" class="w-full h-20 p-3" placeholder="" 
+                        pInputTextareaname="noio"
+                        name="noio" rows="1" [(ngModel)]="data.giadinh.noio" [ngModelOptions]="{standalone: true}"></textarea>
+                    </div>
+                </div>
+        </div>
+    </div>
+
+    <div class="flex flex-0 items-center justify-end h-12 pr-3 sm:pr-5 pl-6 sm:pl-8 mt-2 text-on-primary">
+        <div mat-dialog-actions class="h-toolbar flex justify-end">
+            <button class="mx-1 button-green" mat-flat-button [disabled]="isLockform" (click)="saveAndClose()">
+                <i class="fa-light fa-check icon-size-5"></i>
+                <span class="ml-2">Lưu</span>
+            </button>
+            <button class="mx-1 button-blue" mat-flat-button (click)="nhapTiep()">
+                <i class="fa-light fa-arrow-right icon-size-5"></i>
+                <span class="ml-2">Nhập tiếp</span>
+            </button>
+        </div>
+    </div>
+</form>

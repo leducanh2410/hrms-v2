@@ -11,6 +11,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { LoadingService } from './shared/loading-component/loading-component.services';
 import { provideStore, Store } from '@ngrx/store';
 import { MessageBox } from './fuse/components/message-box/message-box.provider';
+import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,6 +24,9 @@ export const appConfig: ApplicationConfig = {
     LoadingService,
     Store,
     provideStore(),
-    MessageBox
-  ]
+    MessageBox,
+    provideNativeDateAdapter(),
+    { provide: MAT_DIALOG_DATA, useValue: {} },
+    { provide: MatDialogRef, useValue: {} }
+  ],
 };

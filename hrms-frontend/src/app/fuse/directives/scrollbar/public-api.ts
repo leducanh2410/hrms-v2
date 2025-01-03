@@ -1,2 +1,2 @@
-export * from '@fuse/directives/scrollbar/scrollbar.directive';
-export * from '@fuse/directives/scrollbar/scrollbar.module';
+export * from '../../directives/scrollbar/scrollbar.directive';
+export * from '../../directives/scrollbar/scrollbar.module';

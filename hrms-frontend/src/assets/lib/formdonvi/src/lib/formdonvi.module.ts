@@ -20,7 +20,6 @@ import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
-    FormdonviComponent
   ],
   imports: [
     CommonModule,
@@ -40,7 +39,6 @@ import { CommonModule } from '@angular/common';
     TableModule,
   ],
   exports: [
-    FormdonviComponent
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

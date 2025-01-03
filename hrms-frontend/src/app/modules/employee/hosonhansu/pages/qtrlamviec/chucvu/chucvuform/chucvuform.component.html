@@ -1,0 +1,160 @@
+<form id="registerForm" (ngSubmit)="saveAndClose()" #registerForm="ngForm"
+    class="flex flex-col max-w-310 md:min-w-310 overflow-hidden max-h-screen -m-6">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-12 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium head-modal">
+            <span>Quá trình chức vụ</span>
+        </div>
+        <button type="button" mat-icon-button [tabIndex]="-1" (click)="close()">
+            <i class="fa-light fa-xmark icon-size-5"></i>
+        </button>
+    </div>
+
+    <div #mainns class="flex flex-col flex-auto h-modal max-h-146 overflow-y-auto">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-8 w-full min-w-0 p-6 overflow-y-auto">
+
+            <div class="flex flex-col justify-center sm:col-span-2">
+                <app-chonquyetdinh [quyetdinh]="quyetdinh" [isDisableForm]="isLockform" [donviId]="data.nhansu.donviId" [insertFile]="insertFile"></app-chonquyetdinh>
+            </div>
+
+
+            <mat-form-field>
+                <mat-label>Loại quyết định </mat-label>
+                <mat-select [ngModel]="qtChucvu.phanloai" [disabled]="data.noedit" name="loaiquyetdinh"
+                    (selectionChange)="onChonLoaiQD()">
+                    <mat-option *ngFor="let item of listPhanLoaiQD" [value]="item.id">
+                        {{item.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <div></div>
+
+            <div class="flex flex-col justify-center">
+                <div class="mat-field-label">Chức vụ <span style="color: red;">*</span> </div>
+                <div class="flex flex-row justify-between border rounded-md border-slate-300">
+                    <p-dropdown placeholder="Chọn chức vụ" class="dropdown-chucvu" [options]="listChucVu" 
+                        [ngModel]="qtChucvu.chucvuId" optionLabel="name" optionValue="id" name="phanloai"
+                        [required] filterBy="name" [filter]="true" [showClear]="true"  placeholder="&nbsp;" >
+                    </p-dropdown>
+                    <div class="border-r border-slate-300"></div>
+                    <mat-checkbox name="duongchuc" [ngModel]="qtChucvu.duongchuc" [disabled]="data.noedit">
+                        Đương chức
+                    </mat-checkbox>
+                </div>
+            </div>
+
+
+            <div class="flex flex-col justify-center">
+                <div class="flex flex-row border rounded-md border-slate-300 mt-6">
+                    <mat-radio-group name="chucvuchinh" aria-label="Select an option"
+                        [ngModel]="qtChucvu.cvChinh" [disabled]="data.noedit">
+                        <mat-radio-button [value]="true" [checked]="qtChucvu.cvChinh == true">Chức vụ chính </mat-radio-button>
+                        <mat-radio-button [value]="false" [checked]="qtChucvu.cvChinh == false">Chức vụ kiêm nhiệm</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+            </div>
+
+
+            <mat-form-field>
+                <mat-label>Bộ phận </mat-label>
+                <input matInput name="phongban" placeholder="Chọn phòng ban\bộ phận" [disabled]="data.noedit"
+                    [ngModel]="qtChucvu.phongto" required />
+                <button type="button" class="mx-1 -mr-2" color="primary" mat-flat-button (click)="onChonphongban()"
+                    [disabled]="data.noedit">
+                    <span class="ml-2">Chọn</span>
+                </button>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Đơn vị </mat-label>
+                <input matInput name="donvi" readonly="true" value={{tendonvi}} [disabled]="data.noedit" pTooltip={{tendonvi}}/>
+            </mat-form-field>
+
+
+            <div class="sm:col-span-2">
+                <div class="grid grid-cols-3 gap-y-3 gap-x-8">
+                    <mat-form-field>
+                        <mat-label class="">Ngày hiệu lực </mat-label>
+                        <input matInput name="ngayhieuluc" [matDatepicker]="ngayhieuluc"
+                            [ngModel]="qtChucvu.ngayBD" [disabled]="data.noedit" [max]="maxDate"
+                            (dateInput)="startDate($event)" (dateChange)="startDate($event)" required />
+                        <mat-datepicker-toggle matSuffix [for]="ngayhieuluc"></mat-datepicker-toggle>
+                        <mat-datepicker #ngayhieuluc></mat-datepicker>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Thời hạn bổ nhiệm </mat-label>
+                        <input matInput type="number" name="thoihan" placeholder="" name="tgkdnltx"
+                            [ngModel]="qtChucvu.thoihanbonhiem" [disabled]="data.noedit"
+                            (ngModelChange)="onHanbonhiem($event)" />
+                        <span matSuffix>(năm)</span>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Ngày kết thúc </mat-label>
+                        <input matInput name="ngayketthuc" [matDatepicker]="ngayKT" name="ngayKT"
+                            [ngModel]="qtChucvu.ngayKT" [disabled]="data.noedit" [min]="minDate"
+                            (dateInput)="endDate($event)" (dateChange)="endDate($event)" />
+                        <mat-datepicker-toggle matSuffix [for]="ngayKT"></mat-datepicker-toggle>
+                        <mat-datepicker #ngayKT></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="sm:col-span-2">
+                <div class="grid grid-cols-3 gap-y-3 gap-x-8">
+                    <div class="flex flex-col justify-center ">
+                        <div class="mat-field-label">Hưởng phụ cấp</div>
+                        <p-dropdown name="phucap" [disabled]="data.noedit" placeholder="Chọn phụ cấp" panelStyleClass="max-w-full" [style]="{ width: '100%'}"
+                            (onChange)="onChonphucap($event)" [options]="listPhuCap" (onClear)="onClearPhucap()"
+                            [ngModel]="qtChucvu.phucapId" optionLabel="name" optionValue="id"
+                             filterBy="name" [filter]="true" [showClear]="true">
+                        </p-dropdown>
+                    </div>
+
+                    <mat-form-field class="mt-6">
+                        <span matPrefix>
+                            <mat-checkbox name="chonheso" [disabled]="disableCheckHeso" [ngModel]="isCheckHeso"
+                                (change)="oncheckHeso($event)">
+                                Hệ số
+                            </mat-checkbox>
+                        </span>
+                        <mat-select name="heso" class="mr-3" [ngModel]="qtChucvu.hspcId"
+                            placeholder="Chọn hệ số" [disabled]="!isCheckHeso">
+                            <mat-option *ngFor="let item of listHesoPcap" [value]="item.id">
+                                {{item.heso}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field class="mt-6">
+                        <span matPrefix>Mức tiền</span>
+                        <input matInput type="text"  name="muctien" style="padding-left: 15px;" placeholder=""
+                            inputNumberFormat maxlength="12"
+                            [ngModel]="strMucTien" [disabled]="qtChucvu.phucapId == null || isCheckHeso || data.noedit" />
+                        <span matSuffix> (VNĐ)</span>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <mat-form-field class="sm:col-span-2">
+                <mat-label class=" sm:w-1/4 leading-none -mr-1">Ghi chú </mat-label>
+                <input matInput name="ghichu" placeholder="" [ngModel]="qtChucvu.ghichu"
+                    [disabled]="data.noedit" />
+            </mat-form-field>
+        </div>
+
+        <div class="flex flex-0 items-center justify-end h-12 mr-2 pr-3 sm:pr-5 pl-6 sm:pl-8 mt-2 text-on-primary">
+            <div mat-dialog-actions class="h-toolbar flex justify-end">
+                <button class="mx-1 button-green" mat-flat-button type="submit">
+                    <i class="fa-light fa-check icon-size-5"></i>
+                    <span class="ml-2">Lưu</span>
+                </button>
+                <!-- <button class="mx-1 button-blue" mat-flat-button (click)="nhapTiep()">
+                    <i class="fa-light fa-arrow-right icon-size-5"></i>
+                    <span class="ml-2">Nhập tiếp</span>
+                </button> -->
+            </div>
+        </div>
+
+    </div>
+</form>

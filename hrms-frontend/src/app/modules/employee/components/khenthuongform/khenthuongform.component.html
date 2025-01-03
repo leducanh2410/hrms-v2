@@ -1,0 +1,312 @@
+<form
+  id="rightForm"
+  (ngSubmit)="rightForm.form.valid && saveAndClose()"
+  #rightForm="ngForm"
+  class="flex flex-col max-w-310 md:min-w-310 overflow-hidden max-h-screen -m-6"
+>
+  <!-- Header -->
+  <div
+    class="flex flex-0 items-center justify-between h-12 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary"
+  >
+    <div class="text-lg font-medium head-modal">
+      <span>Chi tiết khen thưởng</span>
+    </div>
+    <button mat-icon-button [tabIndex]="-1" (click)="close()">
+      <i class="fa-light fa-xmark icon-size-5"></i>
+    </button>
+  </div>
+
+  <div
+    #mainns
+    class="flex flex-col flex-auto h-modal max-h-128 overflow-y-auto"
+  >
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-8 w-full min-w-0 p-6 overflow-y-auto"
+    >
+      <div class="flex items-center">
+        <mat-form-field class="w-full -pl-2">
+          <mat-label class="sm:w-1/4 leading-none -mr-1"
+            >Số quyết định</mat-label
+          >
+          <input
+            matInput
+            [readonly]="stateForm"
+            placeholder=""
+            name="soqdinh"
+            [(ngModel)]="data.soqd"
+            required="false"
+          />
+        </mat-form-field>
+      </div>
+      <div class="flex items-center">
+        <mat-form-field class="fuse-mat-no-subscript w-full">
+          <mat-label class="">Ngày ký</mat-label>
+          <input
+            [(ngModel)]="data.ngayky"
+            matInput
+            [matDatepicker]="tungay"
+            name="tungay"
+            [readonly]="stateForm"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="tungay"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #tungay [disabled]="stateForm"></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="flex flex-col justify-center">
+        <mat-form-field class="w-full -pl-2">
+          <mat-label class="sm:w-1/4 leading-none -mr-1">Người ký</mat-label>
+          <i class="fa-light fa-user icon-size-5 mr-2"></i>
+          <input
+            name="nguoiky"
+            matInput
+            placeholder="Chọn người xử lý"
+            (click)="onChonNhansu()"
+            readonly
+            [(ngModel)]="data.nguoiky"
+            [disabled]="stateForm"
+          />
+          <i
+            *ngIf="data.nguoiky"
+            class="fa-light fa-xmark icon-size-5"
+            (click)="onDeleteNhansu()"
+          ></i>
+        </mat-form-field>
+      </div>
+      <div class="flex flex-col justify-center">
+        <div class="mat-field-label">Chức vụ</div>
+        <p-dropdown
+          panelStyleClass="max-w-full"
+          [style]="{ width: '100%' }"
+          placeholder="&nbsp;"
+          [options]="listChucvu"
+          name="nganhang"
+          appendTo="body"
+          [filter]="true"
+          filterBy="name"
+          [(ngModel)]="data.chucvuky"
+          [disabled]="stateForm"
+        >
+        </p-dropdown>
+      </div>
+      <div class="flex flex-col justify-center sm:col-span-2">
+        <div class="mat-field-label">File quyết định</div>
+        <p-fileUpload
+          #fileForm
+          accept="image/*,.doc,.docx,.pdf,.xls,.xlsx"
+          class="w-full text-base"
+          chooseLabel="Chọn"
+          cancelLabel="Hủy"
+          [customUpload]="true"
+          (onClear)="removeAllFiles($event)"
+          [maxFileSize]="102400000"
+          (onSelect)="myUploader($event, fileForm)"
+          [disabled]="
+            (insertFile && insertFile.length == 1) ||
+            (data.webLlbsKthuongFileqd &&
+              data.webLlbsKthuongFileqd?.deleted == false)
+          "
+        >
+          <ng-template pTemplate="content" [disabled]="stateForm">
+            <div>
+              <div
+                *ngIf="
+                  data.webLlbsKthuongFileqd &&
+                  !data.webLlbsKthuongFileqd?.deleted
+                "
+                class="flex items-center justify-between w-full md:w-auto mt-2"
+              >
+                <div class="fuse-mat-no-subscript w-2/5">
+                  <div class="mat-field-label truncate">
+                    {{ data.webLlbsKthuongFileqd.fileName }}
+                  </div>
+                </div>
+
+                <div class="fuse-mat-no-subscript w-1/5">
+                  <div class="mat-field-label">
+                    {{ data.webLlbsKthuongFileqd.fileSize }} bytes
+                  </div>
+                </div>
+
+                <div class="flex justify-end w-1/5">
+                  <!-- <p-button icon="pi pi-times" (click)></p-button> -->
+                  <button
+                    pButton
+                    icon="fa-light fa-trash-can"
+                    type="button"
+                    (click)="deleteFile(data.webLlbsKthuongFileqd)"
+                    [disabled]="stateForm"
+                  ></button>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template let-file pTemplate="file">
+            <div
+              class="flex items-center justify-between w-full md:w-auto mt-2"
+            >
+              <div class="fuse-mat-no-subscript w-2/5">
+                <div class="mat-field-label truncate">{{ file.name }}</div>
+              </div>
+
+              <div class="fuse-mat-no-subscript w-1/5">
+                <div class="mat-field-label">{{ file.size }} bytes</div>
+              </div>
+
+              <div class="flex justify-end w-1/5">
+                <!-- <p-button icon="pi pi-times" (click)></p-button> -->
+                <button
+                  pButton
+                  icon="pi pi-times"
+                  type="button"
+                  (click)="removeFile(file, fileForm, $event)"
+                ></button>
+              </div>
+            </div>
+          </ng-template>
+        </p-fileUpload>
+      </div>
+      <div class="flex items-center sm:col-span-2">
+        <mat-form-field appearance="fill" class="w-full -pl-2">
+          <mat-label class="sm:w-1/4 leading-none -mr-1"
+            >Năm khen thưởng
+          </mat-label>
+          <input
+            type="number"
+            matInput
+            placeholder=""
+            name="ngayxuatngu"
+            [(ngModel)]="data.nam"
+            required
+            [readonly]="stateForm"
+          />
+        </mat-form-field>
+      </div>
+      <div class="flex flex-col justify-center sm:col-span-2">
+        <label class="mat-field-label" for="ngoaingu"
+          >Hình thức khen thưởng<span class="font-bold text-red-500 text-md"
+            >*</span
+          ></label
+        >
+        <p-dropdown
+          panelStyleClass="max-w-full"
+          [style]="{ width: '100%' }"
+          [options]="listHthucKhenthg"
+          optionLabel="name"
+          optionValue="id"
+          name="ngoaingu"
+          appendTo="body"
+          [(ngModel)]="data.lKthuongId"
+          [filter]="true"
+          filterBy="name"
+          (onChange)="changeKhenthuong($event.value)"
+          [disabled]="stateForm"
+        >
+        </p-dropdown>
+      </div>
+      <div class="flex items-center sm:col-span-2">
+        <mat-form-field class="w-full" appearance="fill">
+          <mat-label class="">Nội dung khen thưởng</mat-label>
+          <textarea
+            name="ktbanthan"
+            matInput
+            placeholder=""
+            rows="4"
+            [(ngModel)]="data.lydo"
+            [disabled]="stateForm"
+          ></textarea>
+        </mat-form-field>
+      </div>
+      <div class="flex flex-col justify-center sm:col-span-2">
+        <div class="mat-field-label">File khen thưởng</div>
+        <p-fileUpload
+          #fileForm2
+          accept="image/*,.doc,.docx,.pdf,.xls,.xlsx"
+          class="w-full text-base"
+          chooseLabel="Chọn"
+          cancelLabel="Hủy"
+          [customUpload]="true"
+          [maxFileSize]="102400000"
+          (onSelect)="myUploader2($event, fileForm2)"
+          [disabled]="
+            (insertFileKhenthuong && insertFileKhenthuong.length == 1) ||
+            (data.fileBangkhen && data.fileBangkhen?.deleted == false)
+          "
+        >
+          <ng-template pTemplate="content" [disabled]="stateForm">
+            <div>
+              <div
+                *ngIf="data.fileBangkhen && !data.fileBangkhen?.deleted"
+                class="flex items-center justify-between w-full md:w-auto mt-2"
+              >
+                <div class="fuse-mat-no-subscript w-2/5">
+                  <div class="mat-field-label truncate">
+                    {{ data.fileBangkhen.fileName }}
+                  </div>
+                </div>
+
+                <div class="fuse-mat-no-subscript w-1/5">
+                  <div class="mat-field-label">
+                    {{ data.fileBangkhen.fileSize }} bytes
+                  </div>
+                </div>
+
+                <div class="flex justify-end w-1/5">
+                  <!-- <p-button icon="pi pi-times" (click)></p-button> -->
+                  <button
+                    pButton
+                    icon="fa-light fa-trash-can"
+                    type="button"
+                    (click)="deleteFileKhenthuong(data.fileBangkhen)"
+                    [disabled]="stateForm"
+                  ></button>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template let-file pTemplate="file">
+            <div
+              class="flex items-center justify-between w-full md:w-auto mt-2"
+            >
+              <div class="fuse-mat-no-subscript w-2/5">
+                <div class="mat-field-label truncate">{{ file.name }}</div>
+              </div>
+
+              <div class="fuse-mat-no-subscript w-1/5">
+                <div class="mat-field-label">{{ file.size }} bytes</div>
+              </div>
+
+              <div class="flex justify-end w-1/5">
+                <!-- <p-button icon="pi pi-times" (click)></p-button> -->
+                <button
+                  pButton
+                  icon="pi pi-times"
+                  type="button"
+                  (click)="removeFileKhenthuong(file, fileForm2, $event)"
+                ></button>
+              </div>
+            </div>
+          </ng-template>
+        </p-fileUpload>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="flex flex-0 items-center justify-end h-12 mr-2 pr-3 sm:pr-5 pl-6 sm:pl-8 mt-2 text-on-primary"
+  >
+    <div mat-dialog-actions class="h-toolbar flex justify-end">
+      <button
+        type="submit"
+        class="mx-1 button-green"
+        [disabled]="stateForm"
+        mat-flat-button
+      >
+        <i class="fa-light fa-check icon-size-5"></i>
+        <span class="ml-2">Lưu</span>
+      </button>
+    </div>
+  </div>
+</form>

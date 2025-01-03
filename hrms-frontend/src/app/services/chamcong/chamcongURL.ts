@@ -1,4 +1,4 @@
-import { API, Environment } from "../../../app/core/config/app.config";
+import { API } from "../../../app/core/config/app.config";
 import { BaseURL } from "../baseURL";
 
 export class ChamcongURL extends BaseURL{

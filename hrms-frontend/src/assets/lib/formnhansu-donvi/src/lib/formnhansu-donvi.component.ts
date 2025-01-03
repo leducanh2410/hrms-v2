@@ -1,23 +1,62 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, Input, OnInit, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { FormdonviTreeComponent } from 'formdonvi-tree';
+import { FormdonviTreeComponent } from '../../../formdonvi-tree/src/public-api';
 import { Store } from '@ngrx/store';
 import { AppState } from './ngxstore/app.state';
 import { APP_ACTION } from './ngxstore/app.actions';
 import { User } from './ngxstore/user.types';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TableModule } from 'primeng/table';
+import { DropdownModule } from 'primeng/dropdown';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { FormdonviTreeModule } from '../../../formdonvi-tree/src/public-api';
 
 @Component({
   selector: 'lib-formnhansu-donvi',
   templateUrl: './formnhansu-donvi.component.html',
-  styleUrls: [
-    './formnhansu-donvi.component.css'
-  ]
+  styleUrls: ['./formnhansu-donvi.component.css'],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatCheckboxModule,
+    MatTooltipModule,
+    MatBadgeModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatFormFieldModule,
+    MatProgressBarModule,
+    MatSelectModule,
+    MatIconModule,
+    MatInputModule,
+    MatMenuModule,
+    DropdownModule,
+    TableModule,
+    FormdonviTreeModule,
+  ],
 })
 export class FormnhansuDonviComponent implements OnInit {
   @ViewChild('dtns') dtns: any;
-  @ViewChild('caption') caption: any
+  @ViewChild('caption') caption: any;
 
   donvis: any[] = [];
   selectedDonvi: any;
@@ -25,7 +64,7 @@ export class FormnhansuDonviComponent implements OnInit {
   selected: any; //result in single select mode
   selectionMode = 'single';
   listSelected: any[] = []; //result in multiple select mode
-  idField = 'nsID'
+  idField = 'nsID';
   ignoreAuthor = false;
   rightTructhuoc = false;
 
@@ -39,7 +78,7 @@ export class FormnhansuDonviComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     public matDialogRef: MatDialogRef<FormnhansuDonviComponent>,
     private _matDialog: MatDialog,
-    private store: Store<AppState>,
+    private store: Store<AppState>
   ) {
     const appUser = this.store.select((state) => state.appUser);
     appUser.subscribe((res: any) => {
@@ -57,40 +96,53 @@ export class FormnhansuDonviComponent implements OnInit {
     if (this.data.listSelected) this.listSelected = this.data.listSelected;
     if (this.data.idField) this.idField = this.data.idField;
     if (this.data.ignoreAuthor) this.ignoreAuthor = this.data.ignoreAuthor;
-    if (this.data.rightTructhuoc) this.rightTructhuoc = this.data.rightTructhuoc;
+    if (this.data.rightTructhuoc)
+      this.rightTructhuoc = this.data.rightTructhuoc;
 
     if (this.data.userDonvi) {
       this.selectedDonvi = {
         organizationId: this.data.userDonvi.organizationId,
         orgName: this.data.userDonvi.orgName,
-        orgCode: this.data.userDonvi.orgCode
-      }
-      this.http.get(this.data.apiNhansu + '/' + this.selectedDonvi.organizationId).pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.nhansus = res.data;
-      });
-    }
-    else {
-      this.selectedDonvi = {}
+        orgCode: this.data.userDonvi.orgCode,
+      };
+      this.http
+        .get(this.data.apiNhansu + '/' + this.selectedDonvi.organizationId)
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((res: any) => {
+          if (!res || !res.state) return;
+          this.nhansus = res.data;
+        });
+    } else {
+      this.selectedDonvi = {};
     }
 
-    this.http.get(this.data.apiDonvi).pipe(takeUntil(this._unsubscribeAll))
-    .subscribe((res: any) => {
-      if (!res || !res.state) return;
-      this.donvis = res.data;
-    });
+    this.http
+      .get(this.data.apiDonvi)
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((res: any) => {
+        if (!res || !res.state) return;
+        this.donvis = res.data;
+      });
 
     // Phân quyền lựa chọn trực thuộc
     if (!this.ignoreAuthor) {
       if (!this.data?.rightTructhuoc) {
-        this.http.get(`https://smartevn-test.evn.com.vn/hrms/employe/v1/home/listRights`).pipe(takeUntil(this._unsubscribeAll)).subscribe((res: any) => {
-          if (!res || !res.state) return;
-          let rights = res.data;
-          if (rights.some((right: { role: any; }) => right.role == 'RIGHT_TRUCTHUOC')) {
-            this.rightTructhuoc = true;
-          }
-        })
+        this.http
+          .get(
+            `https://smartevn-test.evn.com.vn/hrms/employe/v1/home/listRights`
+          )
+          .pipe(takeUntil(this._unsubscribeAll))
+          .subscribe((res: any) => {
+            if (!res || !res.state) return;
+            let rights = res.data;
+            if (
+              rights.some(
+                (right: { role: any }) => right.role == 'RIGHT_TRUCTHUOC'
+              )
+            ) {
+              this.rightTructhuoc = true;
+            }
+          });
       }
     }
   }
@@ -99,20 +151,21 @@ export class FormnhansuDonviComponent implements OnInit {
     const dialogRef = this._matDialog.open(FormdonviTreeComponent, {
       disableClose: false,
       data: {
-        donvis: this.donvis
-      }
+        donvis: this.donvis,
+      },
     });
 
-    dialogRef.afterClosed()
-      .subscribe((result) => {
-        if (!result) return
-        this.selectedDonvi = result.data;
-        this.http.get(this.data.apiNhansu + '/' + this.selectedDonvi.organizationId).pipe(takeUntil(this._unsubscribeAll))
+    dialogRef.afterClosed().subscribe((result) => {
+      if (!result) return;
+      this.selectedDonvi = result.data;
+      this.http
+        .get(this.data.apiNhansu + '/' + this.selectedDonvi.organizationId)
+        .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((res: any) => {
           if (!res || !res.state) return;
           this.nhansus = res.data;
         });
-      });
+    });
   }
 
   onRowSelect(event: any, selected: any) {
@@ -123,9 +176,9 @@ export class FormnhansuDonviComponent implements OnInit {
 
   saveAndClose(): void {
     if (this.selectionMode != 'single' && this.listSelected) {
-      this.listSelected.forEach(ns => {
-        ns.tendonvi = this.selectedDonvi.orgName
-      })
+      this.listSelected.forEach((ns) => {
+        ns.tendonvi = this.selectedDonvi.orgName;
+      });
       this.matDialogRef.close(this.listSelected);
     } else {
       if (this.selected == undefined || this.selected == null) {
@@ -148,8 +201,8 @@ export class FormnhansuDonviComponent implements OnInit {
   }
 
   /**
-  * On destroy
-  */
+   * On destroy
+   */
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
     this._unsubscribeAll.next(null);

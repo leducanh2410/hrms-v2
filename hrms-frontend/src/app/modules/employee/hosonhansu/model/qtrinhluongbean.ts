@@ -1,0 +1,33 @@
+export class QtrinhLuongBean {
+    nsLuongId?:number;
+    donviId?:number;
+    nsID?:number;
+    nsQdnoidungId?:number;
+    nsQdndung?:any;
+    soQd?:string;
+    nguoiky?:string;
+    chucvuky?:string;
+    ngayky?:Date;
+    strNgayky?:string;
+    noidung?:string;
+    ckeckLuongKhoan?:boolean;
+    luongkhoan?:number;
+    strLuongkhoan?:string;
+    mabangluong?:string;
+    mangachluong?:string;
+    bacluong?:string;
+    bacluongId?:number;
+    heSo?:number;
+    baoluu?:number;
+    tile?:number;
+    ngayhieuluc?:Date;
+    isDanghuong?:boolean;
+    thoiGianCanCuNangL?:Date;
+    ngayketthuc?:Date;
+    moctinhnl?:Date;
+    canhbaonl?:boolean;
+    lydokocanhbao?:string;
+    fileQdinh?:any;
+    fileLuongDinhkem?:any;
+    isNghiviec?:boolean;
+}

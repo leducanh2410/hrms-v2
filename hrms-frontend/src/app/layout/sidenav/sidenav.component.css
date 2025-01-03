@@ -1,0 +1,81 @@
+/* .sidenav-container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .sidenav {
+    width: 250px;
+    background: #2c3e50;
+    color: #ecf0f1;
+    overflow: hidden;
+    transition: width 0.3s ease;
+  }
+  
+  .sidenav.collapsed {
+    width: 70px;
+  }
+  
+  .collapse-btn {
+    width: 100%;
+    text-align: left;
+    color: #ecf0f1;
+  }
+  
+  .menu-item {
+    position: relative;
+    padding: 8px;
+  }
+  
+  .menu-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .submenu {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    background: #34495e;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    min-width: 150px;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+  }
+  
+  .menu-item:hover .submenu {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .content {
+    flex: 1;
+    background: #ecf0f1;
+  }
+  
+  .main-content {
+    padding: 16px;
+  }
+   */
+   /* .toolbar-item-spacer {
+    flex: 1 1 auto;
+}
+
+.app-container {
+    height: 90%;
+    margin: 0;
+}  
+.app-sidenav {
+    width: 230px;
+}
+.app-sidenav-content {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}  */

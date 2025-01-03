@@ -1,0 +1,404 @@
+<!-- Header -->
+<!-- <div
+  class="flex flex-0 items-center justify-between h-12 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary"
+>
+  <div class="text-lg font-medium head-modal">
+    <span>{{ titleForm }}</span>
+  </div>
+  <button mat-icon-button [tabIndex]="-1" (click)="onClose()">
+    <i class="fa-light fa-xmark icon-size-5"></i>
+  </button>
+</div> -->
+
+<div class="flex flex-col flex-auto h-modal max-h-130 overflow-y-auto">
+  <div
+    class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between sm:pt-1 py-1 px-1 border-b bg-white dark:bg-transparent"
+  >
+    <div class="flex flex-0 gap-2 items-center bg-white dark:bg-transparent">
+      <div class="flex px-2">
+        <p-dropdown
+          [(ngModel)]="selectedYear"
+          [options]="years"
+          placeholder="Chọn năm"
+          (onChange)="onChonNam()"
+        ></p-dropdown>
+      </div>
+      <p-autoComplete
+        name="danhSach"
+        [style]="{ width: '100%' }"
+        [(ngModel)]="dsSelected"
+        placeholder="{{ placeHolderTenDanhsach }}"
+        [suggestions]="filteredDs"
+        (completeMethod)="search($event)"
+        field="name"
+        [dropdown]="true"
+        (onSelect)="handleSelection($event)"
+        dataKey="id"
+      >
+      </p-autoComplete>
+      <div class="flex px-2">
+        <mat-checkbox
+          matInput
+          class="example-margin"
+          color="primary"
+          [checked]="copyLoaiHdCu"
+          (change)="onChangeCopyHdldCu($event)"
+        >
+          Copy loại HĐLĐ cũ
+        </mat-checkbox>
+      </div>
+      <div class="flex px-2">
+        <input
+          placeholder="(Điền ngày HĐLĐ mới)"
+          matInput
+          [matDatepicker]="ngayHD"
+          name="ngayHD"
+          [(ngModel)]="ngayHdld"
+          (keyup.enter)="onEnterCopyNgayHD()"
+        />
+        <mat-datepicker-toggle matSuffix [for]="ngayHD"></mat-datepicker-toggle>
+        <mat-datepicker #ngayHD></mat-datepicker>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex shrink-0 items-center">
+      <button
+        style="margin-right: 20px"
+        color="primary"
+        class="mx-1"
+        mat-flat-button
+      >
+        <i class="fa-regular fa-file-excel" matTooltip="Xuất excel"></i>
+      </button>
+      <button
+        class="mx-2 button-primary"
+        mat-flat-button
+        tooltipPosition="top"
+        (click)="onLapDanhsach()"
+      >
+        <span>Lập danh sách</span>
+      </button>
+      <button
+        class="mx-1 button-green"
+        mat-flat-button
+        tooltipPosition="top"
+        (click)="onLuuDanhsach()"
+      >
+        <span>{{ lblCapnhatDs }}</span>
+      </button>
+      <button
+        class="mx-1 button-red"
+        mat-flat-button
+        tooltipPosition="top"
+        (click)="onXoaDanhsach()"
+        [disabled]="isXoaDanhsachDisable"
+      >
+        <span>Xóa danh sách</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main -->
+
+  <div class="flex-auto sm:p-2 shadow bg-card bg-gray-100 w-full">
+    <mat-drawer-container class="flex-auto h-full" [hasBackdrop]="false">
+      <!-- Drawer -->
+      <mat-drawer
+        class="dark:bg-gray-900 !rounded-none"
+        [autoFocus]="false"
+        ngClass=""
+        [mode]="drawerMode"
+        [position]="'start'"
+        [(opened)]="drawerOpened"
+        #drawer
+      >
+        <app-list-employee></app-list-employee>
+      </mat-drawer>
+      <!-- Drawer content -->
+      <mat-drawer-content class="flex flex-col overflow-hidden h-full">
+        <!-- Main -->
+        <div class="flex-auto h-full shadow bg-card bg-gray-100">
+          <!-- CONTENT GOES HERE -->
+          <div class="h-full border-gray-300 rounded bg-white">
+            <!-- Menu page -->
+            <div
+              #mainxeoto
+              class="border-1 w-panel border-gray-300 rounded bg-white p-2 h-full"
+            >
+              <p-table
+                [value]="nsHopdongList"
+                styleClass="w-full"
+                [scrollable]="true"
+                scrollHeight="80vh"
+                class="overflow-x-auto"
+              >
+                <ng-template pTemplate="headergrouped" let-columns>
+                  <tr class="flex">
+                    <th
+                      class="text-left text-black font-bold border whitespace-nowrap inline-block"
+                    >
+                      Stt
+                    </th>
+                    <th
+                      class="text-left text-black font-bold border whitespace-nowrap inline-block"
+                    >
+                      Loại hợp đồng
+                    </th>
+                    <th
+                      class="text-left text-black font-bold border whitespace-nowrap inline-block"
+                    >
+                      Ngày ký hợp đồng
+                    </th>
+                    <th
+                      class="text-left text-black font-bold border whitespace-nowrap inline-block"
+                    >
+                      Ngày bắt đầu
+                    </th>
+                    <th
+                      class="text-left text-black font-bold border whitespace-nowrap inline-block"
+                    >
+                      Ngày kết thúc
+                    </th>
+                    <th
+                      class="text-left text-black font-bold border whitespace-nowrap inline-block"
+                    >
+                      Ngày chấm dứt hợp đồng
+                    </th>
+                    <th
+                      class="text-left text-black font-bold border whitespace-nowrap inline-block"
+                    >
+                      Số hợp đồng
+                    </th>
+                    <th
+                      class="text-left text-black font-bold border whitespace-nowrap inline-block"
+                    >
+                      Ngày tạo
+                    </th>
+                    <th
+                      class="text-left text-black font-bold border whitespace-nowrap inline-block"
+                    >
+                      Ngày cập nhật
+                    </th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-ns let-i="rowIndex">
+                  <tr
+                    class="border-b border-gray-200"
+                    #tableRow
+                    [class.selected]="ns.nsId === selectedNsId"
+                    [ngClass]="{ 'text-blue-600': ns.nsId === selectedNsId }"
+                  >
+                    <td class="text-center" style="width: 3%">{{ i + 1 }}</td>
+                    <td
+                      class="text-left"
+                      style="width: 15%"
+                      [innerHTML]="ns.tenkhaisinhUI"
+                    ></td>
+                    <td class="text-left" style="width: 8%">
+                      <div
+                        [pTooltip]="getTooltipValue(ns.ttrangId)"
+                        tooltipPosition="right"
+                        style="
+                          overflow: hidden;
+                          white-space: nowrap;
+                          width: 100%;
+                        "
+                      >
+                        <p-dropdown
+                          [options]="loaiHdldList"
+                          optionLabel="name"
+                          [disabled]="disabledInput"
+                          optionValue="id"
+                          name="loaihdld"
+                          class="w-full"
+                          [(ngModel)]="ns.ttrangId"
+                          appendTo="body"
+                          autoWidth="false"
+                          [style]="{ width: '100%', 'min-width': '100%' }"
+                          (onChange)="onLoaiHDLDChange($event, ns)"
+                          [ngClass]="{
+                            'text-blue-600': ns.nsId === selectedNsId
+                          }"
+                          tooltipPosition="right"
+                        >
+                        </p-dropdown>
+                      </div>
+                    </td>
+                    <td class="text-left" style="width: 12%">
+                      <mat-form-field class="w-full">
+                        <input
+                          [disabled]="disabledInput"
+                          matInput
+                          [matDatepicker]="pickerNgayHl"
+                          [(ngModel)]="ns.ngayHieuluc"
+                          (ngModelChange)="onNgayHieulucChange($event, ns)"
+                          [ngClass]="{
+                            'text-blue-600': ns.nsId === selectedNsId
+                          }"
+                        />
+                        <mat-datepicker-toggle
+                          matSuffix
+                          [for]="pickerNgayHl"
+                        ></mat-datepicker-toggle>
+                        <mat-datepicker #pickerNgayHl></mat-datepicker>
+                      </mat-form-field>
+                    </td>
+                    <td class="text-left" style="width: 12%">
+                      <mat-form-field class="w-full">
+                        <input
+                          [disabled]="disabledInput"
+                          matInput
+                          [matDatepicker]="pickerNgayKt"
+                          [(ngModel)]="ns.ngaykt"
+                          (ngModelChange)="onNgayKetThucChange($event, ns)"
+                          [ngClass]="{
+                            'text-blue-600': ns.nsId === selectedNsId
+                          }"
+                        />
+                        <mat-datepicker-toggle
+                          matSuffix
+                          [for]="pickerNgayKt"
+                        ></mat-datepicker-toggle>
+                        <mat-datepicker #pickerNgayKt></mat-datepicker>
+                      </mat-form-field>
+                    </td>
+
+                    <td style="width: 8%">
+                      <input
+                        type="text"
+                        [readonly]="true"
+                        value="{{ ns.strMangachluong }}"
+                        (dblclick)="onChonThangBangluong($event, ns)"
+                        class="w-full"
+                        style="width: 100%; height: 100%; display: content"
+                      />
+                    </td>
+
+                    <td class="text-left" style="width: 8%">
+                      <input
+                        type="text"
+                        [(ngModel)]="ns.luongkhoan"
+                        value="{{ ns.luongkhoan }}"
+                      />
+                    </td>
+
+                    <td class="text-left" style="width: 8%">
+                      <input
+                        type="text"
+                        [readonly]="true"
+                        value="{{ ns.strPhucap }}"
+                        (dblclick)="onChonHesoPhucap($event, ns)"
+                        class="w-full"
+                        style="width: 100%; height: 100%; display: content"
+                      />
+                    </td>
+
+                    <td class="text-left" style="width: 5%">
+                      <span>{{ ns.trangthaixuly }}</span>
+                    </td>
+
+                    <td class="text-center" style="width: 9%">
+                      <button
+                        type="button"
+                        class="mr-2"
+                        (click)="viewFileDuthao(ns)"
+                        *ngIf="
+                          ns.fileDuthaoName !== null &&
+                          ns.trangthaiky !== 'CHOTAODUTHAO'
+                        "
+                        [disabled]="disabledInput"
+                      >
+                        <i
+                          class="fa-light fa-eye icon-size-5"
+                          matTooltip="Xem"
+                        ></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="mr-2"
+                        (click)="downFileDuthao(ns)"
+                        *ngIf="
+                          ns.fileDuthaoName !== null &&
+                          ns.trangthaiky !== 'CHOTAODUTHAO'
+                        "
+                        [disabled]="disabledInput"
+                      >
+                        <i
+                          class="fa-light fa-file-arrow-down icon-size-5"
+                          matTooltip="Download"
+                        ></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="mr-2"
+                        (click)="triggerFileInput($event, ns, i)"
+                        [disabled]="ns.id === null || ns.id === undefined"
+                        *ngIf="ns.trangthaiky == 'CHOTAODUTHAO'"
+                      >
+                        <i
+                          class="pi pi-upload"
+                          matTooltip="Upload file dự thảo"
+                        ></i>
+                      </button>
+                      <input
+                        type="file"
+                        #fileInput
+                        style="display: none"
+                        (change)="onFileChange($event)"
+                        [disabled]="disabledInput"
+                      />
+                      <span class="w-full">{{ ns.fileName }}</span>
+                    </td>
+
+                    <td class="text-center" style="width: 4%">
+                      <button
+                        type="button"
+                        class="mr-2"
+                        (click)="onTaoduthao(ns)"
+                        *ngIf="ns.trangthaiky == 'CHOTAODUTHAO'"
+                      >
+                        <i
+                          class="fa-light fa-pencil icon-size-5"
+                          matTooltip="Tạo dự thảo"
+                        ></i>
+                      </button>
+                    </td>
+
+                    <td class="text-center" style="width: 4%">
+                      <button
+                        type="button"
+                        class="mr-2"
+                        (click)="onChuyenky(ns)"
+                        *ngIf="ns.trangthaiky == 'DATAODUTHAO'"
+                      >
+                        <i
+                          class="fas fa-file-signature"
+                          matTooltip="Chuyển ký"
+                        ></i>
+                      </button>
+                    </td>
+
+                    <td class="text-center" style="width: 4%">
+                      <button
+                        type="button"
+                        class="mr-2"
+                        (click)="onXoa(ns)"
+                        [disabled]="disabledInput"
+                      >
+                        <i
+                          class="fa-light fa-trash-can icon-size-5"
+                          matTooltip="Xóa"
+                        ></i>
+                      </button>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </div>
+        </div>
+      </mat-drawer-content>
+    </mat-drawer-container>
+  </div>
+</div>
