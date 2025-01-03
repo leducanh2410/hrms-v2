@@ -1,821 +1,879 @@
-<div class="flex flex-col flex-auto h-modal max-h-130 overflow-y-auto">
-  <div
-    class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between sm:pt-1 py-1 px-1 border-b bg-white dark:bg-transparent"
-  >
-    <!-- <div class="flex flex-0 gap-2 items-center bg-white dark:bg-transparent">
-      <div class="flex px-2">
-        <p-dropdown
-          [(ngModel)]="selectedYear"
-          [options]="years"
-          placeholder="Chọn năm"
-          (onChange)="onChonNam()"
-        ></p-dropdown>
-      </div>
-      <p-autoComplete
-        name="danhSach"
-        [style]="{ width: '100%' }"
-        [(ngModel)]="dsSelected"
-        placeholder="{{ placeHolderTenDanhsach }}"
-        [suggestions]="filteredDs"
-        (completeMethod)="search($event)"
-        field="name"
-        [dropdown]="true"
-        (onSelect)="handleSelection($event)"
-        dataKey="id"
-      >
-      </p-autoComplete>
-      <div class="flex px-2">
-        <mat-checkbox
-          matInput
-          class="example-margin"
-          color="primary"
-          [checked]="copyLoaiHdCu"
-          (change)="onChangeCopyHdldCu($event)"
+<div class="bg-white">
+  <mat-drawer-container class="h-full" [hasBackdrop]="false">
+    <!-- Drawer -->
+    <mat-drawer
+      class="dark:bg-gray-900 !rounded-none"
+      [autoFocus]="false"
+      ngClass=""
+      [mode]="drawerMode"
+      [position]="'start'"
+      [(opened)]="drawerOpened"
+      #drawer
+    >
+      <app-list-employee></app-list-employee>
+    </mat-drawer>
+    <!-- Drawer content -->
+    <mat-drawer-content class="border-l h-[100vh]">
+      <div class="tab-container flex items-center justify-between">
+        <mat-tab-group
+          class="!m-0 w-fit"
+          (selectedIndexChange)="onTabChange($event)"
         >
-          Copy loại HĐLĐ cũ
-        </mat-checkbox>
-      </div>
-      <div class="flex px-2">
-        <input
-          placeholder="(Điền ngày HĐLĐ mới)"
-          matInput
-          [matDatepicker]="ngayHD"
-          name="ngayHD"
-          [(ngModel)]="ngayHdld"
-          (keyup.enter)="onEnterCopyNgayHD()"
-        />
-        <mat-datepicker-toggle matSuffix [for]="ngayHD"></mat-datepicker-toggle>
-        <mat-datepicker #ngayHD></mat-datepicker>
-      </div>
-    </div> -->
+          <mat-tab label="Hợp đồng"></mat-tab>
+          <mat-tab label="Thông tin bảo hiểm"></mat-tab>
+          <mat-tab label="Danh sách bằng cấp"></mat-tab>
+          <mat-tab label="Đảng đoàn"></mat-tab>
+        </mat-tab-group>
 
-    <!-- Actions -->
-    <!-- <div class="flex shrink-0 items-center">
-      <button
-        style="margin-right: 20px"
-        color="primary"
-        class="mx-1"
-        mat-flat-button
-      >
-        <i class="fa-regular fa-file-excel" matTooltip="Xuất excel"></i>
-      </button>
-      <button
-        class="mx-2 button-primary"
-        mat-flat-button
-        tooltipPosition="top"
-        (click)="onLapDanhsach()"
-      >
-        <span>Lập danh sách</span>
-      </button>
-      <button
-        class="mx-1 button-green"
-        mat-flat-button
-        tooltipPosition="top"
-        (click)="onLuuDanhsach()"
-      >
-        <span>{{ lblCapnhatDs }}</span>
-      </button>
-      <button
-        class="mx-1 button-red"
-        mat-flat-button
-        tooltipPosition="top"
-        (click)="onXoaDanhsach()"
-        [disabled]="isXoaDanhsachDisable"
-      >
-        <span>Xóa danh sách</span>
-      </button>
-    </div> -->
-  </div>
-
-  <!-- Main -->
-
-  <div class="flex-auto sm:p-2 shadow bg-card bg-gray-100 w-[100vw]">
-    <mat-drawer-container class="flex-auto h-full" [hasBackdrop]="false">
-      <!-- Drawer -->
-      <mat-drawer
-        class="dark:bg-gray-900 !rounded-none"
-        [autoFocus]="false"
-        ngClass=""
-        [mode]="drawerMode"
-        [position]="'start'"
-        [(opened)]="drawerOpened"
-        #drawer
-      >
-        <app-list-employee></app-list-employee>
-      </mat-drawer>
-      <!-- Drawer content -->
-      <mat-drawer-content class="flex flex-col overflow-hidden h-full">
-        <div class="tab-container flex items-center justify-between">
-          <mat-tab-group
-            class="!m-0 w-fit"
-            (selectedIndexChange)="onTabChange($event)"
-          >
-            <mat-tab label="Hợp đồng"></mat-tab>
-            <mat-tab label="Thông tin bảo hiểm"></mat-tab>
-            <mat-tab label="Danh sách bằng cấp"></mat-tab>
-          </mat-tab-group>
-
-          <div class="content my-2 px-2" *ngIf="selectedTabIndex === 0">
-            <div class="buttons">
-              <button
-                mat-raised-button
-                color="success"
-                (click)="onTaoHopDong()"
-                class="rounded-md bg-gray-200 py-2 px-3 border border-gray-300 hover:bg-gray-300"
-              >
-                <mat-icon class="align-middle mr-1 text-green-600"
-                  >add_circle</mat-icon
-                >
-                <span>Tạo mới</span>
-              </button>
-              <button
-                mat-raised-button
-                color="warn"
-                (click)="onXoaHopDong()"
-                class="rounded-md bg-gray-200 py-2 px-3 border border-gray-300 hover:bg-gray-300"
-              >
-                <mat-icon class="align-middle mr-1"
-                  >restore_from_trash</mat-icon
-                >
-                <span>Xóa</span>
-              </button>
-              <button
-                mat-raised-button
-                color="warning"
-                (click)="handleButtonClick('Đổi cột')"
-                class="rounded-md bg-gray-200 py-2 px-3 border border-gray-300 hover:bg-gray-300"
-              >
-                <mat-icon class="align-middle mr-1">settings</mat-icon>
-                <span>Cấu hình cột</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Main -->
-        <div class="flex-auto shadow bg-card bg-gray-100 overflow-y-scroll">
-          <!-- CONTENT GOES HERE -->
-          <div class="h-full border-gray-300 rounded bg-white">
-            <!-- Menu page -->
-            <div
-              #mainxeoto
-              class="border-1 w-panel border-gray-300 rounded bg-white h-[100vh]"
+        <div class="content my-2 px-2" *ngIf="selectedTabIndex === 0">
+          <div class="buttons">
+            <button
+              mat-raised-button
+              color="success"
+              (click)="onTaoHopDong()"
+              class="rounded-md bg-gray-200 py-2 px-3 border border-gray-300 hover:bg-gray-300"
             >
-              <p-table
-                [value]="nsHopdongList"
-                styleClass="w-full"
-                [scrollable]="true"
-                scrollHeight="80vh"
-                class="overflow-x-auto"
-                *ngIf="selectedTabIndex === 0"
+              <mat-icon class="align-middle mr-1 text-green-600"
+                >add_circle</mat-icon
               >
-                <ng-template pTemplate="headergrouped" let-columns>
-                  <tr class="flex">
-                    <th
-                      class="text-left text-black font-bold border whitespace-nowrap inline-block"
-                    >
-                      Stt
-                    </th>
-                    <th
-                      class="text-left text-black font-bold border whitespace-nowrap inline-block"
-                    >
-                      Loại hợp đồng
-                    </th>
-                    <th
-                      class="text-left text-black font-bold border whitespace-nowrap inline-block"
-                    >
-                      Ngày ký hợp đồng
-                    </th>
-                    <th
-                      class="text-left text-black font-bold border whitespace-nowrap inline-block"
-                    >
-                      Ngày bắt đầu
-                    </th>
-                    <th
-                      class="text-left text-black font-bold border whitespace-nowrap inline-block"
-                    >
-                      Ngày kết thúc
-                    </th>
-                    <th
-                      class="text-left text-black font-bold border whitespace-nowrap inline-block"
-                    >
-                      Ngày chấm dứt hợp đồng
-                    </th>
-                    <th
-                      class="text-left text-black font-bold border whitespace-nowrap inline-block"
-                    >
-                      Số hợp đồng
-                    </th>
-                    <th
-                      class="text-left text-black font-bold border whitespace-nowrap inline-block"
-                    >
-                      Ngày tạo
-                    </th>
-                    <th
-                      class="text-left text-black font-bold border whitespace-nowrap inline-block"
-                    >
-                      Ngày cập nhật
-                    </th>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-ns let-i="rowIndex">
-                  <tr
-                    class="border-b border-gray-200"
-                    #tableRow
-                    [class.selected]="ns.nsId === selectedNsId"
-                    [ngClass]="{ 'text-blue-600': ns.nsId === selectedNsId }"
-                  >
-                    <td class="text-center" style="width: 3%">{{ i + 1 }}</td>
-                    <td
-                      class="text-left"
-                      style="width: 15%"
-                      [innerHTML]="ns.tenkhaisinhUI"
-                    ></td>
-                    <td class="text-left" style="width: 8%">
-                      <div
-                        [pTooltip]="getTooltipValue(ns.ttrangId)"
-                        tooltipPosition="right"
-                        style="
-                          overflow: hidden;
-                          white-space: nowrap;
-                          width: 100%;
-                        "
-                      >
-                        <p-dropdown
-                          [options]="loaiHdldList"
-                          optionLabel="name"
-                          [disabled]="disabledInput"
-                          optionValue="id"
-                          name="loaihdld"
-                          class="w-full"
-                          [(ngModel)]="ns.ttrangId"
-                          appendTo="body"
-                          autoWidth="false"
-                          [style]="{ width: '100%', 'min-width': '100%' }"
-                          (onChange)="onLoaiHDLDChange($event, ns)"
-                          [ngClass]="{
-                            'text-blue-600': ns.nsId === selectedNsId
-                          }"
-                          tooltipPosition="right"
-                        >
-                        </p-dropdown>
-                      </div>
-                    </td>
-                    <td class="text-left" style="width: 12%">
-                      <mat-form-field class="w-full">
-                        <input
-                          [disabled]="disabledInput"
-                          matInput
-                          [matDatepicker]="pickerNgayHl"
-                          [(ngModel)]="ns.ngayHieuluc"
-                          (ngModelChange)="onNgayHieulucChange($event, ns)"
-                          [ngClass]="{
-                            'text-blue-600': ns.nsId === selectedNsId
-                          }"
-                        />
-                        <mat-datepicker-toggle
-                          matSuffix
-                          [for]="pickerNgayHl"
-                        ></mat-datepicker-toggle>
-                        <mat-datepicker #pickerNgayHl></mat-datepicker>
-                      </mat-form-field>
-                    </td>
-                    <td class="text-left" style="width: 12%">
-                      <mat-form-field class="w-full">
-                        <input
-                          [disabled]="disabledInput"
-                          matInput
-                          [matDatepicker]="pickerNgayKt"
-                          [(ngModel)]="ns.ngaykt"
-                          (ngModelChange)="onNgayKetThucChange($event, ns)"
-                          [ngClass]="{
-                            'text-blue-600': ns.nsId === selectedNsId
-                          }"
-                        />
-                        <mat-datepicker-toggle
-                          matSuffix
-                          [for]="pickerNgayKt"
-                        ></mat-datepicker-toggle>
-                        <mat-datepicker #pickerNgayKt></mat-datepicker>
-                      </mat-form-field>
-                    </td>
-
-                    <td style="width: 8%">
-                      <input
-                        type="text"
-                        [readonly]="true"
-                        value="{{ ns.strMangachluong }}"
-                        (dblclick)="onChonThangBangluong($event, ns)"
-                        class="w-full"
-                        style="width: 100%; height: 100%; display: content"
-                      />
-                    </td>
-
-                    <td class="text-left" style="width: 8%">
-                      <input
-                        type="text"
-                        [(ngModel)]="ns.luongkhoan"
-                        value="{{ ns.luongkhoan }}"
-                      />
-                    </td>
-
-                    <td class="text-left" style="width: 8%">
-                      <input
-                        type="text"
-                        [readonly]="true"
-                        value="{{ ns.strPhucap }}"
-                        (dblclick)="onChonHesoPhucap($event, ns)"
-                        class="w-full"
-                        style="width: 100%; height: 100%; display: content"
-                      />
-                    </td>
-
-                    <td class="text-left" style="width: 5%">
-                      <span>{{ ns.trangthaixuly }}</span>
-                    </td>
-
-                    <td class="text-center" style="width: 9%">
-                      <button
-                        type="button"
-                        class="mr-2"
-                        (click)="viewFileDuthao(ns)"
-                        *ngIf="
-                          ns.fileDuthaoName !== null &&
-                          ns.trangthaiky !== 'CHOTAODUTHAO'
-                        "
-                        [disabled]="disabledInput"
-                      >
-                        <i
-                          class="fa-light fa-eye icon-size-5"
-                          matTooltip="Xem"
-                        ></i>
-                      </button>
-                      <button
-                        type="button"
-                        class="mr-2"
-                        (click)="downFileDuthao(ns)"
-                        *ngIf="
-                          ns.fileDuthaoName !== null &&
-                          ns.trangthaiky !== 'CHOTAODUTHAO'
-                        "
-                        [disabled]="disabledInput"
-                      >
-                        <i
-                          class="fa-light fa-file-arrow-down icon-size-5"
-                          matTooltip="Download"
-                        ></i>
-                      </button>
-                      <button
-                        type="button"
-                        class="mr-2"
-                        (click)="triggerFileInput($event, ns, i)"
-                        [disabled]="ns.id === null || ns.id === undefined"
-                        *ngIf="ns.trangthaiky == 'CHOTAODUTHAO'"
-                      >
-                        <i
-                          class="pi pi-upload"
-                          matTooltip="Upload file dự thảo"
-                        ></i>
-                      </button>
-                      <input
-                        type="file"
-                        #fileInput
-                        style="display: none"
-                        (change)="onFileChange($event)"
-                        [disabled]="disabledInput"
-                      />
-                      <span class="w-full">{{ ns.fileName }}</span>
-                    </td>
-
-                    <td class="text-center" style="width: 4%">
-                      <button
-                        type="button"
-                        class="mr-2"
-                        (click)="onTaoduthao(ns)"
-                        *ngIf="ns.trangthaiky == 'CHOTAODUTHAO'"
-                      >
-                        <i
-                          class="fa-light fa-pencil icon-size-5"
-                          matTooltip="Tạo dự thảo"
-                        ></i>
-                      </button>
-                    </td>
-
-                    <td class="text-center" style="width: 4%">
-                      <button
-                        type="button"
-                        class="mr-2"
-                        (click)="onChuyenky(ns)"
-                        *ngIf="ns.trangthaiky == 'DATAODUTHAO'"
-                      >
-                        <i
-                          class="fas fa-file-signature"
-                          matTooltip="Chuyển ký"
-                        ></i>
-                      </button>
-                    </td>
-
-                    <td class="text-center" style="width: 4%">
-                      <button
-                        type="button"
-                        class="mr-2"
-                        (click)="onXoa(ns)"
-                        [disabled]="disabledInput"
-                      >
-                        <i
-                          class="fa-light fa-trash-can icon-size-5"
-                          matTooltip="Xóa"
-                        ></i>
-                      </button>
-                    </td>
-                  </tr>
-                </ng-template>
-              </p-table>
-
-              <ng-container *ngIf="selectedTabIndex === 1">
-                <div class="container" class="!p-0">
-                  <h2 class="text-blue-400 border-b mb-3 font-bold pb-2">
-                    Bảo hiểm xã hội
-                  </h2>
-                  <form class="grid grid-cols-2 px-2">
-                    <div class="field mb-2">
-                      <label class="w-[30%] text-left">Tham gia BHXH</label>
-                      <input type="checkbox" class="scale-125" />
-                    </div>
-
-                    <div class="field mb-2">
-                      <label class="w-[30%] text-left">Số sổ BHXH</label>
-                      <input pInputText class="py-1 rounded-sm w-[60%]" />
-                    </div>
-
-                    <div class="field mb-2">
-                      <label class="w-[30%] text-left">Nơi cấp BHXH</label>
-                      <input pInputText class="py-1 rounded-sm w-[60%]" />
-                    </div>
-
-                    <div class="field mb-2">
-                      <label class="w-[30%] text-left">Số BHXH cũ</label>
-                      <input pInputText class="py-1 rounded-sm w-[60%]" />
-                    </div>
-
-                    <div class="field mb-2">
-                      <label class="w-[30%] text-left"
-                        >Đã nhận sổ BHXH bảo lưu</label
-                      >
-                      <input type="checkbox" class="scale-125" />
-                    </div>
-
-                    <div class="field mb-2">
-                      <label class="w-[30%] text-left">Mã số BHXH</label>
-                      <input pInputText class="py-1 rounded-sm w-[60%]" />
-                    </div>
-
-                    <div class="field mb-2">
-                      <label class="w-[30%] text-left"
-                        >Ngày nhận sổ BHXH bảo lưu</label
-                      >
-                      <input pInputText class="py-1 rounded-sm w-[60%]" />
-                    </div>
-
-                    <div class="field mb-2">
-                      <label class="w-[30%] text-left">Ngày cấp BHXH</label>
-                      <input pInputText class="py-1 rounded-sm w-[60%]" />
-                    </div>
-
-                    <div class="field mb-2">
-                      <label class="w-[30%] text-left">Ngày bảo lưu sổ</label>
-                      <input pInputText class="py-1 rounded-sm w-[60%]" />
-                    </div>
-
-                    <div class="field mb-2">
-                      <label class="w-[30%] text-left"
-                        >Ngày tham gia BHXH</label
-                      >
-                      <input pInputText class="py-1 rounded-sm w-[60%]" />
-                    </div>
-
-                    <div class="field mb-2">
-                      <label class="w-[30%] text-left"
-                        >Ngày trả sổ bảo hiểm</label
-                      >
-                      <input pInputText class="py-1 rounded-sm w-[60%]" />
-                    </div>
-
-                    <div class="field mb-2">
-                      <label class="w-[30%] text-left">Nộp sổ BHXH</label>
-                      <input pInputText class="py-1 rounded-sm w-[60%]" />
-                    </div>
-
-                    <div class="field mb-2">
-                      <label class="w-[30%] text-left">Ngày hẹn nhân sổ</label>
-                      <input pInputText class="py-1 rounded-sm w-[60%]" />
-                    </div>
-
-                    <div class="field mb-2">
-                      <label class="w-[30%] text-left">Ngày nộp sổ BHXH</label>
-                      <input pInputText class="py-1 rounded-sm w-[60%]" />
-                    </div>
-
-                    <div class="field mb-2">
-                      <label class="w-[30%] text-left"
-                        >Trạng thái sổ BHXH</label
-                      >
-                      <input pInputText class="py-1 rounded-sm w-[60%]" />
-                    </div>
-
-                    <div class="field mb-2">
-                      <label class="w-[30%] text-left align-top">Ghi chú</label>
-                      <textarea
-                        name=""
-                        id=""
-                        rows="3"
-                        class="outline-none border indent-2 w-[60%]"
-                      ></textarea>
-                    </div>
-                  </form>
-                </div>
-
-                <div>
-                  <h2 class="text-blue-400 border-b mb-3 font-bold pb-2">
-                    Bảo hiểm y tế
-                  </h2>
-
-                  <div class="content my-2 px-2 text-right">
-                    <div class="buttons">
-                      <button
-                        mat-raised-button
-                        color="success"
-                        (click)="handleButtonClick('Tạo mới')"
-                        class="rounded-md bg-gray-200 py-2 px-3 mr-3 border border-gray-300 hover:bg-gray-300"
-                      >
-                        <mat-icon class="align-middle mr-1 text-green-600"
-                          >add_circle</mat-icon
-                        >
-                        <span>Tạo mới</span>
-                      </button>
-                      <button
-                        mat-raised-button
-                        color="warn"
-                        (click)="handleButtonClick('Xóa')"
-                        class="rounded-md bg-gray-200 py-2 px-3 mr-3 border border-gray-300 hover:bg-gray-300"
-                      >
-                        <mat-icon class="align-middle mr-1"
-                          >restore_from_trash</mat-icon
-                        >
-                        <span>Xóa</span>
-                      </button>
-                      <button
-                        mat-raised-button
-                        color="warning"
-                        (click)="handleButtonClick('Đổi cột')"
-                        class="rounded-md bg-gray-200 py-2 px-3 border border-gray-300 hover:bg-gray-300"
-                      >
-                        <mat-icon class="align-middle mr-1">settings</mat-icon>
-                        <span>Cấu hình cột</span>
-                      </button>
-                    </div>
-                  </div>
-
-                  <p-table
-                    styleClass="w-full"
-                    [scrollable]="true"
-                    scrollHeight="80vh"
-                    class="overflow-x-auto"
-                  >
-                    <ng-template
-                      pTemplate="headergrouped"
-                      let-columns
-                      class="border"
-                    >
-                      <tr class="border border-collapse">
-                        <th
-                          class="text-left text-black font-bold border whitespace-nowrap inline-block w-fit"
-                        >
-                          <input type="checkbox" class="scale-125" />
-                        </th>
-                        <th
-                          class="text-left text-black font-bold border whitespace-nowrap inline-block w-fit"
-                        >
-                          Số thẻ BHYT
-                        </th>
-                        <th
-                          class="text-left text-black font-bold border whitespace-nowrap inline-block w-fit"
-                        >
-                          Nơi đăng kí khám bệnh
-                        </th>
-                        <th
-                          class="text-left text-black font-bold border whitespace-nowrap inline-block w-fit"
-                        >
-                          Mã bệnh viện đăng ký khám
-                        </th>
-                        <th
-                          class="text-left text-black font-bold border whitespace-nowrap inline-block w-fit"
-                        >
-                          Tham gia BHYT
-                        </th>
-
-                        <th
-                          class="text-left text-black font-bold border whitespace-nowrap inline-block w-fit"
-                        >
-                          Thao tác
-                        </th>
-                      </tr>
-                      <tr></tr>
-                    </ng-template>
-                  </p-table>
-                </div>
-              </ng-container>
-
-              <ng-container *ngIf="selectedTabIndex === 2">
-                <div class="max-h-[50%]">
-                  <div class="flex items-center justify-between border">
-                    <h2 class="text-blue-400 font-bold ml-2">DS Bằng cấp</h2>
-
-                    <div class="content my-2 px-2 text-right">
-                      <div class="buttons">
-                        <button
-                          mat-raised-button
-                          color="success"
-                          (click)="handleButtonClick('Tạo mới')"
-                          class="rounded-md bg-gray-200 py-2 px-3 mr-3 border border-gray-300 hover:bg-gray-300"
-                        >
-                          <mat-icon class="align-middle mr-1 text-green-600"
-                            >add_circle</mat-icon
-                          >
-                          <span>Tạo mới</span>
-                        </button>
-                        <button
-                          mat-raised-button
-                          color="warn"
-                          (click)="handleButtonClick('Xóa')"
-                          class="rounded-md bg-gray-200 py-2 px-3 mr-3 border border-gray-300 hover:bg-gray-300"
-                        >
-                          <mat-icon class="align-middle mr-1"
-                            >restore_from_trash</mat-icon
-                          >
-                          <span>Xóa</span>
-                        </button>
-                        <button
-                          mat-raised-button
-                          color="warning"
-                          (click)="handleButtonClick('Đổi cột')"
-                          class="rounded-md bg-gray-200 py-2 px-3 border border-gray-300 hover:bg-gray-300"
-                        >
-                          <mat-icon class="align-middle mr-1"
-                            >settings</mat-icon
-                          >
-                          <span>Cấu hình cột</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <p-table
-                    styleClass="w-full"
-                    [scrollable]="true"
-                    class="overflow-x-auto"
-                  >
-                    <ng-template
-                      pTemplate="headergrouped"
-                      let-columns
-                      class="border"
-                    >
-                      <tr class="border border-collapse">
-                        <th
-                          class="text-left text-black font-bold border whitespace-nowrap"
-                        >
-                          <input type="checkbox" class="scale-125" />
-                        </th>
-                        <th
-                          class="text-left text-black font-bold border whitespace-nowrap"
-                        >
-                          Bằng cấp
-                        </th>
-                        <th
-                          class="text-left text-black font-bold border whitespace-nowrap"
-                        >
-                          Đơn vị đào tạo
-                        </th>
-                        <th
-                          class="text-left text-black font-bold border whitespace-nowrap"
-                        >
-                          Chuyên nghành
-                        </th>
-                        <th
-                          class="text-left text-black font-bold border whitespace-nowrap"
-                        >
-                          Xếp loại
-                        </th>
-
-                        <th
-                          class="text-left text-black font-bold border whitespace-nowrap"
-                        >
-                          Ngày bắt đầu
-                        </th>
-
-                        <th
-                          class="text-left text-black font-bold border whitespace-nowrap"
-                        >
-                          Ngày kết thúc
-                        </th>
-
-                        <th
-                          class="text-left text-black font-bold border whitespace-nowrap"
-                        >
-                          Ngày tốt nghiệp
-                        </th>
-                      </tr>
-                      <tr></tr>
-                    </ng-template>
-                  </p-table>
-                </div>
-                <div>
-                  <div class="flex items-center justify-between border">
-                    <h2 class="text-blue-400 font-bold ml-2">
-                      Chứng chỉ tin học
-                    </h2>
-
-                    <div class="content my-2 px-2 text-right">
-                      <div class="buttons">
-                        <button
-                          mat-raised-button
-                          color="success"
-                          (click)="handleButtonClick('Tạo mới')"
-                          class="rounded-md bg-gray-200 py-2 px-3 mr-3 border border-gray-300 hover:bg-gray-300"
-                        >
-                          <mat-icon class="align-middle mr-1 text-green-600"
-                            >add_circle</mat-icon
-                          >
-                          <span>Tạo mới</span>
-                        </button>
-                        <button
-                          mat-raised-button
-                          color="warn"
-                          (click)="handleButtonClick('Xóa')"
-                          class="rounded-md bg-gray-200 py-2 px-3 mr-3 border border-gray-300 hover:bg-gray-300"
-                        >
-                          <mat-icon class="align-middle mr-1"
-                            >restore_from_trash</mat-icon
-                          >
-                          <span>Xóa</span>
-                        </button>
-                        <button
-                          mat-raised-button
-                          color="warning"
-                          (click)="handleButtonClick('Đổi cột')"
-                          class="rounded-md bg-gray-200 py-2 px-3 border border-gray-300 hover:bg-gray-300"
-                        >
-                          <mat-icon class="align-middle mr-1"
-                            >settings</mat-icon
-                          >
-                          <span>Cấu hình cột</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <p-table
-                    styleClass="w-full"
-                    [scrollable]="true"
-                    scrollHeight="80vh"
-                    class="overflow-x-auto"
-                  >
-                    <ng-template
-                      pTemplate="headergrouped"
-                      let-columns
-                      class="border"
-                    >
-                      <tr class="border border-collapse">
-                        <th
-                          class="text-left text-black font-bold border whitespace-nowrap"
-                        >
-                          <input type="checkbox" class="scale-125" />
-                        </th>
-                        <th
-                          class="text-left text-black font-bold border whitespace-nowrap"
-                        >
-                          Loại kỹ năng
-                        </th>
-                        <th
-                          class="text-left text-black font-bold border whitespace-nowrap"
-                        >
-                          Xếp loại
-                        </th>
-                        <th
-                          class="text-left text-black font-bold border whitespace-nowrap"
-                        >
-                          Là kỹ năng chính
-                        </th>
-                      </tr>
-                      <tr></tr>
-                    </ng-template>
-                  </p-table>
-                </div>
-              </ng-container>
-            </div>
+              <span>Tạo mới</span>
+            </button>
+            <button
+              mat-raised-button
+              color="warn"
+              (click)="onXoaHopDong()"
+              class="rounded-md bg-gray-200 py-2 px-3 border border-gray-300 hover:bg-gray-300"
+            >
+              <mat-icon class="align-middle mr-1">restore_from_trash</mat-icon>
+              <span>Xóa</span>
+            </button>
+            <button
+              mat-raised-button
+              color="warning"
+              (click)="handleButtonClick('Đổi cột')"
+              class="rounded-md bg-gray-200 py-2 px-3 border border-gray-300 hover:bg-gray-300"
+            >
+              <mat-icon class="align-middle mr-1">settings</mat-icon>
+              <span>Cấu hình cột</span>
+            </button>
           </div>
         </div>
-      </mat-drawer-content>
-    </mat-drawer-container>
-  </div>
+      </div>
+
+      <!-- Main -->
+      <div
+        #mainxeoto
+        class="h-full max-h-[88vh] overflow-y-auto border-gray-300 rounded bg-white"
+      >
+        <p-table
+          [value]="nsHopdongList"
+          styleClass="w-full"
+          [scrollable]="true"
+          scrollHeight="80vh"
+          class="overflow-x-auto"
+          *ngIf="selectedTabIndex === 0"
+        >
+          <ng-template pTemplate="headergrouped" let-columns>
+            <tr class="flex">
+              <th
+                class="text-left text-black font-bold border whitespace-nowrap inline-block"
+              >
+                Stt
+              </th>
+              <th
+                class="text-left text-black font-bold border whitespace-nowrap inline-block"
+              >
+                Loại hợp đồng
+              </th>
+              <th
+                class="text-left text-black font-bold border whitespace-nowrap inline-block"
+              >
+                Ngày ký hợp đồng
+              </th>
+              <th
+                class="text-left text-black font-bold border whitespace-nowrap inline-block"
+              >
+                Ngày bắt đầu
+              </th>
+              <th
+                class="text-left text-black font-bold border whitespace-nowrap inline-block"
+              >
+                Ngày kết thúc
+              </th>
+              <th
+                class="text-left text-black font-bold border whitespace-nowrap inline-block"
+              >
+                Ngày chấm dứt hợp đồng
+              </th>
+              <th
+                class="text-left text-black font-bold border whitespace-nowrap inline-block"
+              >
+                Số hợp đồng
+              </th>
+              <th
+                class="text-left text-black font-bold border whitespace-nowrap inline-block"
+              >
+                Ngày tạo
+              </th>
+              <th
+                class="text-left text-black font-bold border whitespace-nowrap inline-block"
+              >
+                Ngày cập nhật
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-ns let-i="rowIndex">
+            <tr
+              class="border-b border-gray-200"
+              #tableRow
+              [class.selected]="ns.nsId === selectedNsId"
+              [ngClass]="{ 'text-blue-600': ns.nsId === selectedNsId }"
+            >
+              <td class="text-center" style="width: 3%">{{ i + 1 }}</td>
+              <td
+                class="text-left"
+                style="width: 15%"
+                [innerHTML]="ns.tenkhaisinhUI"
+              ></td>
+              <td class="text-left" style="width: 8%">
+                <div
+                  [pTooltip]="getTooltipValue(ns.ttrangId)"
+                  tooltipPosition="right"
+                  style="overflow: hidden; white-space: nowrap; width: 100%"
+                >
+                  <p-dropdown
+                    [options]="loaiHdldList"
+                    optionLabel="name"
+                    [disabled]="disabledInput"
+                    optionValue="id"
+                    name="loaihdld"
+                    class="w-full"
+                    [(ngModel)]="ns.ttrangId"
+                    appendTo="body"
+                    autoWidth="false"
+                    [style]="{ width: '100%', 'min-width': '100%' }"
+                    (onChange)="onLoaiHDLDChange($event, ns)"
+                    [ngClass]="{
+                      'text-blue-600': ns.nsId === selectedNsId
+                    }"
+                    tooltipPosition="right"
+                  >
+                  </p-dropdown>
+                </div>
+              </td>
+              <td class="text-left" style="width: 12%">
+                <mat-form-field class="w-full">
+                  <input
+                    [disabled]="disabledInput"
+                    matInput
+                    [matDatepicker]="pickerNgayHl"
+                    [(ngModel)]="ns.ngayHieuluc"
+                    (ngModelChange)="onNgayHieulucChange($event, ns)"
+                    [ngClass]="{
+                      'text-blue-600': ns.nsId === selectedNsId
+                    }"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="pickerNgayHl"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #pickerNgayHl></mat-datepicker>
+                </mat-form-field>
+              </td>
+              <td class="text-left" style="width: 12%">
+                <mat-form-field class="w-full">
+                  <input
+                    [disabled]="disabledInput"
+                    matInput
+                    [matDatepicker]="pickerNgayKt"
+                    [(ngModel)]="ns.ngaykt"
+                    (ngModelChange)="onNgayKetThucChange($event, ns)"
+                    [ngClass]="{
+                      'text-blue-600': ns.nsId === selectedNsId
+                    }"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="pickerNgayKt"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #pickerNgayKt></mat-datepicker>
+                </mat-form-field>
+              </td>
+
+              <td style="width: 8%">
+                <input
+                  type="text"
+                  [readonly]="true"
+                  value="{{ ns.strMangachluong }}"
+                  (dblclick)="onChonThangBangluong($event, ns)"
+                  class="w-full"
+                  style="width: 100%; height: 100%; display: content"
+                />
+              </td>
+
+              <td class="text-left" style="width: 8%">
+                <input
+                  type="text"
+                  [(ngModel)]="ns.luongkhoan"
+                  value="{{ ns.luongkhoan }}"
+                />
+              </td>
+
+              <td class="text-left" style="width: 8%">
+                <input
+                  type="text"
+                  [readonly]="true"
+                  value="{{ ns.strPhucap }}"
+                  (dblclick)="onChonHesoPhucap($event, ns)"
+                  class="w-full"
+                  style="width: 100%; height: 100%; display: content"
+                />
+              </td>
+
+              <td class="text-left" style="width: 5%">
+                <span>{{ ns.trangthaixuly }}</span>
+              </td>
+
+              <td class="text-center" style="width: 9%">
+                <button
+                  type="button"
+                  class="mr-2"
+                  (click)="viewFileDuthao(ns)"
+                  *ngIf="
+                    ns.fileDuthaoName !== null &&
+                    ns.trangthaiky !== 'CHOTAODUTHAO'
+                  "
+                  [disabled]="disabledInput"
+                >
+                  <i class="fa-light fa-eye icon-size-5" matTooltip="Xem"></i>
+                </button>
+                <button
+                  type="button"
+                  class="mr-2"
+                  (click)="downFileDuthao(ns)"
+                  *ngIf="
+                    ns.fileDuthaoName !== null &&
+                    ns.trangthaiky !== 'CHOTAODUTHAO'
+                  "
+                  [disabled]="disabledInput"
+                >
+                  <i
+                    class="fa-light fa-file-arrow-down icon-size-5"
+                    matTooltip="Download"
+                  ></i>
+                </button>
+                <button
+                  type="button"
+                  class="mr-2"
+                  (click)="triggerFileInput($event, ns, i)"
+                  [disabled]="ns.id === null || ns.id === undefined"
+                  *ngIf="ns.trangthaiky == 'CHOTAODUTHAO'"
+                >
+                  <i class="pi pi-upload" matTooltip="Upload file dự thảo"></i>
+                </button>
+                <input
+                  type="file"
+                  #fileInput
+                  style="display: none"
+                  (change)="onFileChange($event)"
+                  [disabled]="disabledInput"
+                />
+                <span class="w-full">{{ ns.fileName }}</span>
+              </td>
+
+              <td class="text-center" style="width: 4%">
+                <button
+                  type="button"
+                  class="mr-2"
+                  (click)="onTaoduthao(ns)"
+                  *ngIf="ns.trangthaiky == 'CHOTAODUTHAO'"
+                >
+                  <i
+                    class="fa-light fa-pencil icon-size-5"
+                    matTooltip="Tạo dự thảo"
+                  ></i>
+                </button>
+              </td>
+
+              <td class="text-center" style="width: 4%">
+                <button
+                  type="button"
+                  class="mr-2"
+                  (click)="onChuyenky(ns)"
+                  *ngIf="ns.trangthaiky == 'DATAODUTHAO'"
+                >
+                  <i class="fas fa-file-signature" matTooltip="Chuyển ký"></i>
+                </button>
+              </td>
+
+              <td class="text-center" style="width: 4%">
+                <button
+                  type="button"
+                  class="mr-2"
+                  (click)="onXoa(ns)"
+                  [disabled]="disabledInput"
+                >
+                  <i
+                    class="fa-light fa-trash-can icon-size-5"
+                    matTooltip="Xóa"
+                  ></i>
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+
+        <ng-container *ngIf="selectedTabIndex === 1">
+          <div class="container" class="!p-0">
+            <h2 class="text-blue-400 border-b mb-3 font-bold pb-2 ml-2 mt-3">
+              Bảo hiểm xã hội
+            </h2>
+            <form class="grid grid-cols-2 px-2">
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Tham gia BHXH</label>
+                <input type="checkbox" class="scale-125" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Số sổ BHXH</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Nơi cấp BHXH</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Số BHXH cũ</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Đã nhận sổ BHXH bảo lưu</label>
+                <input type="checkbox" class="scale-125" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Mã số BHXH</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left"
+                  >Ngày nhận sổ BHXH bảo lưu</label
+                >
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày cấp BHXH</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày bảo lưu sổ</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày tham gia BHXH</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày trả sổ bảo hiểm</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Nộp sổ BHXH</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày hẹn nhân sổ</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày nộp sổ BHXH</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Trạng thái sổ BHXH</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left align-top">Ghi chú</label>
+                <textarea
+                  name=""
+                  id=""
+                  rows="3"
+                  class="outline-none border indent-2 w-[60%]"
+                ></textarea>
+              </div>
+            </form>
+          </div>
+
+          <div>
+            <h2 class="text-blue-400 border-b mb-3 font-bold pb-2 ml-2 mt-3">
+              Bảo hiểm y tế
+            </h2>
+
+            <div class="content my-2 px-2 text-right">
+              <div class="buttons">
+                <button
+                  mat-raised-button
+                  color="success"
+                  (click)="handleButtonClick('Tạo mới')"
+                  class="rounded-md bg-gray-200 py-2 px-3 mr-3 border border-gray-300 hover:bg-gray-300"
+                >
+                  <mat-icon class="align-middle mr-1 text-green-600"
+                    >add_circle</mat-icon
+                  >
+                  <span>Tạo mới</span>
+                </button>
+                <button
+                  mat-raised-button
+                  color="warn"
+                  (click)="handleButtonClick('Xóa')"
+                  class="rounded-md bg-gray-200 py-2 px-3 mr-3 border border-gray-300 hover:bg-gray-300"
+                >
+                  <mat-icon class="align-middle mr-1"
+                    >restore_from_trash</mat-icon
+                  >
+                  <span>Xóa</span>
+                </button>
+                <button
+                  mat-raised-button
+                  color="warning"
+                  (click)="handleButtonClick('Đổi cột')"
+                  class="rounded-md bg-gray-200 py-2 px-3 border border-gray-300 hover:bg-gray-300"
+                >
+                  <mat-icon class="align-middle mr-1">settings</mat-icon>
+                  <span>Cấu hình cột</span>
+                </button>
+              </div>
+            </div>
+
+            <p-table
+              styleClass="w-full"
+              [scrollable]="true"
+              scrollHeight="80vh"
+              class="overflow-x-auto"
+            >
+              <ng-template pTemplate="headergrouped" let-columns class="border">
+                <tr class="border border-collapse">
+                  <th
+                    class="text-left text-black font-bold border whitespace-nowrap inline-block w-fit"
+                  >
+                    <input type="checkbox" class="scale-125" />
+                  </th>
+                  <th
+                    class="text-left text-black font-bold border whitespace-nowrap inline-block w-fit"
+                  >
+                    Số thẻ BHYT
+                  </th>
+                  <th
+                    class="text-left text-black font-bold border whitespace-nowrap inline-block w-fit"
+                  >
+                    Nơi đăng kí khám bệnh
+                  </th>
+                  <th
+                    class="text-left text-black font-bold border whitespace-nowrap inline-block w-fit"
+                  >
+                    Mã bệnh viện đăng ký khám
+                  </th>
+                  <th
+                    class="text-left text-black font-bold border whitespace-nowrap inline-block w-fit"
+                  >
+                    Tham gia BHYT
+                  </th>
+
+                  <th
+                    class="text-left text-black font-bold border whitespace-nowrap inline-block w-fit"
+                  >
+                    Thao tác
+                  </th>
+                </tr>
+                <tr></tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="selectedTabIndex === 2">
+          <div class="max-h-[50%]">
+            <div class="flex items-center justify-between border">
+              <h2 class="text-blue-400 font-bold ml-2">DS Bằng cấp</h2>
+
+              <div class="content my-2 px-2 text-right">
+                <div class="buttons">
+                  <button
+                    mat-raised-button
+                    color="success"
+                    (click)="handleButtonClick('Tạo mới')"
+                    class="rounded-md bg-gray-200 py-2 px-3 mr-3 border border-gray-300 hover:bg-gray-300"
+                  >
+                    <mat-icon class="align-middle mr-1 text-green-600"
+                      >add_circle</mat-icon
+                    >
+                    <span>Tạo mới</span>
+                  </button>
+                  <button
+                    mat-raised-button
+                    color="warn"
+                    (click)="handleButtonClick('Xóa')"
+                    class="rounded-md bg-gray-200 py-2 px-3 mr-3 border border-gray-300 hover:bg-gray-300"
+                  >
+                    <mat-icon class="align-middle mr-1"
+                      >restore_from_trash</mat-icon
+                    >
+                    <span>Xóa</span>
+                  </button>
+                  <button
+                    mat-raised-button
+                    color="warning"
+                    (click)="handleButtonClick('Đổi cột')"
+                    class="rounded-md bg-gray-200 py-2 px-3 border border-gray-300 hover:bg-gray-300"
+                  >
+                    <mat-icon class="align-middle mr-1">settings</mat-icon>
+                    <span>Cấu hình cột</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <p-table
+              styleClass="w-full"
+              [scrollable]="true"
+              class="overflow-x-auto"
+            >
+              <ng-template pTemplate="headergrouped" let-columns class="border">
+                <tr class="border border-collapse">
+                  <th
+                    class="text-left text-black font-bold border whitespace-nowrap"
+                  >
+                    <input type="checkbox" class="scale-125" />
+                  </th>
+                  <th
+                    class="text-left text-black font-bold border whitespace-nowrap"
+                  >
+                    Bằng cấp
+                  </th>
+                  <th
+                    class="text-left text-black font-bold border whitespace-nowrap"
+                  >
+                    Đơn vị đào tạo
+                  </th>
+                  <th
+                    class="text-left text-black font-bold border whitespace-nowrap"
+                  >
+                    Chuyên nghành
+                  </th>
+                  <th
+                    class="text-left text-black font-bold border whitespace-nowrap"
+                  >
+                    Xếp loại
+                  </th>
+
+                  <th
+                    class="text-left text-black font-bold border whitespace-nowrap"
+                  >
+                    Ngày bắt đầu
+                  </th>
+
+                  <th
+                    class="text-left text-black font-bold border whitespace-nowrap"
+                  >
+                    Ngày kết thúc
+                  </th>
+
+                  <th
+                    class="text-left text-black font-bold border whitespace-nowrap"
+                  >
+                    Ngày tốt nghiệp
+                  </th>
+                </tr>
+                <tr></tr>
+              </ng-template>
+            </p-table>
+          </div>
+          <div>
+            <div class="flex items-center justify-between border">
+              <h2 class="text-blue-400 font-bold ml-2">Chứng chỉ tin học</h2>
+
+              <div class="content my-2 px-2 text-right">
+                <div class="buttons">
+                  <button
+                    mat-raised-button
+                    color="success"
+                    (click)="handleButtonClick('Tạo mới')"
+                    class="rounded-md bg-gray-200 py-2 px-3 mr-3 border border-gray-300 hover:bg-gray-300"
+                  >
+                    <mat-icon class="align-middle mr-1 text-green-600"
+                      >add_circle</mat-icon
+                    >
+                    <span>Tạo mới</span>
+                  </button>
+                  <button
+                    mat-raised-button
+                    color="warn"
+                    (click)="handleButtonClick('Xóa')"
+                    class="rounded-md bg-gray-200 py-2 px-3 mr-3 border border-gray-300 hover:bg-gray-300"
+                  >
+                    <mat-icon class="align-middle mr-1"
+                      >restore_from_trash</mat-icon
+                    >
+                    <span>Xóa</span>
+                  </button>
+                  <button
+                    mat-raised-button
+                    color="warning"
+                    (click)="handleButtonClick('Đổi cột')"
+                    class="rounded-md bg-gray-200 py-2 px-3 border border-gray-300 hover:bg-gray-300"
+                  >
+                    <mat-icon class="align-middle mr-1">settings</mat-icon>
+                    <span>Cấu hình cột</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <p-table
+              styleClass="w-full"
+              [scrollable]="true"
+              scrollHeight="80vh"
+              class="overflow-x-auto"
+            >
+              <ng-template pTemplate="headergrouped" let-columns class="border">
+                <tr class="border border-collapse">
+                  <th
+                    class="text-left text-black font-bold border whitespace-nowrap"
+                  >
+                    <input type="checkbox" class="scale-125" />
+                  </th>
+                  <th
+                    class="text-left text-black font-bold border whitespace-nowrap"
+                  >
+                    Loại kỹ năng
+                  </th>
+                  <th
+                    class="text-left text-black font-bold border whitespace-nowrap"
+                  >
+                    Xếp loại
+                  </th>
+                  <th
+                    class="text-left text-black font-bold border whitespace-nowrap"
+                  >
+                    Là kỹ năng chính
+                  </th>
+                </tr>
+                <tr></tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="selectedTabIndex === 3" class="w-[100vw]">
+          <div class="container" class="ml-2 mt-3">
+            <h2 class="text-blue-400 border-b mb-3 font-bold pb-2">Bộ đội</h2>
+            <form class="grid grid-cols-2 px-2">
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày nhập ngũ bộ đội</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Chức vụ bộ đội</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày xuất ngũ bộ đội</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Đơn vị công tác</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Quân hàm</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+            </form>
+          </div>
+          <div class="container" class="ml-2 mt-3">
+            <h2 class="text-blue-400 border-b mb-3 font-bold pb-2">
+              Đảng viên
+            </h2>
+            <form class="grid grid-cols-2 px-2">
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Là Đảng viên</label>
+                <input type="checkbox" class="scale-125" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Chức vụ Đảng</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày chính thức</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left"
+                  >Ngày giữ chức vụ Đảng viên</label
+                >
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày vào Đảng</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Trình độ chính trị</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+            </form>
+          </div>
+          <div class="container" class="ml-2 mt-3">
+            <h2 class="text-blue-400 border-b mb-3 font-bold pb-2">
+              Đoàn viên
+            </h2>
+            <form class="grid grid-cols-2 px-2">
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Là Đoàn viên</label>
+                <input type="checkbox" class="scale-125" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Chức vụ Đoàn</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày kết nạp Đoàn</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left"
+                  >Ngày giữ chức vụ Đoàn viên</label
+                >
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Nơi kết nạp Đoàn viên</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+            </form>
+          </div>
+          <div class="container" class="ml-2 mt-3">
+            <h2 class="text-blue-400 border-b mb-3 font-bold pb-2">
+              Cách mạng
+            </h2>
+            <form class="grid grid-cols-2 px-2">
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày nhập ngũ</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày xuất ngũ CM</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Chức vụ cách mạng</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Loại thương binh</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+            </form>
+          </div>
+          <div class="container" class="ml-2 mt-3">
+            <h2 class="text-blue-400 border-b mb-3 font-bold pb-2">
+              Hội cựu chiến binh
+            </h2>
+            <form class="grid grid-cols-2 px-2">
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Là thành viên HCCB</label>
+                <input type="checkbox" class="scale-125" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Số thẻ</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày kết nạp HCCB</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Chức vụ Đoàn viên</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+            </form>
+          </div>
+          <div class="container" class="ml-2 mt-3">
+            <h2 class="text-blue-400 border-b mb-3 font-bold pb-2">
+              Dân quân tự vệ
+            </h2>
+            <form class="grid grid-cols-2 px-2">
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Dân quân tự vệ</label>
+                <input type="checkbox" class="scale-125" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Chức vụ DQTV</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày kết nạp DQTV</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày xuất ngũ DQTV</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+            </form>
+          </div>
+          <div class="container" class="ml-2 mt-3">
+            <h2 class="text-blue-400 border-b mb-3 font-bold pb-2">
+              Gia đình chính sách
+            </h2>
+            <form class="grid grid-cols-2 px-2">
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Là gia đình chính sách</label>
+                <input type="checkbox" class="scale-125" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Loại chính sách</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+            </form>
+          </div>
+        </ng-container>
+      </div>
+    </mat-drawer-content>
+  </mat-drawer-container>
 </div>

@@ -7,7 +7,7 @@ import {
   withEventReplay,
 } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import { LoadingService } from './shared/loading-component/loading-component.services';
 import { provideStore, Store } from '@ngrx/store';
 import { MessageBox } from './fuse/components/message-box/message-box.provider';
@@ -20,7 +20,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
     provideAnimationsAsync(),
-    provideHttpClient(),
+    provideHttpClient(withFetch()),
     LoadingService,
     Store,
     provideStore(),
