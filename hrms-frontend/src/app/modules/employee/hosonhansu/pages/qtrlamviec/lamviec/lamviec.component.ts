@@ -1,4 +1,10 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonApiService } from '../../../../../../services/commonHttp';
 import { HSNhansuURL } from '../../../../../../services/employe/hosonhansuURL';
@@ -21,35 +27,56 @@ import { TableModule } from 'primeng/table';
   selector: 'app-lamviec',
   templateUrl: './lamviec.component.html',
   styleUrls: ['./lamviec.component.scss'],
-  imports:[
-    DividerModule,
-    CommonModule,
-    FormsModule,
-    TableModule,
-    
-  ]
+  imports: [DividerModule, CommonModule, FormsModule, TableModule],
 })
 export class LamviecComponent implements OnInit, OnChanges {
-  data: any[];
+  data: any[] = [
+    {
+      type: 'Chính thức',
+      effectiveDate: new Date('2023-01-01'),
+      position: 'Quản lý',
+      department: 'Kinh doanh',
+      office: 'Hà Nội',
+      carBrand: "Mazda",
+      creationDate: new Date('2022-12-01'),
+      updateDate: new Date('2023-01-15'),
+    },
+    {
+      type: 'Thử việc',
+      effectiveDate: new Date('2023-02-01'),
+      position: 'Nhân viên',
+      department: 'Hỗ trợ',
+      office: 'Hồ Chí Minh',
+      carBrand: "Honda",
+      creationDate: new Date('2023-01-05'),
+      updateDate: new Date('2023-02-10'),
+    },
+    {
+      type: 'Hợp đồng',
+      effectiveDate: new Date('2023-03-01'),
+      position: 'Kỹ sư',
+      department: 'Kỹ thuật',
+      office: 'Đà Nẵng',
+      carBrand: "Toyota",
+      creationDate: new Date('2023-01-10'),
+      updateDate: new Date('2023-03-05'),
+    },
+  ];
   @Input('nsInfo') nsInfo: any;
 
   model: THONG_TIN_CHUNG;
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
-
     private _matDialog: MatDialog,
     private http: CommonApiService,
     private messageService: MessageService,
-    private mb: MessageBox,
-  ) {
-
-  }
+    private mb: MessageBox
+  ) {}
   ngOnChanges(): void {
-    if (this.nsInfo != null && this.nsInfo.nsID != null) {
-
+    if (this.nsInfo != null && this.nsInfo?.nsID != null) {
       // this.http
-      //   .get(HSNhansuURL.getQtlamviec(this.nsInfo.nsID))
+      //   .get(HSNhansuURL.getQtlamviec(this.nsInfo?.nsID))
       //   .pipe(takeUntil(this._unsubscribeAll))
       //   .subscribe((res: any) => {
       //     if (!res || !res.state) return;
@@ -64,17 +91,15 @@ export class LamviecComponent implements OnInit, OnChanges {
   }
 
   loadData(): void {
-
-    if (this.nsInfo != null && this.nsInfo.nsID != null) {
+    if (this.nsInfo != null && this.nsInfo?.nsID != null) {
       this.http
-        .get(HSNhansuURL.getQtlamviec(this.nsInfo.nsID))
+        .get(HSNhansuURL.getQtlamviec(this.nsInfo?.nsID))
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((res: any) => {
           if (!res || !res.state) return;
           this.data = res.data;
         });
     }
-
   }
 
   themchucdanh() {
@@ -82,19 +107,17 @@ export class LamviecComponent implements OnInit, OnChanges {
       width: '900px',
       disableClose: true,
       data: {
-        nsID: this.nsInfo.nsID,
+        nsID: this.nsInfo?.nsID,
         isNow: true,
-        tenbophan: this.nsInfo.phongban,
-        phonbanId: this.nsInfo.phongbanId,
-        tendonvi: this.nsInfo.donvi,
-        donviId: this.nsInfo.donviId,
-      }
+        tenbophan: this.nsInfo?.phongban,
+        phonbanId: this.nsInfo?.phongbanId,
+        tendonvi: this.nsInfo?.donvi,
+        donviId: this.nsInfo?.donviId,
+      },
     });
-    dialogRef.afterClosed()
-      .subscribe((result) => {
-        this.loadData();
-
-      });
+    dialogRef.afterClosed().subscribe((result) => {
+      this.loadData();
+    });
   }
 
   suachucdanh(product) {
@@ -102,27 +125,20 @@ export class LamviecComponent implements OnInit, OnChanges {
     const dialogRef = this._matDialog.open(LamviecdialogComponent, {
       width: '900px',
       disableClose: true,
-      data: obj
+      data: obj,
     });
-    dialogRef.afterClosed()
-      .subscribe((result) => {
-        this.loadData();
-
-      });
+    dialogRef.afterClosed().subscribe((result) => {
+      this.loadData();
+    });
   }
 
   delete(product) {
-
     this.http
       .post(QuatrinhLamviecURL.validXoaQtLamviec(), product)
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((res: any) => {
         if (!res || !res.state) {
-
-          this.messageService.showErrorMessage(
-            'Hệ thống',
-            res.message
-          );
+          this.messageService.showErrorMessage('Hệ thống', res.message);
           return;
         }
         let dialog = this.mb.showDefault(
@@ -151,14 +167,12 @@ export class LamviecComponent implements OnInit, OnChanges {
               });
           }
         });
-
       });
-
   }
 
   xuatExcel(): void {
     this.http
-      .get(QuatrinhLamviecURL.xuatExcel(this.nsInfo.nsID))
+      .get(QuatrinhLamviecURL.xuatExcel(this.nsInfo?.nsID))
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((res: any) => {
         if (!res || !res.state) {
@@ -166,7 +180,7 @@ export class LamviecComponent implements OnInit, OnChanges {
         }
 
         const blob = AppUltil.base64ToBlob(res.data);
-        FileSaver.saveAs(blob, "quatrinhlamviec.xls");
+        FileSaver.saveAs(blob, 'quatrinhlamviec.xls');
       });
   }
 }

@@ -1,204 +1,138 @@
-<div class="h-full absolute inset-0 flex flex-col min-w-0 overflow-hidden bg-gray-100 w-full" cdkScrollable>
-    <div class="sm:p-2 overflow-x-hidden overflow-y-auto bg-gray-100 w-full">
-        <div class="w-full px-4 pb-4 flex flex-col border-1 border-gray-300 rounded bg-white">
-                    <div class="flex justify-between items-center">
-                        <p-divider align="left">
-                            <div class="inline-flex align-items-center justify-between">
-                                <b class="text-blue-600">Thông tin thân nhân(bao gồm: bố, mẹ, vợ, con, anh chị em, bố
-                                    mẹ vợ/chồng, anh chị em vợ/chồng)</b>
-                            </div>
-                        </p-divider>
-                        <div class="flex">
-                            <button [disabled]="!nhansu" style="margin-right: 20px;" color="primary" class="mx-1"
-                        mat-flat-button>
-                        <i class="fa-regular fa-file-excel" matTooltip="Xuất excel"></i>
-                    </button>
-                        <button [disabled]="!nhansu" style="margin-right: 20px;" color="primary" class="mx-1"
-                            mat-flat-button (click)="add()">
-                            <i class="fa-light fa-circle-plus" matTooltip="Thêm mới"></i>
-                    </button>
-                        </div>
-                    </div>
-
-                    <p-table [value]="thannhan" responsiveLayout="stack" 
-                        [tableStyle]="{ width: '100%'}">
-                        <ng-template pTemplate="header" let-columns>
-                            <tr>
-                                <th style="width: 7% ;word-wrap: normal" class="text-center font-bold text-black border" >Quan hệ</th>
-                                <th style="width: 10%;word-wrap: normal" class="text-center font-bold text-black border" >Họ và tên</th>
-                                <th style="width: 7%;word-wrap: normal" class="text-center font-bold text-black border" >Ngày sinh</th>
-                                <th style="width: 24%;word-wrap: normal" class="text-center font-bold text-black border" >Chức danh công tác, nơi làm việc</th>
-                                <th style="width: 25%;word-wrap: normal" class="text-center font-bold text-black border" >Nơi ở</th>
-                                <th style="width: 10%;word-wrap: normal" class="text-center font-bold text-black border" >CCCD</th>
-                                <th style="width: 10%;word-wrap: normal" class="text-center font-bold text-black border" >Điện thoại</th>
-                                <th style="width: 7%;word-wrap: normal" class="text-center font-bold text-black border">Thao tác</th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-product let-columns="columns" let-i="rowIndex">
-                            <tr class="border-b border-gray-200">
-                                <td  style="width: 7%; word-wrap: normal;">
-                                    {{ product.lqhegdinh?.name }}
-                                </td>
-                                <td  style="width: 10%; word-wrap: normal;">
-                                    {{ product.hoten }}
-                                </td>
-                                <td class="text-center" style="width: 7%; word-wrap: normal">
-                                    {{ product.ngaysinh | date:'dd/MM/yyyy'
-                                    }}
-                                </td>
-                                <td  style="width: 24%; word-wrap: normal">
-                                    {{ product.congtac }}
-                                </td>
-                                <!-- <td [ngClass]="{'text-blue-600':product.status == 2}" style="width: 5%"><p-tag [value]="product.inventoryStatus" [severity]="getSeverity(product.inventoryStatus)"></p-tag></td> -->
-                                <td  style="width: 25%; word-wrap: normal">
-                                    {{ product.noio }}
-                                </td>
-                                <td style="width: 10%; word-wrap: normal">
-                                    {{ product.cccd }}
-                                </td>
-                                <td style="width: 10%; word-wrap: normal">
-                                    {{ product.dienthoai }}
-                                </td>
-
-                                <td  style="width: 7%"
-                                    class="text-center">
-                                    <div class="flex flex-row justify-between pl-3 pr-3">
-                                        <button type="button" class="mr-2" (click)="update(product)">
-                                            <i class="fa-light fa-pencil icon-size-5" matTooltip="Sửa"></i>
-                                        </button>
-
-                                        <button type="button" (click)="delete(product.nsGiadinhId )">
-                                            <i class="fa-light fa-trash-can icon-size-5" matTooltip="Xóa"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </ng-template>
-                    </p-table>          
-
-                
-                    <div class="flex justify-between items-center">
-                        <p-divider align="left">
-                            <div class="inline-flex align-items-center justify-between">
-                                <b class="text-blue-600">Thông tin người phụ thuộc</b>
-                            </div>
-                        </p-divider>
-                        <div class="flex">
-                            <button [disabled]="!nhansu" style="margin-right: 20px;" color="primary" class="mx-1"
-                            mat-flat-button>
-                            <i class="fa-regular fa-file-excel" matTooltip="Xuất excel"></i>
-                        </button>
-                        <button [disabled]="!nhansu" style="margin-right: 20px;" color="primary" class="mx-1"
-                            mat-flat-button (click)="addNgPhuThuoc()">
-                            <i class="fa-light fa-circle-plus" matTooltip="Thêm mới"></i>
-                        </button>
-                        </div>
-                    </div>
-
-                    <p-table [value]="nguoiphuthuoc"  [tableStyle]="{'min-width': '50rem','width':'100%'}">
-                        <!-- <ng-template pTemplate="caption">
-                            <div class="flex justify-between">
-                                Thông tin người phụ thuộc
-                                <button class="button-primary mt-2" mat-flat-button type="button" (click)="addNgPhuThuoc()">Thêm
-                                    mới</button>
-                            </div>
-                        </ng-template> -->
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th rowspan="3" class="text-center font-bold text-black border text-sm">STT</th>
-                                <th rowspan="3" class="text-sm text-center font-bold text-black border" style="word-wrap: normal;">Họ và tên</th>
-                                <th rowspan="3" class="text-center font-bold text-black border text-sm" style="word-wrap: normal;">Ngày sinh</th>
-                                <th rowspan="3" class="text-sm text-center font-bold text-black border" style="word-wrap: normal;">Quốc tịch</th>
-                                <th rowspan="3" class="text-sm text-center font-bold text-black border" style="word-wrap: normal;">Quan hệ với người nộp thuế</th>
-                                <th colspan="2" class="text-sm text-center font-bold text-black border" style="word-wrap: normal;" >NPT đã có CCCD/ Hộ chiếu</th>
-                                <th colspan="6" class="text-sm text-center font-bold text-black border" style="word-wrap: normal;">NPT đã chưa có CCCD/ Hộ chiếu <br> Thông tin
-                                    trên giấy khai sinh
-                                </th>
-                                <th rowspan="3" class="text-sm text-center font-bold text-black border" style="word-wrap: normal;">Thời điểm tính GT</th>
-                                <th rowspan="3" class="text-sm text-center font-bold text-black border" style="word-wrap: normal;">Thời điểm KT tính GT</th>
-                                <th rowspan="3" class="text-sm text-center font-bold text-black border" style="word-wrap: normal;">Đang dùng</th>
-                                <th rowspan="3" class="text-center font-bold text-black border text-sm" >Thao tác</th>
-                            </tr>
-                            <tr>
-                                <th rowspan="2" class="text-sm text-center font-bold text-black border" style="word-wrap: normal;">MST nếu có</th>
-                                <th rowspan="2" class="text-sm text-center font-bold text-black border" style="word-wrap: normal;">số CMND/ CCCD/ Hộ chiếu </th>
-                                <th rowspan="2" class="text-sm text-center font-bold text-black border" style="word-wrap: normal;">Số</th>
-                                <th rowspan="2" class="text-sm text-center font-bold text-black border" style="word-wrap: normal;">Quyển số</th>
-                                <th colspan="4" class="text-sm text-center font-bold text-black border" style="word-wrap: normal;">Nơi đăng ký</th>
-                            </tr>
-                            <tr>
-                                <th class="text-sm text-center font-bold text-black border" style="word-wrap: normal;">Quốc gia</th>
-                                <th class="text-sm text-center font-bold text-black border" style="word-wrap: normal;">Tỉnh/ Thành phố</th>
-                                <th class="text-sm text-center font-bold text-black border" style="word-wrap: normal;">Quận/ Huyện</th>
-                                <th class="text-sm text-center font-bold text-black border" style="word-wrap: normal;">Phường/ Xã</th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-product let-columns="columns" let-i="rowIndex">
-                            <tr class="border-b border-gray-200">
-                                <td class="text-center text-sm" style="word-wrap: normal;">
-                                    {{i+1}}
-                                </td>
-                                <td class="text-sm" style="word-wrap: normal;">
-                                    {{ product.tennguoipt}}
-                                </td>
-                                <td class="text-center text-sm" style="word-wrap: normal;">
-                                    <span class="p-column-title">Ngày sinh</span>{{ product.ngaysinh | date:'dd/MM/yyyy' }}
-                                </td>
-                                <td class="text-center text-sm" style="word-wrap: normal;">
-                                    {{ product?.lQuocgia?.name}}
-                                </td>
-                                <td class="text-sm" style="word-wrap: normal;">
-                                    {{product?.lQhenguoiphuthuoc?.quanhe}}
-                                </td>
-                                <td class="text-sm" style="word-wrap: normal;">
-                                    {{ product.mstcanhan}}
-                                </td>
-                                <td class="text-sm" style="word-wrap: normal;">
-                                    {{ product.cmndorcccd}}
-                                </td>
-                                <td class="text-sm" style="word-wrap: normal;">
-                                    {{ product.so}}
-                                </td>
-                                <td class="text-sm" style="word-wrap: normal;">
-                                    {{ product.quyenso}}
-                                </td>
-
-                                <td class="text-center text-sm" style="word-wrap: normal;">
-                                    {{ product?.ks_lQuocgia?.name }}
-                                </td>
-                                <td class="text-sm" style="word-wrap: normal;">
-                                    {{ product?.ks_thanhpho?.tenTtpho }}
-                                </td>
-                                <td class="text-sm" style="word-wrap: normal;">
-                                    {{ product?.ks_quanhuyen?.name }}
-                                </td>
-                                <td class="text-sm" style="word-wrap: normal;">
-                                    {{ product.phuongxa }}
-                                </td>
-                                <td class="text-center text-sm" style="word-wrap: normal;">
-                                    {{ product.thangbatdau | date:'dd/MM/yyyy' }}
-                                </td>
-                                <td class="text-center text-sm" style="word-wrap: normal;">
-                                    {{ product.thangketthuc | date:'dd/MM/yyyy' }}
-                                </td>
-                                <td class="text-center text-sm" style="word-wrap: normal;">
-                                    <p-checkbox name="hientai" [binary]="true" value="product.hientai"
-                                        [(ngModel)]="product.hientai"></p-checkbox>
-                                </td>
-                                <td class="text-center text-sm">
-                                    <div>
-                                        <button type="button" class="mr-2" (click)="updateNgPhuThuoc(product)">
-                                            <i class="fa-light fa-pencil icon-size-5" matTooltip="Sửa"></i>
-                                        </button>
-
-                                        <button type="button" class="mr-2" (click)="deleteNgPhuThuoc(product.id)">
-                                            <i class="fa-light fa-trash-can icon-size-5" matTooltip="Xóa"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </ng-template>
-                    </p-table>
+<div
+  class="h-full absolute inset-0 flex flex-col min-w-0 overflow-hidden bg-gray-100 w-full"
+  cdkScrollable
+>
+  <div class="sm:p-2 overflow-x-hidden overflow-y-auto bg-gray-100 w-full">
+    <div
+      class="w-full px-4 pb-4 flex flex-col border-1 border-gray-300 rounded bg-white"
+    >
+      <div class="flex justify-between items-center">
+        <p-divider align="left">
+          <div class="inline-flex align-items-center justify-between">
+            <b class="text-blue-600"
+              >Thông tin thân nhân(bao gồm: bố, mẹ, vợ, con, anh chị em, bố mẹ
+              vợ/chồng, anh chị em vợ/chồng)</b
+            >
+          </div>
+        </p-divider>
+        <div class="flex">
+          <button
+            [disabled]="!nhansu"
+            style="margin-right: 20px"
+            color="primary"
+            class="mx-1"
+            mat-flat-button
+          >
+            <i class="fa-regular fa-file-excel" matTooltip="Xuất excel"></i>
+          </button>
+          <button
+            [disabled]="!nhansu"
+            style="margin-right: 20px"
+            color="primary"
+            class="mx-1"
+            mat-flat-button
+            (click)="add()"
+          >
+            <i class="fa-light fa-circle-plus" matTooltip="Thêm mới"></i>
+          </button>
         </div>
+      </div>
+
+      <p-table
+        [value]="people"
+        responsiveLayout="stack"
+        [tableStyle]="{ width: '100%' }"
+        [paginator]="true"
+        [rows]="10"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th
+              style="width: 15%; word-wrap: normal"
+              class="text-center font-bold text-black border"
+            >
+              Họ và tên
+            </th>
+
+            <th
+              style="width: 7%; word-wrap: normal"
+              class="text-center font-bold text-black border"
+            >
+              Quan hệ
+            </th>
+            <th
+              style="width: 15%; word-wrap: normal"
+              class="text-center font-bold text-black border"
+            >
+              Ngày sinh
+            </th>
+            <th
+              style="width: 7%; word-wrap: normal"
+              class="text-center font-bold text-black border"
+            >
+              Giới tính
+            </th>
+            <th
+              style="width: 15%; word-wrap: normal"
+              class="text-center font-bold text-black border"
+            >
+              Nghề nghiệp
+            </th>
+            <th
+              style="width: 20%; word-wrap: normal"
+              class="text-center font-bold text-black border"
+            >
+              Địa chỉ người thân
+            </th>
+            <th
+              style="width: 7%; word-wrap: normal"
+              class="text-center font-bold text-black border"
+            >
+              Thao tác
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-person>
+          <tr class="border border-gray-200">
+            <td class="border" style="width: 7%; word-wrap: normal">
+              {{ person.fullName }}
+            </td>
+            <td class="border" style="width: 10%; word-wrap: normal">
+              {{ person.relationship }}
+            </td>
+            <td class="border" class="text-center" style="width: 7%; word-wrap: normal">
+              {{ person.dateOfBirth | date : "dd/MM/yyyy" }}
+            </td>
+            <td class="border" style="width: 24%; word-wrap: normal">
+              {{ person.gender }}
+            </td>
+            <td class="border" style="width: 25%; word-wrap: normal">
+              {{ person.occupation }}
+            </td>
+            <td class="border" style="width: 10%; word-wrap: normal">
+              {{ person.address }}
+            </td>
+
+            <td style="width: 7%" class="text-center border">
+              <div class="flex flex-row justify-between pl-3 pr-3">
+                <button type="button" class="mr-2" (click)="update(person)">
+                  <i
+                    class="fa-light fa-pencil icon-size-5"
+                    matTooltip="Sửa"
+                  ></i>
+                </button>
+
+                <button type="button" (click)="delete(person.nsGiadinhId)">
+                  <i
+                    class="fa-light fa-trash-can icon-size-5"
+                    matTooltip="Xóa"
+                  ></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
     </div>
+  </div>
 </div>

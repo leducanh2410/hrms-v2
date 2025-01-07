@@ -2,17 +2,17 @@
   name="registerForm"
   #registerForm="ngForm"
   (ngSubmit)="registerForm.form.valid && saveAndClose()"
-  class="flex flex-col max-w-310 md:min-w-310 overflow-hidden max-h-screen -m-6"
+  class="flex flex-col max-w-310 md:min-w-310 overflow-hidden max-h-[90vh]"
 >
   <!-- Header -->
   <div
     class="flex flex-0 items-center justify-between h-12 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary"
   >
     <div class="text-lg font-medium head-modal">
-      <span>Cập nhật khen thưởng</span>
+      <span class="text-white">Cập nhật đánh giá</span>
     </div>
     <button mat-icon-button [tabIndex]="-1" (click)="close()">
-      <i class="fa-light fa-xmark icon-size-5"></i>
+      <i class="fa-light fa-xmark icon-size-5 text-xl text-white"></i>
     </button>
   </div>
 
@@ -20,167 +20,159 @@
     #mainns
     class="flex flex-col flex-auto h-modal max-h-200 overflow-y-auto"
   >
-    <div
-      class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-8 w-full min-w-0 p-6 overflow-y-auto"
-    >
-      <div class="flex flex-col justify-center sm:col-span-2">
-        <app-chonquyetdinh
-          [(quyetdinh)]="quyetdinh"
-          [isDisableForm]="isLockform"
-          [donviId]="data.nhansu.donviId"
-          [(insertFile)]="insertFile"
-        ></app-chonquyetdinh>
+    <div class="mt-5">
+      <h2 class="text-blue-500 border-b text-lg ml-2 mb-3">
+        Đánh giá của nhân viên
+      </h2>
+      <div class="grid grid-cols-2 gap-4 px-4">
+        <div class="">
+          <div class="mat-field-label">Đợt đánh giá</div>
+          <p-dropdown
+            panelStyleClass="max-w-full"
+            [style]="{ width: '100%' }"
+            optionLabel="name"
+            optionValue="id"
+            name="vtricdanh"
+            appendTo="body"
+            [filter]="true"
+            filterBy="name"
+            [required]="true"
+            placeholder="&nbsp;"
+          >
+          </p-dropdown>
+        </div>
+        <div class="">
+          <div class="mat-field-label">Họ và tên</div>
+          <input pInputText class="w-full" [disabled]="true" />
+        </div>
+
+        <div class="flex flex-col justify-center">
+          <div class="mat-field-label">Thời gian đánh giá</div>
+          <div class="flex items-center gap-2">
+            <p-calendar
+              name="tgDanhGia"
+              [showIcon]="true"
+              [showOnFocus]="false"
+              class="!w-full"
+              placeholder="Từ ngày"
+            />
+            <p-calendar
+              name="tgDanhGia"
+              [showIcon]="true"
+              [showOnFocus]="false"
+              class="!w-full"
+              placeholder="Đến ngày"
+            />
+          </div>
+        </div>
+
+        <div class="flex flex-col justify-center">
+          <div class="mat-field-label">Thời hạn</div>
+          <p-calendar
+            name="tgDanhGia"
+            [showIcon]="true"
+            [showOnFocus]="false"
+            class="!w-full"
+            placeholder="Từ ngày"
+          />
+        </div>
       </div>
+    </div>
+    <div class="mt-5">
+      <h2 class="text-blue-500 border-b text-lg ml-2 mb-3">Đánh giá chung</h2>
+      <div class="grid grid-cols-2 gap-4 px-4">
+        <div class="">
+          <div class="mat-field-label">Nhận xét</div>
+          <textarea rows="3" class="w-full border rounded-md"></textarea>
+        </div>
 
-      <mat-form-field>
-        <mat-label class="sm:w-1/4 leading-none -mr-1"
-          >Năm khen thưởng
-        </mat-label>
-        <input
-          matInput
-          type="number"
-          required
-          [disabled]="isLockform"
-          placeholder=""
-          [(ngModel)]="data.khenthuong.namKt"
-          name="namKt"
-        />
-      </mat-form-field>
+        <div class="">
+          <div class="mat-field-label">Cá nhân đánh giá</div>
+          <textarea rows="3" class="w-full border rounded-md"></textarea>
+        </div>
 
-      <mat-form-field>
-        <mat-label>Cấp khen thưởng </mat-label>
-        <mat-select
-          [disabled]="isLockform"
-          name="capkhenthuong"
-          required
-          [(ngModel)]="capKtId"
-          (selectionChange)="onChonCapKT()"
-        >
-          <mat-option *ngFor="let item of listCapKT" [value]="item.capKtId">
-            {{ item.tenCapKt }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+        <div class="">
+          <div class="mat-field-label">Cá nhân xếp loại</div>
+          <textarea rows="3" class="w-full border rounded-md"></textarea>
+        </div>
 
-      <mat-form-field>
-        <mat-label>Danh hiệu </mat-label>
-        <mat-select
-          name="danhhieu"
-          [disabled]="isLockform"
-          required
-          [(ngModel)]="data.khenthuong.ktId"
-        >
-          <mat-option *ngFor="let item of listDanhhieu" [value]="item.id">
-            {{ item.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+        <div class="">
+          <div class="mat-field-label">Điểm mạnh</div>
+          <textarea rows="3" class="w-full border rounded-md"></textarea>
+        </div>
 
-      <mat-form-field>
-        <mat-label class="sm:w-1/4 leading-none -mr-1"
-          >Nội dung khen thưởng
-        </mat-label>
-        <input
-          matInput
-          [disabled]="isLockform"
-          placeholder=""
-          [(ngModel)]="data.khenthuong.lydo"
-          [ngModelOptions]="{ standalone: true }"
-        />
-      </mat-form-field>
+        <div class="">
+          <div class="mat-field-label">Hạn chế</div>
+          <textarea rows="3" class="w-full border rounded-md"></textarea>
+        </div>
 
-      <div class="flex flex-col justify-center sm:col-span-2">
-        <div class="mat-field-label">File bằng khen:</div>
-        <p-fileUpload
-          #fileForm2
-          [disabled]="isLockform"
-          accept="image/*,.doc,.docx,.pdf,.xls,.xlsx"
-          class="w-full text-base"
-          chooseLabel="Chọn"
-          cancelLabel="Hủy"
-          [customUpload]="true"
-          [maxFileSize]="51200000"
-          invalidFileSizeMessageSummary=""
-          invalidFileSizeMessageDetail="File Size không được quá 50 MB"
-          invalidFileTypeMessageSummary="File không đúng định dạng"
-          invalidFileTypeMessageDetail="({0})"
-          (onSelect)="myUploaderBangKhen($event, fileForm2)"
-        >
-          <ng-template pTemplate="content">
-            <!-- <div *ngIf="loadingFile" class="flex flex-row justify-center">
-                                <mat-spinner class="loadingFileQD">
-                                </mat-spinner>
-                            </div> -->
+        <div class="">
+          <div class="mat-field-label">Cần cải thiện</div>
+          <textarea rows="3" class="w-full border rounded-md"></textarea>
+        </div>
 
-            <div
-              *ngIf="
-                fileKhenThuong &&
-                (insertFileBangKhen == null ||
-                  (insertFileBangKhen && insertFileBangKhen.length == 0))
-              "
-              class="flex flex-row w-full"
-            >
-              <div class="flex-auto">
-                <div
-                  class="mat-field-label truncate max-w-140"
-                  [pTooltip]="fileKhenThuong.fileName"
-                >
-                  {{ fileKhenThuong.fileName }}
-                </div>
-              </div>
+        <div>
+          <div class="mat-field-label">Điểm</div>
+          <input name="diem" type="number" class="border rounded-md py-1" />
+        </div>
 
-              <div class="flex-none w-36">
-                <div class="mat-field-label">
-                  {{ fileKhenThuong.fileSize }}
-                  bytes
-                </div>
-              </div>
-              <!-- <div class="flex-none w-14" >
-                                    <button pButton icon="fa-light fa-eye" type="button"
-                                        (click)="viewFileQD()"></button>
-                                </div> 
-                                <div class="flex-none w-14" >
-                                    <button pButton icon="fa-light fa-file-arrow-down" type="button"
-                                        (click)="downloadFileQD()"></button>
-                                </div>  -->
-              <div class="flex-none w-14">
-                <button
-                  pButton
-                  icon="pi pi-times"
-                  type="button"
-                  [disabled]="isLockform"
-                  (click)="deleteFileBangKhen()"
-                ></button>
-              </div>
-            </div>
-          </ng-template>
-          <ng-template let-file pTemplate="file">
-            <div class="flex flex-row w-full">
-              <div class="flex-auto">
-                <div
-                  class="mat-field-label truncate max-w-140"
-                  [pTooltip]="file.name"
-                >
-                  {{ file.name }}
-                </div>
-              </div>
+        <div></div>
 
-              <div class="flex-none w-36">
-                <div class="mat-field-label">{{ file.size }} bytes</div>
-              </div>
-
-              <div class="flex-none w-14">
-                <button
-                  pButton
-                  icon="pi pi-times"
-                  type="button"
-                  [disabled]="isLockform"
-                  (click)="removeFileBangKhen(file, fileForm2, $event)"
-                ></button>
-              </div>
-            </div>
-          </ng-template>
-        </p-fileUpload>
+        <div>
+          <div class="mat-field-label">Xếp loại</div>
+          <p-dropdown
+            panelStyleClass="max-w-full"
+            [style]="{ width: '100%' }"
+            optionLabel="name"
+            optionValue="id"
+            name="xepLoai"
+            appendTo="body"
+            [filter]="true"
+            filterBy="name"
+            [required]="true"
+            placeholder="&nbsp;"
+          >
+          </p-dropdown>
+        </div>
+      </div>
+    </div>
+    <div class="mt-5">
+      <h2 class="text-blue-500 border-b text-lg ml-2 mb-3">
+        Áp dụng kết quả đánh giá
+      </h2>
+      <div class="grid grid-cols-2 gap-4 px-4">
+        <div>
+          <div class="mat-field-label">Kết quả tăng lương</div>
+          <p-dropdown
+            panelStyleClass="max-w-full"
+            [style]="{ width: '100%' }"
+            optionLabel="name"
+            optionValue="id"
+            name="kqTangLuong"
+            appendTo="body"
+            [filter]="true"
+            filterBy="name"
+            [required]="true"
+            placeholder="&nbsp;"
+          >
+          </p-dropdown>
+        </div>
+        <div>
+          <div class="mat-field-label">Kết quả thưởng</div>
+          <p-dropdown
+            panelStyleClass="max-w-full"
+            [style]="{ width: '100%' }"
+            optionLabel="name"
+            optionValue="id"
+            name="kqThuong"
+            appendTo="body"
+            [filter]="true"
+            filterBy="name"
+            [required]="true"
+            placeholder="&nbsp;"
+          >
+          </p-dropdown>
+        </div>
       </div>
     </div>
   </div>
@@ -191,15 +183,19 @@
     <div mat-dialog-actions class="h-toolbar flex justify-end">
       <button
         type="submit"
-        class="mx-1 button-green"
+        class="mx-1 button-green px-3 py-2 mr-8 rounded-md bg-slate-200 hover:bg-slate-300"
         mat-flat-button
         [disabled]="isLockform"
       >
-        <i class="fa-light fa-check icon-size-5"></i>
+        <i class="fa-light fa-check icon-size-5 text-green-500"></i>
         <span class="ml-2">Lưu</span>
       </button>
-      <button class="mx-1 button-blue" mat-flat-button (click)="nhapTiep()">
-        <i class="fa-light fa-arrow-right icon-size-5"></i>
+      <button
+        class="mx-1 button-blue px-3 py-2 mr-8 rounded-md bg-slate-200 hover:bg-slate-300"
+        mat-flat-button
+        (click)="nhapTiep()"
+      >
+        <i class="fa-light fa-arrow-right icon-size-5 text-blue-500"></i>
         <span class="ml-2">Nhập tiếp</span>
       </button>
     </div>

@@ -7,16 +7,17 @@ import { HosonhansuComponent } from './modules/employee/hosonhansu/hosonhansu.co
 import { MenuComponent } from './modules/employee/hosonhansu/menu/menu.component';
 import { HdldComponent } from './modules/hdld/hdld.component';
 import { DanhsachhdldComponent } from './modules/hdld/danhsachhdld/danhsachhdld.component';
+import { DepartmentComponent } from './modules/department/department/department.component';
 export const routes: Routes = [
   {
     path: '', // Đường dẫn gốc
     component: LayoutComponent, // Sử dụng LayoutComponent làm bố cục
     children: [
       { path: '', component: DashboardComponent }, // Trang chủ
+      { path: 'phongban', component: DepartmentComponent }, // Trang chủ
       {
         path: 'dsachnhansu',
         component: DsnhansuComponent,
-        children: [],
       }, // Trang "Giới thiệu"
       {
         path: 'hosonhansu',
@@ -47,5 +48,9 @@ export const routes: Routes = [
       //   { path: '', component: HomeComponent }, // Trang chủ
       //   { path: 'about', component: AboutComponent }, // Trang "Giới thiệu"
     ],
+  },
+  {
+    path: '**', // Wildcard để xử lý các route không khớp
+    redirectTo: '', // Hoặc một component error page nếu cần
   },
 ];

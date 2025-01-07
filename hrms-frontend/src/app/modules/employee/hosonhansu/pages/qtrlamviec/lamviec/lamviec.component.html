@@ -28,116 +28,60 @@
   responsiveLayout="stack"
   [breakpoint]="'960px'"
   [tableStyle]="{ width: '100%' }"
+  [paginator]="true"
+  [rows]="10"
 >
   <ng-template pTemplate="header" let-columns>
     <tr>
-      <th style="width: 8%" class="text-black font-bold border">Từ ngày</th>
-      <th style="width: 8%" class="text-black font-bold border">Đến ngày</th>
-      <th style="width: 20%" class="text-black font-bold border">Chức danh</th>
-
-      <th style="width: 30%" class="text-black font-bold border">Phòng ban/Đơn vị</th>
-      <th style="width: 17%" class="text-black font-bold border">Nghề CNKT</th>
-      <th style="width: 5%" class="text-black font-bold border">Hiện tại</th>
-      <th style="width: 5%" class="text-black font-bold border">Kiêm nhiệm</th>
-      <th style="width: 7%" class="text-center" class="text-black font-bold border">
+      <th style="width: 8%" class="text-black font-bold border">Loại QTCT</th>
+      <th style="width: 10%" class="text-black font-bold border">
+        Ngày hiệu lực
+      </th>
+      <th style="width: 10%" class="text-black font-bold border">Chức danh</th>
+      <th style="width: 15%" class="text-black font-bold border">Phòng ban</th>
+      <th style="width: 20%" class="text-black font-bold border">
+        Văn phòng làm việc
+      </th>
+      <th style="width: 10%" class="text-black font-bold border">Ngày tạo</th>
+      <th style="width: 10%" class="text-black font-bold border">
+        Ngày cập nhật
+      </th>
+      <th style="width: 15%" class="text-black font-bold border">
+        Thương hiệu xe
+      </th>
+      <th
+        style="width: 7%"
+        class="text-center"
+        class="text-black font-bold border"
+      >
         Thao tác
       </th>
     </tr>
   </ng-template>
-  <ng-template
-    pTemplate="body"
-    let-product
-    let-columns="columns"
-    let-i="rowIndex"
-  >
+  <ng-template pTemplate="body" let-qtct let-columns="columns" let-i="rowIndex">
     <tr class="border-b border-gray-200">
+      <td class="border">{{ qtct.type }}</td>
+      <td class="border">{{ qtct.effectiveDate | date : "dd/MM/yyyy" }}</td>
+      <td class="border">{{ qtct.position }}</td>
+      <td class="border">{{ qtct.department }}</td>
+      <td class="border">{{ qtct.office }}</td>
+      <td class="border">{{ qtct.creationDate | date : "dd/MM/yyyy" }}</td>
+      <td class="border">{{ qtct.updateDate | date : "dd/MM/yyyy" }}</td>
+      <td class="border">{{ qtct.carBrand }}</td>
       <td
         [ngClass]="{
-          'text-blue-600': product.status != null && product.status != 0
-        }"
-        style="width: 8%; word-break: break-word; text-align: center"
-      >
-        <span class="p-column-title">Từ ngày</span
-        >{{ product.tungay | date : "dd/MM/yyyy" }}
-      </td>
-      <td
-        [ngClass]="{
-          'text-blue-600': product.status != null && product.status != 0
-        }"
-        style="width: 8%; word-break: break-word; text-align: center"
-      >
-        <span class="p-column-title">Đến ngày</span
-        >{{ product.denngay | date : "dd/MM/yyyy" }}
-      </td>
-      <td
-        [ngClass]="{
-          'text-blue-600': product.status != null && product.status != 0
-        }"
-        style="width: 20%; word-break: break-word"
-      >
-        <span class="p-column-title">Chức danh</span>{{ product.vtricdanh }}
-      </td>
-      <!-- <td [ngClass]="{'text-blue-600':product.status != null && product.status != 0}" style="width: 5%"><p-tag [value]="product.inventoryStatus" [severity]="getSeverity(product.inventoryStatus)"></p-tag></td> -->
-      <!-- <td [ngClass]="{'text-blue-600':product.status != null && product.status != 0}" style="width: 20%; word-break: break-word;">
-                <span class="p-column-title">Bộ phận</span>{{ product.tenbophan }}
-            </td>-->
-      <td
-        [ngClass]="{
-          'text-blue-600': product.status != null && product.status != 0
-        }"
-        style="width: 30%; word-break: break-word"
-      >
-        <span class="p-column-title">Phòng ban/Đơn vị</span>
-        <div class="flex flex-col">
-          <span style="font-size: 12">
-            {{ product.tenbophan }}
-          </span>
-          <p class="text-sm">
-            {{ product.tendonvi }}
-          </p>
-        </div>
-      </td>
-      <td
-        [ngClass]="{
-          'text-blue-600': product.status != null && product.status != 0
-        }"
-        style="width: 17%; word-break: break-word"
-      >
-        <span class="p-column-title">Nghề CNKT</span>
-        {{ product.nghecnkt }}
-      </td>
-      <td
-        [ngClass]="{
-          'text-blue-600': product.status != null && product.status != 0
-        }"
-        style="width: 5%; word-break: break-word; text-align: center"
-      >
-        <span class="p-column-title">Hiện tại</span>
-        {{ product.strHientai }}
-      </td>
-      <td
-        [ngClass]="{
-          'text-blue-600': product.status != null && product.status != 0
-        }"
-        style="width: 5%; text-align: center"
-      >
-        <span class="p-column-title">Kiêm nhiệm</span>
-        {{ product.strKiemnhiem }}
-      </td>
-      <td
-        [ngClass]="{
-          'text-blue-600': product.status != null && product.status != 0
+          'text-blue-600': qtct.status != null && qtct.status != 0
         }"
         style="width: 7%"
-        class="text-center"
+        class="text-center border"
       >
         <span class="p-column-title">Thao tác</span>
         <div>
-          <button type="button" class="mr-2" (click)="suachucdanh(product)">
+          <button type="button" class="mr-2" (click)="suachucdanh(qtct)">
             <i class="fa-light fa-pencil icon-size-5" matTooltip="Sửa"></i>
           </button>
 
-          <button type="button" class="mr-2" (click)="delete(product)">
+          <button type="button" class="mr-2" (click)="delete(qtct)">
             <i class="fa-light fa-trash-can icon-size-5" matTooltip="Xóa"></i>
           </button>
         </div>

@@ -69,9 +69,6 @@ import { LamviecdialogComponent } from './pages/qtrlamviec/lamviec/lamviecDialog
 import { XacnhanpopupComponent } from './pages/xacnhanpopup/xacnhanpopup.component';
 import { ChucvuformComponent } from './pages/qtrlamviec/chucvu/chucvuform/chucvuform.component';
 import { KyHdldDialogComponent } from './pages/qtrlamviec/kyhdld/ky-hdld-dialog/ky-hdld-dialog.component';
-import { QtrdaotaoComponent } from './pages/qtrdaotao/qtrdaotao.component';
-import { DaotaodaihanComponent } from './pages/qtrdaotao/daotaodaihan/daotaodaihan.component';
-import { BoiduongnganhanComponent } from './pages/qtrdaotao/boiduongnganhan/boiduongnganhan.component';
 import { DieudongdialogComponent } from './pages/qtrlamviec/dieudong/dieudongdialog/dieudongdialog/dieudongdialog.component';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';

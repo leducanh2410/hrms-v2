@@ -71,7 +71,6 @@
 
         <ng-template #elseBlock>
             <p-table #dtns id="table" [value]="nhansus" selectionMode="single" [dataKey]="idField" responsiveLayout="scroll"
-                scrollHeight="{{mainns.offsetHeight - 46}}px"
                 [globalFilterFields]="['sohieu', 'tenkhaisinh','tenphong','vtricdanh', 'chucdanh', 'phongban', 'departmentc1Name']" [scrollable]="true"
                 [(selection)]="selected">
                 <ng-template pTemplate="caption">

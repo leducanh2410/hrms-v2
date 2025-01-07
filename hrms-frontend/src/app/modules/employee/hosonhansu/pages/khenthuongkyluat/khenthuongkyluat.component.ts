@@ -39,12 +39,61 @@ import { MatInputModule } from '@angular/material/input';
     MatSelectModule,
     DividerModule,
     TableModule,
-    MatInputModule
+    MatInputModule,
   ],
 })
 export class KhenthuongKyluatComponent implements OnInit {
   @Input('nsInfo') nhansu: any;
-  dsKhenthuong: any;
+  dsKhenthuong: any = [
+    {
+      evaluationName: 'Đánh giá 1',
+      startDate: new Date('2023-01-01'),
+      endDate: new Date('2023-01-31'),
+      deadline: new Date('2023-01-15'),
+      comments: 'Excellent performance',
+      personalEvaluation: 'Exceeded expectations',
+      personalRating: 'A',
+      score: 95,
+      classification: 'Outstanding',
+      strengths: 'Leadership, Teamwork',
+      weaknesses: 'Time management',
+      areasForImprovement: 'Improve presentation skills',
+      salaryIncreaseResult: '10%',
+      bonusResult: '5%',
+    },
+    {
+      evaluationName: 'Đánh giá 2',
+      startDate: new Date('2023-02-01'),
+      endDate: new Date('2023-02-28'),
+      deadline: new Date('2023-02-15'),
+      comments: 'Good performance',
+      personalEvaluation: 'Met expectations',
+      personalRating: 'B',
+      score: 85,
+      classification: 'Satisfactory',
+      strengths: 'Technical skills',
+      weaknesses: 'Communication',
+      areasForImprovement: 'Enhance stakeholder engagement',
+      salaryIncreaseResult: '5%',
+      bonusResult: '3%',
+    },
+    {
+      evaluationName: 'Đánh giá 3',
+      startDate: new Date('2023-03-01'),
+      endDate: new Date('2023-03-31'),
+      deadline: new Date('2023-03-15'),
+      comments: 'Needs improvement',
+      personalEvaluation: 'Below expectations',
+      personalRating: 'C',
+      score: 70,
+      classification: 'Needs Improvement',
+      strengths: 'Creativity',
+      weaknesses: 'Focus',
+      areasForImprovement: 'Work on project management',
+      salaryIncreaseResult: 'No increase',
+      bonusResult: 'None',
+    },
+  ];
   dsKyluat: any;
   dsSangkien: any;
   listNgKy: any[] = [];
@@ -60,8 +109,8 @@ export class KhenthuongKyluatComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadDataKhenThuong();
-    this.loadDataKyLuat();
+    // this.loadDataKhenThuong();
+    // this.loadDataKyLuat();
 
     if (this.nhansu) {
       this.http
@@ -73,25 +122,25 @@ export class KhenthuongKyluatComponent implements OnInit {
         });
     }
 
-    //--------- nguoi ky --------
-    this.http
-      .get(EmployeURL.getDsNguoiKyBean())
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (res.state) {
-          this.listNgKy = res.data;
-          //console.log('----------------------------this.listNgKy: ', this.listNgKy)
-        }
-      });
-    //--------- vitri chuc danh --------
-    this.http
-      .get(DanhMucURL.getChucvuForQdnoidung2())
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (res.state) {
-          this.listChucVu = res.data;
-        }
-      });
+    // //--------- nguoi ky --------
+    // this.http
+    //   .get(EmployeURL.getDsNguoiKyBean())
+    //   .pipe(takeUntil(this._unsubscribeAll))
+    //   .subscribe((res: any) => {
+    //     if (res.state) {
+    //       this.listNgKy = res.data;
+    //       //console.log('----------------------------this.listNgKy: ', this.listNgKy)
+    //     }
+    //   });
+    // //--------- vitri chuc danh --------
+    // this.http
+    //   .get(DanhMucURL.getChucvuForQdnoidung2())
+    //   .pipe(takeUntil(this._unsubscribeAll))
+    //   .subscribe((res: any) => {
+    //     if (res.state) {
+    //       this.listChucVu = res.data;
+    //     }
+    //   });
   }
 
   loadDataKhenThuong() {

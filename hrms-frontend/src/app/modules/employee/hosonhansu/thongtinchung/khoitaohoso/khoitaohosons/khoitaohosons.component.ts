@@ -70,7 +70,7 @@ export class KhoitaohosonsComponent implements OnInit {
       const data = res;
       if (data && data.type === APP_ACTION.USER_INFO) {
         this.user_info = { ...data.payload };
-        this.user_info.avatar = `${API.IMG}/${this.user_info.iddonvi}/${this.user_info.idnv}.png`;
+        this.user_info.avatar = `${API.IMG}/${this.user_info?.iddonvi}/${this.user_info.idnv}.png`;
         this.user_info.status = 'online';
         this.user$.next(this.user_info);
       }
@@ -79,7 +79,7 @@ export class KhoitaohosonsComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.donviThaotacId = this.user_info.iddonvi;
+    this.donviThaotacId = this.user_info?.iddonvi;
     if (this.data) this.model = this.data;
 
     this.disableBtnCNKT = true;

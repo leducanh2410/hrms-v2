@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { QtrdaotaoComponent } from './qtrdaotao.component';
+import { DepartmentComponent } from './department.component';
 
-describe('QtrdaotaoComponent', () => {
-  let component: QtrdaotaoComponent;
-  let fixture: ComponentFixture<QtrdaotaoComponent>;
+describe('DepartmentComponent', () => {
+  let component: DepartmentComponent;
+  let fixture: ComponentFixture<DepartmentComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ QtrdaotaoComponent ]
+      imports: [DepartmentComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(QtrdaotaoComponent);
+    fixture = TestBed.createComponent(DepartmentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

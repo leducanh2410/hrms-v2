@@ -31,6 +31,7 @@ import { CommonModule } from '@angular/common';
 import { MatOptionModule } from '@angular/material/core';
 import { DropdownModule } from 'primeng/dropdown';
 import { MatInputModule } from '@angular/material/input';
+import { CalendarModule } from 'primeng/calendar';
 
 @Component({
   selector: 'app-lamviecdialog',
@@ -46,7 +47,8 @@ import { MatInputModule } from '@angular/material/input';
     MatOptionModule,
     CheckboxModule,
     DropdownModule,
-    MatInputModule
+    MatInputModule,
+    CalendarModule
   ]
 })
 export class LamviecdialogComponent implements OnInit {
@@ -96,7 +98,7 @@ export class LamviecdialogComponent implements OnInit {
       const data = res;
       if (data && data.type === APP_ACTION.USER_INFO) {
         this.user_info = { ...data.payload };
-        this.user_info.avatar = `${API.IMG}/${this.user_info.iddonvi}/${this.user_info.idnv}.png`;
+        this.user_info.avatar = `${API.IMG}/${this.user_info?.iddonvi}/${this.user_info.idnv}.png`;
         this.user_info.status = 'online';
         this.user$.next(this.user_info);
       }
@@ -165,7 +167,7 @@ export class LamviecdialogComponent implements OnInit {
       });
 
     this.http
-      .get(DanhMucURL.getAllDepartment(this.user_info.iddonvi))
+      .get(DanhMucURL.getAllDepartment(this.user_info?.iddonvi))
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((res: any) => {
         if (!res || !res.state) return;

@@ -22,12 +22,11 @@
             optionValue="id"
             appendTo="body"
             name="quoctich"
-            [ngModel]="model.quocgiaId"
-            [disabled]="!is_edit"
             placeholder="&nbsp;"
             [filter]="true"
             filterBy="name"
             [showClear]="true"
+            [ngModel]="0"
           >
           </p-dropdown>
         </div>
@@ -41,18 +40,17 @@
             optionValue="id"
             appendTo="body"
             name="dantoc"
-            [ngModel]="model.dantocId"
-            [disabled]="!is_edit"
             placeholder="&nbsp;"
             [filter]="true"
             filterBy="name"
             [showClear]="true"
+            [ngModel]="0"
           >
           </p-dropdown>
         </div>
 
         <div class="flex items-center">
-          <div class="flex flex-col w-1/2 mr-2">
+          <div class="flex flex-col w-full">
             <div class="mat-field-label">Tôn giáo</div>
             <p-dropdown
               [style]="{ width: '100%' }"
@@ -61,22 +59,11 @@
               optionValue="id"
               appendTo="body"
               name="tongiao"
-              [ngModel]="model.tongiaoId"
-              [disabled]="!is_edit"
               placeholder="&nbsp;"
               [showClear]="true"
+              [ngModel]="0"
             >
             </p-dropdown>
-          </div>
-          <div class="flex flex-col w-1/2 mr-2">
-            <div class="mat-field-label">Bí danh</div>
-            <input
-              pInputText
-              placeholder=""
-              name="bidanh"
-              [ngModel]="model.bidanh"
-              [readonly]="!is_edit"
-            />
           </div>
         </div>
 
@@ -89,10 +76,9 @@
             optionValue="id"
             appendTo="body"
             name="tinhtranghn"
-            [disabled]="!is_edit"
             placeholder="&nbsp;"
-            [ngModel]="model.ttranghonnhanId"
             [showClear]="true"
+            [ngModel]="0"
           >
           </p-dropdown>
         </div>
@@ -104,244 +90,119 @@
             pInputText
             placeholder=""
             name="cccd"
-            [ngModel]="model.socmnd"
-            [readonly]="!is_edit"
             maxlength="12"
             pattern="[0-9.]+"
             required
             class="w-full"
+            [(ngModel)]="nsInfo.cccd_number"
           />
         </div>
 
-        <div class="flex items-center">
-          <!-- <div class="mat-field-label">Ngày, nơi cấp</div> -->
-          <mat-form-field class="fuse-mat-no-subscript w-1/2 mr-2">
-            <mat-label class="">Ngày, nơi cấp</mat-label>
-            <input
-              matInput
-              [matDatepicker]="ngaycap"
-              name="ngaycap"
-              [ngModel]="model.ngaycap"
-              [readonly]="!is_edit"
-            />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="ngaycap"
-            ></mat-datepicker-toggle>
-            <mat-datepicker #ngaycap [disabled]="!is_edit"></mat-datepicker>
-          </mat-form-field>
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label></mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="noicap"
-              [ngModel]="model.noicap"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
+        <div class="">
+          <div class="mat-field-label">Ngày, nơi cấp</div>
+          <p-calendar
+            name="ngaycap"
+            [showIcon]="true"
+            inputId="buttondisplay"
+            [showOnFocus]="false"
+            [readonlyInput]="!is_edit"
+            class="!w-1/3 !inline-block"
+            [(ngModel)]="cccd_ngayCap"
+          />
+
+          <input
+            pInputText
+            name="noicap"
+            [readonly]="!is_edit"
+            class="!inline-block w-2/3"
+            [(ngModel)]="nsInfo.cccd_noicap"
+          />
         </div>
 
         <div class="flex flex-col justify-center">
-          <div class="mat-field-label">Thành phần gia đình</div>
-          <p-dropdown
-            [style]="{ width: '100%' }"
-            [options]="tpGiadinh"
-            optionLabel="name"
-            optionValue="id"
-            appendTo="body"
-            name="tpgiadinh"
-            [ngModel]="model.tpgiadinhId"
-            [disabled]="!is_edit"
-            placeholder="&nbsp;"
-            [showClear]="true"
-          >
-          </p-dropdown>
-        </div>
-
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Thành phần bản thân</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="tpbanthan"
-              [ngModel]="model.tpbanthan"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-        </div>
-
-        <div class="flex flex-col justify-center">
-          <div class="mat-field-label">Gia đình chính sách</div>
+          <div>Gia đình chính sách</div>
           <div class="flex">
             <!-- <mat-checkbox name="isgdcs" [ngModel]="model.giadinhchinhsach" [disabled]="!is_edit" ()></mat-checkbox> -->
             <p-checkbox
               class="mr-2"
               name="isgdcs"
               [binary]="true"
-              [ngModel]="model.giadinhchinhsach"
               (onChange)="changeGDCS()"
               [disabled]="!is_edit"
             ></p-checkbox>
-            <mat-form-field appearance="fill" class="w-full">
-              <input
-                matInput
-                placeholder=""
-                name="gdchinhsach"
-                [ngModel]="model.kieugdcsach"
-                [disabled]="!model?.giadinhchinhsach"
-                [readonly]="!is_edit"
-              />
-            </mat-form-field>
+            <input
+              pInputText
+              name="gdchinhsach"
+              [readonly]="!is_edit"
+              class="!inline-block w-full"
+            />
           </div>
         </div>
 
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Số sổ BHXH</mat-label>
+        <div class="">
+          <div class="">Số sổ BHXH</div>
+          <div>
             <input
-              matInput
-              placeholder=""
+              pInputText
               name="bhxh"
-              [ngModel]="model.soxoBHXH"
               [readonly]="!is_edit"
+              class="w-full"
+              value="032541556562"
             />
-          </mat-form-field>
+          </div>
         </div>
 
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-1/2 mr-2">
-            <mat-label class="">Mã số thuế</mat-label>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <div class="">Mã số thuế</div>
             <input
-              matInput
-              placeholder=""
+              pInputText
               name="mathue"
-              [ngModel]="model.masothue"
               [readonly]="!is_edit"
+              class="w-full"
+              value="565265512516565"
+
             />
-          </mat-form-field>
-          <mat-form-field appearance="fill" class="w-1/2">
-            <mat-label class="">Số thẻ BHYT</mat-label>
+          </div>
+          <div>
+            <div class="">Số thẻ BHYT</div>
             <input
-              matInput
-              placeholder=""
+              pInputText
               name="sobhyt"
-              [ngModel]="model.sotheBHYT"
               [readonly]="!is_edit"
+              class="w-full"
+              value="1235647895456"
+
             />
-          </mat-form-field>
+          </div>
         </div>
 
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Nơi khám chữa BĐ</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="noikhamchua"
-              [ngModel]="model.noikhambenh"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
+        <div class="">
+          <div class="">Nơi khám chữa BĐ</div>
+          <input
+            pInputText
+            name="noikhamchua"
+            [readonly]="!is_edit"
+            class="w-full"
+            value="Bệnh viện Phương Đông"
+          />
         </div>
 
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Số tk ngân hàng</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="stknganhang"
-              [ngModel]="model.sotk"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-        </div>
-
-        <div class="flex flex-col justify-center">
-          <div class="mat-field-label">Tên ngân hàng</div>
-          <p-dropdown
-            [style]="{ width: '100%' }"
-            [options]="nganHang"
-            optionLabel="name"
-            optionValue="id"
-            appendTo="body"
-            name="tennganhang"
-            [ngModel]="model.nganhangId"
-            [disabled]="!is_edit"
-            [filter]="true"
-            filterBy="name"
-            placeholder="&nbsp;"
-            [showClear]="true"
-          >
-          </p-dropdown>
-        </div>
-
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Mở tại chi nhánh</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="chinhanh"
-              [ngModel]="model.chinhanhNH"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-        </div>
-
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Tên chủ tài khoản</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="tenchutk"
-              [ngModel]="model.chutk"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-        </div>
-
-        <div class="flex items-start">
-          <mat-form-field appearance="fill" class="w-1/2 mr-2">
-            <mat-label class="">Điện thoại</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="dt"
-              [ngModel]="model.dienthoai"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-          <mat-form-field appearance="fill" class="w-1/2">
-            <mat-label class="">Nội bộ</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="dtnoibo"
-              [ngModel]="model.dienthoaiNoibo"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
+        <div class="">
+          <div class="">Điện thoại</div>
+          <input pInputText name="dt" [(ngModel)]="nsInfo.phone" [readonly]="!is_edit" class="w-full" />
         </div>
 
         <div class="flex flex-col justify-start">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Email</mat-label>
-            <input
-              type="email"
-              matInput
-              placeholder=""
-              name="email"
-              [ngModel]="model.email"
-              email="true"
-              [readonly]="!is_edit"
-            />
-            <!-- <mat-hint>{{'(Các email phân tách bởi dấu ;)'}}</mat-hint> -->
-          </mat-form-field>
-          <!-- <small id="username-help">(Các email phân tách bởi dấu ;)</small> -->
+          <div class="">Email</div>
+          <input
+            pInputText
+            name="email"
+            type="email"
+            [readonly]="!is_edit"
+            class="w-full"
+            value="emp1_thaco@gmail.com.vn"
+          />
         </div>
       </div>
     </div>
@@ -371,7 +232,6 @@
             filterBy="label"
             appendTo="body"
             name="nsTP"
-            [ngModel]="model.nsTtphoId"
             [disabled]="!is_edit"
             (onChange)="getDsQhNoisinh($event.value)"
             placeholder="&nbsp;"
@@ -389,7 +249,6 @@
             optionValue="id"
             appendTo="body"
             name="nsQH"
-            [ngModel]="model.nsQhId"
             [disabled]="!is_edit"
             placeholder="&nbsp;"
             [filter]="true"
@@ -399,17 +258,9 @@
           </p-dropdown>
         </div>
 
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Phường xã</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="nsPx"
-              [ngModel]="model.nsChitiet"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
+        <div class="flex flex-col justify-start">
+          <div class="">Phường xã</div>
+          <input pInputText name="nsPX" type="text" class="w-full" />
         </div>
 
         <!-- Que quan -->
@@ -424,7 +275,6 @@
             filterBy="label"
             appendTo="body"
             name="qqTP"
-            [ngModel]="model.qqTtphoId"
             [disabled]="!is_edit"
             (onChange)="getDsQhQuequan($event.value)"
             placeholder="&nbsp;"
@@ -442,7 +292,6 @@
             optionValue="id"
             appendTo="body"
             name="qqQH"
-            [ngModel]="model.qqQhId"
             [disabled]="!is_edit"
             placeholder="&nbsp;"
             [filter]="true"
@@ -452,70 +301,9 @@
           </p-dropdown>
         </div>
 
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Phường xã</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="qqPx"
-              [ngModel]="model.qqChitiet"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-        </div>
-
-        <!-- Hộ khẩu -->
-        <div class="flex flex-col justify-center">
-          <div class="mat-field-label">Hộ khẩu Tỉnh/ TP</div>
-          <p-dropdown
-            [style]="{ width: '100%' }"
-            [options]="thanhPho"
-            optionLabel="label"
-            optionValue="value"
-            [filter]="true"
-            filterBy="label"
-            appendTo="body"
-            name="hkTP"
-            [ngModel]="model.ttTtphoId"
-            [disabled]="!is_edit"
-            (onChange)="getDsQhHokhau($event.value)"
-            placeholder="&nbsp;"
-            [showClear]="true"
-          >
-          </p-dropdown>
-        </div>
-
-        <div class="flex flex-col justify-center">
-          <div class="mat-field-label">Quận huyện</div>
-          <p-dropdown
-            [style]="{ width: '100%' }"
-            [options]="qhHokhau"
-            optionLabel="name"
-            optionValue="id"
-            appendTo="body"
-            name="hkQH"
-            [ngModel]="model.ttQhId"
-            [disabled]="!is_edit"
-            placeholder="&nbsp;"
-            [filter]="true"
-            filterBy="label"
-            [showClear]="true"
-          >
-          </p-dropdown>
-        </div>
-
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Phường xã</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="hkPX"
-              [ngModel]="model.ttChitiet"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
+        <div class="flex flex-col justify-start">
+          <div class="">Phường xã</div>
+          <input pInputText name="qqPX" type="text" class="w-full" />
         </div>
 
         <!-- Cho o -->
@@ -530,7 +318,6 @@
             filterBy="label"
             appendTo="body"
             name="chnTP"
-            [ngModel]="model.chnTtphoId"
             [disabled]="!is_edit"
             (onChange)="getDsQhNoio($event.value)"
             placeholder="&nbsp;"
@@ -548,7 +335,6 @@
             optionValue="id"
             appendTo="body"
             name="chnQH"
-            [ngModel]="model.chnQhId"
             [disabled]="!is_edit"
             placeholder="&nbsp;"
             [filter]="true"
@@ -558,648 +344,9 @@
           </p-dropdown>
         </div>
 
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Phường xã</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="chnPX"
-              [ngModel]="model.chnChitiet"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-        </div>
-      </div>
-    </div>
-
-    <!-- Thông tin tuyển dụng -->
-    <div
-      class="w-full px-4 pb-4 flex flex-col border-1 border-gray-300 rounded bg-white mt-2"
-    >
-      <p-divider align="left">
-        <div class="inline-flex align-items-center">
-          <b class="text-blue-600">Thông tin tuyển dụng</b>
-        </div>
-      </p-divider>
-
-      <div
-        class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-8 w-full min-w-0 overflow-hidden"
-      >
-        <div class="flex items-center">
-          <mat-form-field class="fuse-mat-no-subscript w-full">
-            <mat-label class="">Ngày tuyển dụng</mat-label>
-            <input
-              matInput
-              [matDatepicker]="ngaytuyendung"
-              name="ngaytuyendung"
-              [ngModel]="model.ngaytuyendung"
-              [readonly]="!is_edit"
-            />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="ngaytuyendung"
-            ></mat-datepicker-toggle>
-            <mat-datepicker
-              #ngaytuyendung
-              [disabled]="!is_edit"
-            ></mat-datepicker>
-          </mat-form-field>
-        </div>
-
-        <div class="flex items-center">
-          <mat-form-field class="fuse-mat-no-subscript w-full">
-            <mat-label class="">Ngày vào ngành</mat-label>
-            <input
-              matInput
-              [matDatepicker]="ngayvaonganh"
-              name="ngayvaonganh"
-              [ngModel]="model.ngayvaonganh"
-              [readonly]="!is_edit"
-            />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="ngayvaonganh"
-            ></mat-datepicker-toggle>
-            <mat-datepicker
-              #ngayvaonganh
-              [disabled]="!is_edit"
-            ></mat-datepicker>
-          </mat-form-field>
-        </div>
-
-        <div class="flex flex-col justify-center">
-          <div class="mat-field-label">NN trước khi TD</div>
-          <p-dropdown
-            [style]="{ width: '100%' }"
-            [options]="ngheNghiep"
-            optionLabel="name"
-            optionValue="id"
-            appendTo="body"
-            name="nntruoctd"
-            [ngModel]="model.nntruoctdId"
-            [disabled]="!is_edit"
-            placeholder="&nbsp;"
-            [showClear]="true"
-          >
-          </p-dropdown>
-        </div>
-
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Vào cơ quan nào, ở đâu</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="coquan"
-              [ngModel]="model.coquan"
-              placeholder="&nbsp;"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-        </div>
-
-        <div class="flex items-center sm:col-span-2 sm:w-1/2">
-          <mat-form-field appearance="fill" class="w-full sm:mr-4">
-            <mat-label class="">Văn hóa phổ thông</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="vhpthong"
-              [ngModel]="model.vhoaPthong"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-        </div>
-
-        <div class="flex flex-col justify-center">
-          <div class="mat-field-label">Học hàm cao nhất</div>
-          <p-dropdown
-            [style]="{ width: '100%' }"
-            [options]="listHocham"
-            optionLabel="name"
-            optionValue="id"
-            appendTo="body"
-            name="hocham"
-            [ngModel]="model.idHhamCnhat"
-            [disabled]="!is_edit"
-            placeholder="&nbsp;"
-            [showClear]="true"
-          >
-          </p-dropdown>
-        </div>
-
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Năm phong tặng</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="nampt"
-              [ngModel]="model.namHocham"
-              maxlength="12"
-              pattern="[0-9.]+"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-        </div>
-
-        <div class="flex items-center">
-          <div class="flex flex-col justify-center w-1/2 mr-2">
-            <div class="mat-field-label">Trình độ QLKT</div>
-            <p-dropdown
-              [style]="{ width: '100%' }"
-              [options]="listTrinhdoqlkt"
-              optionLabel="name"
-              optionValue="id"
-              appendTo="body"
-              name="trinhdoqlkt"
-              [ngModel]="model.tdqlktId"
-              [disabled]="!is_edit"
-              placeholder="&nbsp;"
-              [showClear]="true"
-            >
-            </p-dropdown>
-          </div>
-          <mat-form-field appearance="fill" class="w-1/2">
-            <mat-label class="">Năm đào tạo</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="namqlkt"
-              [ngModel]="model.namqlykte"
-              maxlength="12"
-              pattern="[0-9.]+"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-        </div>
-
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Nơi đào tạo</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="noiqlkt"
-              [ngModel]="model.noidtqlkte"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-        </div>
-
-        <div class="flex items-center">
-          <div class="flex flex-col justify-center w-1/2 mr-2">
-            <div class="mat-field-label">Trình độ LLCT</div>
-            <p-dropdown
-              [style]="{ width: '100%' }"
-              [options]="trinhDo"
-              optionLabel="name"
-              optionValue="id"
-              appendTo="body"
-              name="trinhdollct"
-              [ngModel]="model.llctTrinhdoId"
-              [disabled]="!is_edit"
-              placeholder="&nbsp;"
-              [showClear]="true"
-            >
-            </p-dropdown>
-          </div>
-          <mat-form-field appearance="fill" class="w-1/2">
-            <mat-label class="">Năm đào tạo</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="namdtaollct"
-              [ngModel]="model.namlluanctri"
-              maxlength="12"
-              pattern="[0-9.]+"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-        </div>
-
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Nơi đào tạo</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="noidtaollct"
-              [ngModel]="model.noidtLlctri"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-        </div>
-
-        <div class="flex flex-col justify-center sm:col-span-2 sm:w-1/2">
-          <div class="mat-field-label">Hình thức đào tạo LLCT</div>
-          <p-dropdown
-            class="sm:mr-4"
-            [style]="{ width: '100%' }"
-            [options]="listHinhThucDaoTao"
-            optionLabel="name"
-            appendTo="body"
-            optionValue="id"
-            [ngModel]="model.llctHthucdtId"
-            name="hthucdaotaollct"
-            [disabled]="!is_edit"
-            placeholder="&nbsp;"
-            [showClear]="true"
-          >
-          </p-dropdown>
-        </div>
-
-        <div class="flex items-center">
-          <div class="mb-1 w-1/2">
-            <p-checkbox
-              class="mr-2"
-              name="bodoi"
-              [binary]="true"
-              [ngModel]="model.bodoi"
-              (onChange)="changeBodoi()"
-              [disabled]="!is_edit"
-            ></p-checkbox>
-            <label class="mat-field-label" for="ngoaingu"
-              >Bộ đội phục viên</label
-            >
-          </div>
-          <mat-form-field class="fuse-mat-no-subscript w-full">
-            <mat-label class="">Ngày nhập ngũ</mat-label>
-            <input
-              matInput
-              [matDatepicker]="ngaynhapngu"
-              name="ngaynhapngu"
-              [ngModel]="model.ngaynhapngu"
-              [readonly]="!is_edit || !model?.bodoi"
-            />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="ngaynhapngu"
-            ></mat-datepicker-toggle>
-            <mat-datepicker
-              #ngaynhapngu
-              [disabled]="!is_edit || !model?.bodoi"
-            ></mat-datepicker>
-          </mat-form-field>
-        </div>
-
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Ngày xuất ngũ, lý do</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="ngayxnlydo"
-              [ngModel]="model.ngayxnlydo"
-              [readonly]="!is_edit || !model?.bodoi"
-            />
-          </mat-form-field>
-        </div>
-
-        <div class="flex items-center sm:col-span-2 sm:w-1/2">
-          <mat-form-field appearance="fill" class="w-full sm:mr-4">
-            <mat-label class="">Chức vụ bộ đội cao nhất(năm), đơn vị</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="chucvucaonhat"
-              [ngModel]="model.chucvucaonhat"
-              [readonly]="!is_edit || !model?.bodoi"
-            />
-          </mat-form-field>
-        </div>
-
-        <div class="flex items-center">
-          <!-- <div class="mat-field-label">Ngày, nơi cấp</div> -->
-          <mat-form-field class="fuse-mat-no-subscript w-1/2 mr-2">
-            <mat-label class="">Ngày vào đảng</mat-label>
-            <input
-              matInput
-              [matDatepicker]="ngayvaodang"
-              name="ngayvaodang"
-              [ngModel]="model.ngayvaodang"
-              [readonly]="!is_edit"
-            />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="ngayvaodang"
-            ></mat-datepicker-toggle>
-            <mat-datepicker #ngayvaodang [disabled]="!is_edit"></mat-datepicker>
-          </mat-form-field>
-          <mat-form-field class="fuse-mat-no-subscript w-1/2">
-            <mat-label class="">Ngày chính thức</mat-label>
-            <input
-              matInput
-              [matDatepicker]="ngaychinhthuc"
-              name="ngaychinhthuc"
-              [ngModel]="model.ngayvaochinhthuc"
-              [readonly]="!is_edit"
-            />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="ngaychinhthuc"
-            ></mat-datepicker-toggle>
-            <mat-datepicker
-              #ngaychinhthuc
-              [disabled]="!is_edit"
-            ></mat-datepicker>
-          </mat-form-field>
-        </div>
-
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Nơi kết nạp</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="noiketnap"
-              [ngModel]="model.noiketnap"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-        </div>
-
-        <div class="flex items-center sm:col-span-2 sm:w-1/2">
-          <mat-form-field appearance="fill" class="w-full mr-2">
-            <mat-label class="">Số thẻ đảng</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="sothedang"
-              [ngModel]="model.sothedang"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-          <mat-form-field class="fuse-mat-no-subscript w-full sm:mr-4">
-            <mat-label class="">Ngày rời đảng</mat-label>
-            <input
-              matInput
-              [matDatepicker]="ngayroidang"
-              name="ngayroidang"
-              [ngModel]="model.ngayroidang"
-              [readonly]="!is_edit"
-            />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="ngayroidang"
-            ></mat-datepicker-toggle>
-            <mat-datepicker #ngayroidang [disabled]="!is_edit"></mat-datepicker>
-          </mat-form-field>
-        </div>
-
-        <div class="flex items-center">
-          <!-- <div class="mat-field-label">Ngày, nơi cấp</div> -->
-          <mat-form-field class="fuse-mat-no-subscript w-1/2 mr-2">
-            <mat-label class="">Ngày vào đoàn</mat-label>
-            <input
-              matInput
-              [matDatepicker]="ngayvaodoan"
-              name="ngayvaodoan"
-              [ngModel]="model.ngayvaodoan"
-              [readonly]="!is_edit"
-            />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="ngayvaodoan"
-            ></mat-datepicker-toggle>
-            <mat-datepicker #ngayvaodoan [disabled]="!is_edit"></mat-datepicker>
-          </mat-form-field>
-          <mat-form-field class="fuse-mat-no-subscript w-1/2">
-            <mat-label class="">Ngày trưởng thành Đoàn</mat-label>
-            <input
-              matInput
-              [matDatepicker]="ngayvaotthanh"
-              name="ngayvaotthanh"
-              [ngModel]="model.ngaytthanhdoan"
-              [readonly]="!is_edit"
-            />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="ngayvaotthanh"
-            ></mat-datepicker-toggle>
-            <mat-datepicker
-              #ngayvaotthanh
-              [disabled]="!is_edit"
-            ></mat-datepicker>
-          </mat-form-field>
-        </div>
-
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Nơi kết nạp</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="noiketnapdoan"
-              [ngModel]="model.noiketnapdoan"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-        </div>
-
-        <div class="flex items-center">
-          <!-- <div class="mat-field-label">Ngày, nơi cấp</div> -->
-          <mat-form-field class="fuse-mat-no-subscript w-1/2 mr-2">
-            <mat-label class="">Ngày công đoàn</mat-label>
-            <input
-              matInput
-              [matDatepicker]="ngayvaocdoan"
-              name="ngayvaocdoan"
-              [ngModel]="model.ngayvaocdoan"
-              [readonly]="!is_edit"
-            />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="ngayvaocdoan"
-            ></mat-datepicker-toggle>
-            <mat-datepicker
-              #ngayvaocdoan
-              [disabled]="!is_edit"
-            ></mat-datepicker>
-          </mat-form-field>
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Nơi vào</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="noivaocdoan"
-              [ngModel]="model.noivaocdoan"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-        </div>
-
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Số thẻ công đoàn</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="sothecdoan"
-              [ngModel]="model.sothecdoan"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-        </div>
-      </div>
-    </div>
-
-    <!-- Lịch sử bản thân -->
-    <div
-      class="w-full px-4 pb-4 flex flex-col border-1 border-gray-300 rounded bg-white mt-2"
-    >
-      <p-divider align="left">
-        <div class="inline-flex align-items-center">
-          <b class="text-blue-600">Lịch sử bản thân</b>
-        </div>
-      </p-divider>
-
-      <div
-        class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-8 w-full min-w-0 overflow-hidden"
-      >
-        <div class="flex flex-col sm:col-span-2 mb-2">
-          <div class="flex items-center justify-between">
-            <div class="mat-field-label">
-              Tóm tắt quá trình công tác (từ ngày ... đến ngày ...: chức vụ, đơn
-              vị công tác)
-            </div>
-            <button
-              [disabled]="!is_edit"
-              class="mx-1 button-blue"
-              type="button"
-              mat-flat-button
-              (click)="chonTuQtrinh()"
-            >
-              <span>Bổ sung từ QTLV</span>
-            </button>
-          </div>
-
-          <quill-editor
-            #editor
-            [style]="{ width: '100%', height: '250px' }"
-            name="qtcontac"
-            [ngModel]="model.capnhatquatrinhct"
-            [readOnly]="is_edit"
-          >
-          </quill-editor>
-        </div>
-
-        <div class="flex items-center sm:col-span-2">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Sức khỏe</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="suckhoe"
-              [ngModel]="model.suckhoe"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-        </div>
-
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Năng lực sở trường công tác</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="nlsotruong"
-              [ngModel]="model.nlsotruong"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-        </div>
-
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Việc làm lâu nhất</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="cvdalamlaunhat"
-              [ngModel]="model.cvdalamlaunhat"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-        </div>
-
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Danh hiệu được phong</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="danhhieuduocphong"
-              [ngModel]="model.danhhieuduocphong"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-        </div>
-
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Đặc điểm bản thân</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="ddlsbanthan"
-              [ngModel]="model.ddlsbanthan"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-        </div>
-
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Quan hệ người nước ngoài</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="qhvoinguoinuocngoai"
-              [ngModel]="model.qhvoinguoinuocngoai"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-        </div>
-
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Tự nhận xét</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="tunxbanthan"
-              [ngModel]="model.tunxbanthan"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-        </div>
-
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Hoàn cảnh k.tế gia đình</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="hcktgiadinh"
-              [ngModel]="model.hcktgiadinh"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
-        </div>
-
-        <div class="flex items-center">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label class="">Nhận dạng</mat-label>
-            <input
-              matInput
-              placeholder=""
-              name="nhandang"
-              [ngModel]="model.nhandang"
-              [readonly]="!is_edit"
-            />
-          </mat-form-field>
+        <div class="flex flex-col justify-start">
+          <div class="">Phường xã</div>
+          <input pInputText name="chnPX" type="text" class="w-full" />
         </div>
       </div>
     </div>
@@ -1207,7 +354,7 @@
     <!-- Xac nhan -->
     <div class="flex items-center fixed right-4 bottom-2 p-2 z-10">
       <button
-        [disabled]="!model.nsID || is_edit"
+        [disabled]="!model.employee_id || is_edit"
         class="mx-1 btn btn-primary"
         mat-flat-button
         (click)="edit()"
@@ -1216,7 +363,7 @@
       </button>
 
       <button
-        [disabled]="!model.nsID || !is_edit"
+        [disabled]="!model.employee_id || !is_edit"
         type="submit"
         class="mx-1 btn btn-primary"
         mat-flat-button
@@ -1225,7 +372,7 @@
       </button>
 
       <button
-        [disabled]="!model.nsID || !is_edit"
+        [disabled]="!model.employee_id || !is_edit"
         class="mx-1 btn btn-warning"
         mat-flat-button
         (click)="back()"

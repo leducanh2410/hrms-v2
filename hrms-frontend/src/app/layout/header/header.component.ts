@@ -5,27 +5,37 @@ import { SearchComponent } from '../common/search/search.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { User } from '../../core/user/user.types';
-import {MatDividerModule} from '@angular/material/divider';
+import { MatDividerModule } from '@angular/material/divider';
 import { CommonModule } from '@angular/common';
-import {MatSidenavModule} from '@angular/material/sidenav';
-import {MatListModule} from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { RouterModule } from '@angular/router';
+
+
 @Component({
   selector: 'app-header',
-  imports: [MatToolbarModule, MatIconModule, SearchComponent, MatMenuModule, MatDividerModule,
-    CommonModule, MatSidenavModule, MatListModule
+  imports: [
+    MatToolbarModule,
+    MatIconModule,
+    SearchComponent,
+    MatMenuModule,
+    MatDividerModule,
+    CommonModule,
+    MatSidenavModule,
+    MatListModule,
+    RouterModule
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
 export class HeaderComponent {
   user$ = new BehaviorSubject<User>({});
-  signOut(): void
-  {
-      // Sign out
-      // this._authService.signOut();
-      // this._cookie.delete(AuthConfig.ACCESS_TOKEN, '/', API.ORG_DOMAIN, true, 'Lax');
-      // this._cookie.delete(AuthConfig.REFRESH_TOKEN, '/', API.ORG_DOMAIN, true, 'Lax');
-      // this._cookie.delete('__Secure-PSID', '/', API.ORG_DOMAIN, true, 'Lax');
-      // this._router.navigate(['/sign-in']);
+  signOut(): void {
+    // Sign out
+    // this._authService.signOut();
+    // this._cookie.delete(AuthConfig.ACCESS_TOKEN, '/', API.ORG_DOMAIN, true, 'Lax');
+    // this._cookie.delete(AuthConfig.REFRESH_TOKEN, '/', API.ORG_DOMAIN, true, 'Lax');
+    // this._cookie.delete('__Secure-PSID', '/', API.ORG_DOMAIN, true, 'Lax');
+    // this._router.navigate(['/sign-in']);
   }
 }

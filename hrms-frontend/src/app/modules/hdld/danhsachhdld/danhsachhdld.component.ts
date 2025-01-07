@@ -129,7 +129,41 @@ export class DanhsachhdldComponent {
   loaiHdldList: any[] = [];
   loaiHdldSelected: any = {};
 
-  nsHopdongList: NsDanhsachHdld[] = [];
+  nsHopdongList: any[] = [
+    {
+      index: 1,
+      contractType: 'Hợp đồng chính thức',
+      contractSignDate: new Date('2023-01-01'),
+      startDate: new Date('2023-01-01'),
+      endDate: new Date('2024-01-01'),
+      terminationDate: null,
+      contractNumber: 'HD001',
+      creationDate: new Date('2023-01-01'),
+      updateDate: new Date('2023-01-15'),
+    },
+    {
+      index: 2,
+      contractType: 'Hợp đồng thử việc',
+      contractSignDate: new Date('2023-02-01'),
+      startDate: new Date('2023-02-01'),
+      endDate: new Date('2023-04-01'),
+      terminationDate: null,
+      contractNumber: 'HD002',
+      creationDate: new Date('2023-02-01'),
+      updateDate: new Date('2023-02-10'),
+    },
+    {
+      index: 3,
+      contractType: 'Hợp đồng hợp tác',
+      contractSignDate: new Date('2023-03-01'),
+      startDate: new Date('2023-03-01'),
+      endDate: new Date('2024-03-01'),
+      terminationDate: new Date('2023-12-31'),
+      contractNumber: 'HD003',
+      creationDate: new Date('2023-03-01'),
+      updateDate: new Date('2023-03-05'),
+    },
+  ];
   nsInfo: any;
   donviId: any;
 

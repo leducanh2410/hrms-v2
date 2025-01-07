@@ -1,4 +1,12 @@
-import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { CommonApiService } from '../../../../../services/commonHttp';
 import { HSNhansuURL } from '../../../../../services/employe/hosonhansuURL';
 import { Subject, takeUntil } from 'rxjs';
@@ -9,8 +17,14 @@ import { ShareData } from '../../../../../shared/shareservice.service';
 import { NHAN_SU } from '../../../../../shared/appkeymessages';
 import { QtrinhlamviecComponent } from './qtrinhlamviec/qtrinhlamviec.component';
 import { MatDialog } from '@angular/material/dialog';
-import { formatDate } from '@angular/common';
-import { FormBuilder, FormGroup, FormsModule, NgForm, Validators } from '@angular/forms';
+import { CommonModule, formatDate } from '@angular/common';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  NgForm,
+  Validators,
+} from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -19,12 +33,13 @@ import { DividerModule } from 'primeng/divider';
 import { QuillEditorComponent, QuillModule } from 'ngx-quill';
 import { MatInputModule } from '@angular/material/input';
 import { InputTextModule } from 'primeng/inputtext';
+import { CalendarModule } from 'primeng/calendar';
 
 @Component({
   selector: 'app-thongtincanhan',
   templateUrl: './thongtincanhan.component.html',
   styleUrls: ['./thongtincanhan.component.scss'],
-  imports:[
+  imports: [
     DropdownModule,
     MatFormFieldModule,
     MatDatepickerModule,
@@ -33,8 +48,10 @@ import { InputTextModule } from 'primeng/inputtext';
     QuillModule,
     FormsModule,
     MatInputModule,
-    InputTextModule
-  ]
+    InputTextModule,
+    CommonModule,
+    CalendarModule,
+  ],
 })
 export class ThongtincanhanComponent implements OnInit, OnChanges, OnDestroy {
   @Input('nsInfo') nsInfo: THONG_TIN_CHUNG;
@@ -42,7 +59,7 @@ export class ThongtincanhanComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('cccdInput') cccdInput: ElementRef;
 
   model: THONG_TIN_CHUNG;
-  list: any[] = []
+  list: any[] = [];
 
   danToc: any[] = [];
   thanhPho: any[] = [];
@@ -62,6 +79,8 @@ export class ThongtincanhanComponent implements OnInit, OnChanges, OnDestroy {
   listHocham: any;
   listTrinhdoqlkt: any;
 
+  cccd_ngayCap: Date;
+
   is_edit: boolean = false;
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -73,29 +92,56 @@ export class ThongtincanhanComponent implements OnInit, OnChanges, OnDestroy {
     private el: ElementRef,
     private fb: FormBuilder
   ) {
+    this.cccd_ngayCap = new Date('2010-05-15');
+
     this.form = this.fb.group({
-      cccd: ['', Validators.required]
-    })
+      cccd: ['', Validators.required],
+    });
+
+    this.nsInfo = new THONG_TIN_CHUNG();
+    this.quocGia = [
+      {
+        name: 'Việt nam',
+        id: 0,
+      },
+    ];
+
+    this.danToc = [
+      {
+        name: 'Kinh',
+        id: 0,
+      },
+    ];
+
+    this.tonGiao = [
+      {
+        name: 'Không',
+        id: 0,
+      },
+    ];
+
+    this.listTtranghonnhan = [{ name: 'Độc thân', id: 0 }];
   }
 
   ngOnInit(): void {
-    this.loadDanhmuc();
-    this.model = new THONG_TIN_CHUNG()
+    // this.loadDanhmuc();
+    this.model = new THONG_TIN_CHUNG();
     if (this.nsInfo) {
       this.resetData();
     }
     // Xử lý kiểm tra update page khi dùng nút chức năng
-    this.shareData.getMessage(NHAN_SU.UPDATE_TTCN).pipe(takeUntil(this._unsubscribeAll)).subscribe(async (is_save: any) => {
-      if (is_save) {
-        this.save(this.form.valid);
-      }
-      else {
-        this.resetData();
-      }
-      this.is_edit = false
-      this.shareData.sendMessage(NHAN_SU.IS_EDIT, this.is_edit);
-    });
-
+    // this.shareData
+    //   .getMessage(NHAN_SU.UPDATE_TTCN)
+    //   .pipe(takeUntil(this._unsubscribeAll))
+    //   .subscribe(async (is_save: any) => {
+    //     if (is_save) {
+    //       this.save(this.form.valid);
+    //     } else {
+    //       this.resetData();
+    //     }
+    //     this.is_edit = false;
+    //     this.shareData.sendMessage(NHAN_SU.IS_EDIT, this.is_edit);
+    //   });
   }
 
   loadDanhmuc() {
@@ -195,25 +241,9 @@ export class ThongtincanhanComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(): void {
     if (this.nsInfo) {
       this.resetData();
-      if (this.model.is_create) {
-        this.model.quocgiaId = 1;
-        this.model.dantocId = 1;
-        this.model.tongiaoId = 2;
-        this.model.is_create = false;
-        this.is_edit = true;
-      } else {
-        this.is_edit = false;
-      }
-      if (this.nsInfo.nsTtphoId)
-        this.getDsQhNoisinh(this.nsInfo.nsTtphoId);
-      if (this.nsInfo.qqTtphoId)
-        this.getDsQhQuequan(this.nsInfo.qqTtphoId);
-      if (this.nsInfo.chnTtphoId)
-        this.getDsQhNoio(this.nsInfo.chnTtphoId);
-      if (this.nsInfo.ttTtphoId)
-        this.getDsQhHokhau(this.nsInfo.ttTtphoId);
+      //
     }
-      }
+  }
 
   // subcribeChange() {
   //   if (this.model != null) {
@@ -234,7 +264,7 @@ export class ThongtincanhanComponent implements OnInit, OnChanges, OnDestroy {
 
   save(isValid) {
     if (!isValid) {
-      if (this.model.socmnd == null) {
+      if (this.model.cccd_number == null) {
         this.messageService.showErrorMessage(
           'Hệ thống',
           'Thông tin nhập thiếu CMND/ Căn cước.'
@@ -246,7 +276,7 @@ export class ThongtincanhanComponent implements OnInit, OnChanges, OnDestroy {
         'Hệ thống',
         'Thông tin nhập thiếu hoặc không đúng định dạng.'
       );
-      this.focusFirstInvalidControlPlus()
+      this.focusFirstInvalidControlPlus();
       return;
     }
     this.http
@@ -267,31 +297,30 @@ export class ThongtincanhanComponent implements OnInit, OnChanges, OnDestroy {
         this.is_edit = false;
         this.shareData.sendMessage(NHAN_SU.VIEW_TTIN, this.model);
         this.shareData.sendMessage(NHAN_SU.IS_EDIT, this.is_edit);
-        this.shareData.sendMessage(NHAN_SU.REFRESH_THONGTINCHUNG, 'REFRESH_THONGTINCHUNG');
+        this.shareData.sendMessage(
+          NHAN_SU.REFRESH_THONGTINCHUNG,
+          'REFRESH_THONGTINCHUNG'
+        );
       });
   }
 
   edit() {
     this.is_edit = true;
-    this.shareData.sendMessage(NHAN_SU.IS_EDIT, this.is_edit)
+    this.shareData.sendMessage(NHAN_SU.IS_EDIT, this.is_edit);
   }
 
   back() {
-    this.is_edit = false
+    this.is_edit = false;
     this.resetData();
-    this.shareData.sendMessage(NHAN_SU.IS_EDIT, this.is_edit)
+    this.shareData.sendMessage(NHAN_SU.IS_EDIT, this.is_edit);
   }
 
-  resetData() {
-    this.model = JSON.parse(JSON.stringify(this.nsInfo))
-    if (this.model.capnhatquatrinhct) this.model.capnhatquatrinhct = this.model.capnhatquatrinhct.replaceAll("\n", "<br/>");
-    else this.model.capnhatquatrinhct = ''
-  }
+  resetData() {}
 
   chonTuQtrinh() {
     let listQtlamviec;
     this.http
-      .get(HSNhansuURL.getQtlamviec(this.model.nsID))
+      .get(HSNhansuURL.getQtlamviec(this.model.employee_id))
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((res: any) => {
         if (!res || !res.state) return;
@@ -299,48 +328,14 @@ export class ThongtincanhanComponent implements OnInit, OnChanges, OnDestroy {
         const dialogRef = this._matDialog.open(QtrinhlamviecComponent, {
           width: '900px',
           disableClose: true,
-          data: listQtlamviec
+          data: listQtlamviec,
         });
-        dialogRef.afterClosed()
-          .subscribe((result) => {
-            if (result) {
-              if (this.model.capnhatquatrinhct == null) {
-                this.model.capnhatquatrinhct = ''
-              }
-              result.forEach(qtrinh => {
-                let line = `Từ ${formatDate(qtrinh.tungay, 'dd/MM/yyyy', 'en-US')}`
-                if (qtrinh.denngay) {
-                  line += ` đến ${formatDate(qtrinh.denngay, 'dd/MM/yyyy', 'en-US')}`
-                }
-                line += `: ${qtrinh.vtricdanh}`;
-                if (this.model.capnhatquatrinhct.includes(line)) {
-                    this.messageService.showErrorMessage(
-                        'Hệ thống',
-                        'Quá trình hiện đã có trong tóm tắt.'
-                      );
-                } else {
-                    this.model.capnhatquatrinhct += '<br/>';
-                    this.model.capnhatquatrinhct += (line + `, ${qtrinh.tendonvi}`);
-                }
-              });
-
-            }
-          });
       });
   }
 
-  changeBodoi() {
-    if (!this.model.bodoi) {
-      this.model.ngaynhapngu = null;
-      this.model.ngayxnlydo = null;
-      this.model.chucvucaonhat = null;
-    }
-  }
+  changeBodoi() {}
 
-  changeGDCS() {
-    if (!this.model.giadinhchinhsach)
-      this.model.kieugdcsach = null
-  }
+  changeGDCS() {}
 
   getDsQhNoio(idtp) {
     let tpnoio = idtp;
@@ -387,7 +382,10 @@ export class ThongtincanhanComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   focusFirstInvalidControlPlus(): void {
-    const firstElementWithErrors: HTMLElement = this.el.nativeElement.querySelector(`form :not(mat-form-field) :not(div) .ng-invalid`);
+    const firstElementWithErrors: HTMLElement =
+      this.el.nativeElement.querySelector(
+        `form :not(mat-form-field) :not(div) .ng-invalid`
+      );
 
     if (firstElementWithErrors) {
       firstElementWithErrors.focus();
@@ -395,8 +393,8 @@ export class ThongtincanhanComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   /**
-* On destroy
-*/
+   * On destroy
+   */
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
     this._unsubscribeAll.next(null);

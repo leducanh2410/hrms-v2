@@ -1,4 +1,11 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonApiService } from '../../../../../services/commonHttp';
 import { HSNhansuURL } from '../../../../../services/employe/hosonhansuURL';
@@ -25,36 +32,65 @@ import { NumberFormatPipe } from '../../../../../shared/formatNumber';
   selector: 'app-qtrluong',
   templateUrl: './qtrluong.component.html',
   styleUrls: ['./qtrluong.component.scss'],
-  imports:[
+  imports: [
     MatAccordion,
     MatExpansionModule,
     TableModule,
     FormsModule,
     QtrluongdieuchinhComponent,
     CommonModule,
-    NumberFormatPipe
-  ]
+    NumberFormatPipe,
+  ],
 })
 export class QtrluongComponent implements OnInit, OnChanges {
   @Input('nsInfo') nsInfo: any;
   @ViewChild('qtrluongdieuchinh') qtrluongdieuchinh: any;
-  data: any[];
-  dataPhucap:any[];
+  data: any[] = [
+    {
+      effectiveDate: new Date('2023-01-01'),
+      income: 15000000,
+      seniority: 5,
+      expertise: 'Quản lý dự án',
+      position: 'Quản lý',
+      attraction: 'Năng lực lãnh đạo',
+      specialAssignment: 'Không',
+      responsibility: 'Quản lý đội ngũ',
+      updateDate: new Date('2023-01-15'),
+    },
+    {
+      effectiveDate: new Date('2023-02-01'),
+      income: 12000000,
+      seniority: 3,
+      expertise: 'Kỹ thuật phần mềm',
+      position: 'Kỹ sư',
+      attraction: 'Kinh nghiệm thực tiễn',
+      specialAssignment: 'Có',
+      responsibility: 'Phát triển sản phẩm',
+      updateDate: new Date('2023-02-10'),
+    },
+    {
+      effectiveDate: new Date('2023-03-01'),
+      income: 18000000,
+      seniority: 7,
+      expertise: 'Phân tích dữ liệu',
+      position: 'Chuyên viên',
+      attraction: 'Khả năng phân tích',
+      specialAssignment: 'Không',
+      responsibility: 'Phân tích báo cáo',
+      updateDate: new Date('2023-03-05'),
+    },
+  ];
+  dataPhucap: any[];
 
   model: THONG_TIN_CHUNG;
-
-  
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
     private _matDialog: MatDialog,
     private http: CommonApiService,
     private messageService: MessageService,
-    private mb: MessageBox,
-  ) {
-
-
-  }
+    private mb: MessageBox
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     this.loadDataLuong();
@@ -62,8 +98,8 @@ export class QtrluongComponent implements OnInit, OnChanges {
   }
   ngOnInit(): void {
     this.model = this.nsInfo;
-    
-    console.log('nhan su',this.nsInfo);
+
+    console.log('nhan su', this.nsInfo);
     // this.loadDataLuong();
     // this.loadDataPhucap();
   }
@@ -76,8 +112,6 @@ export class QtrluongComponent implements OnInit, OnChanges {
         if (!res || !res.state) return;
         this.data = res.data;
       });
-
-
   }
 
   loadDataPhucap(): void {
@@ -106,14 +140,13 @@ export class QtrluongComponent implements OnInit, OnChanges {
             fileId: fileQD.fileId,
             fileContent: fileQD.fileContent,
             fileExten: fileQD.fileExten,
-            fileName: fileQD.fileName
+            fileName: fileQD.fileName,
+          },
+        });
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result) {
           }
         });
-        dialogRef.afterClosed()
-          .subscribe((result) => {
-            if (result) {
-            }
-          });
       });
     return;
   }
@@ -140,21 +173,18 @@ export class QtrluongComponent implements OnInit, OnChanges {
       data: {
         nsID: this.nsInfo?.nsID,
         donviId: this.nsInfo?.donviId,
-
-      }
+      },
     });
-    dialogRef.afterClosed()
-      .subscribe((result) => {
-        this.loadDataLuong();
-
-      });
+    dialogRef.afterClosed().subscribe((result) => {
+      this.loadDataLuong();
+    });
   }
 
-  xuatExcelLuongdieuchinh(){
+  xuatExcelLuongdieuchinh() {
     this.qtrluongdieuchinh.xuatExcel();
   }
 
-  themluongDieuchinh(){
+  themluongDieuchinh() {
     this.qtrluongdieuchinh.themluong();
   }
 
@@ -165,16 +195,12 @@ export class QtrluongComponent implements OnInit, OnChanges {
       data: {
         nsID: this.nsInfo?.nsID,
         donviId: this.nsInfo?.donviId,
-
-      }
+      },
     });
-    dialogRef.afterClosed()
-      .subscribe((result) => {
-        this.loadDataPhucap();
-
-      });
+    dialogRef.afterClosed().subscribe((result) => {
+      this.loadDataPhucap();
+    });
   }
-
 
   sualuong(product): void {
     const obj = JSON.parse(JSON.stringify(product));
@@ -182,13 +208,11 @@ export class QtrluongComponent implements OnInit, OnChanges {
     const dialogRef = this._matDialog.open(LuongdialogComponent, {
       width: '1000px',
       disableClose: true,
-      data: obj
+      data: obj,
     });
-    dialogRef.afterClosed()
-      .subscribe((result) => {
-        this.loadDataLuong();
-
-      });
+    dialogRef.afterClosed().subscribe((result) => {
+      this.loadDataLuong();
+    });
   }
 
   suaphucap(product) {
@@ -197,17 +221,14 @@ export class QtrluongComponent implements OnInit, OnChanges {
     const dialogRef = this._matDialog.open(PhucapdialogComponent, {
       width: '900px',
       disableClose: true,
-      data: obj
+      data: obj,
     });
-    dialogRef.afterClosed()
-    .subscribe((result) => {
+    dialogRef.afterClosed().subscribe((result) => {
       this.loadDataPhucap();
-
     });
   }
 
   delete(id) {
-
     let dialog = this.mb.showDefault(
       'Bạn có chắc chắn muốn muốn xóa quá trình lương này không?',
       Buttons.YesNo
@@ -234,11 +255,9 @@ export class QtrluongComponent implements OnInit, OnChanges {
           });
       }
     });
-
   }
 
   deletePhucap(id) {
-
     let dialog = this.mb.showDefault(
       'Bạn có chắc chắn muốn muốn xóa quá phụ cấp này không?',
       Buttons.YesNo
@@ -265,10 +284,9 @@ export class QtrluongComponent implements OnInit, OnChanges {
           });
       }
     });
-
   }
 
-  xuatExcel():void{
+  xuatExcel(): void {
     console.log('excel');
     this.http
       .get(QuatrinhLuongURL.xuatExcel(this.nsInfo?.nsID))
@@ -279,11 +297,11 @@ export class QtrluongComponent implements OnInit, OnChanges {
         }
 
         const blob = AppUltil.base64ToBlob(res.data);
-        FileSaver.saveAs(blob, "quatrinhluong.xls");
+        FileSaver.saveAs(blob, 'quatrinhluong.xls');
       });
   }
 
-  xuatExcelPhucap():void{
+  xuatExcelPhucap(): void {
     console.log('excel');
     this.http
       .get(QuatrinhLuongURL.xuatExcelPhucap(this.nsInfo?.nsID))
@@ -294,7 +312,7 @@ export class QtrluongComponent implements OnInit, OnChanges {
         }
 
         const blob = AppUltil.base64ToBlob(res.data);
-        FileSaver.saveAs(blob, "quaphucap.xls");
+        FileSaver.saveAs(blob, 'quaphucap.xls');
       });
   }
 }

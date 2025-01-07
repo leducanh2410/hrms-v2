@@ -80,15 +80,15 @@ export class FormnhansuDonviComponent implements OnInit {
     private _matDialog: MatDialog,
     private store: Store<AppState>
   ) {
-    const appUser = this.store.select((state) => state.appUser);
-    appUser.subscribe((res: any) => {
-      const data = res;
-      if (data && data.type === APP_ACTION.USER_INFO) {
-        this.user_info = { ...data.payload };
-        this.user_info.status = 'online';
-        this.user$.next(this.user_info);
-      }
-    });
+    // const appUser = this.store.select((state) => state.appUser);
+    // appUser.subscribe((res: any) => {
+    //   const data = res;
+    //   if (data && data.type === APP_ACTION.USER_INFO) {
+    //     this.user_info = { ...data.payload };
+    //     this.user_info.status = 'online';
+    //     this.user$.next(this.user_info);
+    //   }
+    // });
   }
 
   ngOnInit(): void {
@@ -105,44 +105,44 @@ export class FormnhansuDonviComponent implements OnInit {
         orgName: this.data.userDonvi.orgName,
         orgCode: this.data.userDonvi.orgCode,
       };
-      this.http
-        .get(this.data.apiNhansu + '/' + this.selectedDonvi.organizationId)
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((res: any) => {
-          if (!res || !res.state) return;
-          this.nhansus = res.data;
-        });
+      // this.http
+      //   .get(this.data.apiNhansu + '/' + this.selectedDonvi.organizationId)
+      //   .pipe(takeUntil(this._unsubscribeAll))
+      //   .subscribe((res: any) => {
+      //     if (!res || !res.state) return;
+      //     this.nhansus = res.data;
+      //   });
     } else {
       this.selectedDonvi = {};
     }
 
-    this.http
-      .get(this.data.apiDonvi)
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.donvis = res.data;
-      });
+    // this.http
+    //   .get(this.data.apiDonvi)
+    //   .pipe(takeUntil(this._unsubscribeAll))
+    //   .subscribe((res: any) => {
+    //     if (!res || !res.state) return;
+    //     this.donvis = res.data;
+    //   });
 
     // Phân quyền lựa chọn trực thuộc
     if (!this.ignoreAuthor) {
       if (!this.data?.rightTructhuoc) {
-        this.http
-          .get(
-            `https://smartevn-test.evn.com.vn/hrms/employe/v1/home/listRights`
-          )
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (!res || !res.state) return;
-            let rights = res.data;
-            if (
-              rights.some(
-                (right: { role: any }) => right.role == 'RIGHT_TRUCTHUOC'
-              )
-            ) {
-              this.rightTructhuoc = true;
-            }
-          });
+        // this.http
+        //   .get(
+        //     `https://smartevn-test.evn.com.vn/hrms/employe/v1/home/listRights`
+        //   )
+        //   .pipe(takeUntil(this._unsubscribeAll))
+        //   .subscribe((res: any) => {
+        //     if (!res || !res.state) return;
+        //     let rights = res.data;
+        //     if (
+        //       rights.some(
+        //         (right: { role: any }) => right.role == 'RIGHT_TRUCTHUOC'
+        //       )
+        //     ) {
+        //       this.rightTructhuoc = true;
+        //     }
+        //   });
       }
     }
   }

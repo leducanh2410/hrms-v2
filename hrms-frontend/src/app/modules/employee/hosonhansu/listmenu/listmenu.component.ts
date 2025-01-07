@@ -10,21 +10,19 @@ import { CommonModule } from '@angular/common';
   selector: 'app-listmenu',
   templateUrl: './listmenu.component.html',
   styleUrls: ['./listmenu.component.scss'],
-  imports: [
-    CommonModule
-  ]
+  imports: [CommonModule],
 })
 export class ListmenuComponent implements OnInit, OnDestroy {
   items: MenuItem[] | undefined;
-  menu: string = 'canhan'
+  menu: string = 'canhan';
   is_change: boolean = false;
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
     private shareData: ShareData,
     private subData: ShareData,
-    private _matDialog: MatDialog,
-  ) { }
+    private _matDialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.items = [
@@ -35,26 +33,28 @@ export class ListmenuComponent implements OnInit, OnDestroy {
         disabled: true,
         command: async () => {
           this.shareData.sendMessage(NHAN_SU.PAGE, 'canhan');
-          // this.menu = 'canhan'
-        }
+          this.menu = 'canhan';
+        },
       },
       {
         id: 'thannhan',
         label: 'Thông tin thân nhân',
         styleClass: 'border-b',
         command: async () => {
+          console.log(this.menu);
+
           let is_close: boolean;
           if (this.menu === 'canhan') {
             is_close = await this.checkUpdatePage();
             if (is_close != null && is_close) {
               this.shareData.sendMessage(NHAN_SU.PAGE, 'thannhan');
-              this.menu = 'thannhan'
+              this.menu = 'thannhan';
             }
           } else {
             this.shareData.sendMessage(NHAN_SU.PAGE, 'thannhan');
-            this.menu = 'thannhan'
+            this.menu = 'thannhan';
           }
-        }
+        },
       },
       {
         id: 'qtlamviec',
@@ -72,7 +72,7 @@ export class ListmenuComponent implements OnInit, OnDestroy {
             this.shareData.sendMessage(NHAN_SU.PAGE, 'qtlamviec');
             // this.menu = 'qtlamviec'
           }
-        }
+        },
       },
       {
         id: 'qtrluong',
@@ -90,15 +90,14 @@ export class ListmenuComponent implements OnInit, OnDestroy {
             this.shareData.sendMessage(NHAN_SU.PAGE, 'qtrluong');
             // this.menu = 'qtrluong'
           }
-        }
+        },
       },
-      
+
       {
         id: 'khenthuongkyluat',
-        label: 'Khen thưởng - kỷ luật',
+        label: 'Đánh giá',
         styleClass: 'border-b',
         command: async () => {
-
           let is_close: boolean;
           if (this.menu === 'canhan') {
             is_close = await this.checkUpdatePage();
@@ -110,34 +109,33 @@ export class ListmenuComponent implements OnInit, OnDestroy {
             this.shareData.sendMessage(NHAN_SU.PAGE, 'khenthuongkyluat');
             // this.menu = 'khenthuongkyluat'
           }
-        }
+        },
       },
-    
-      {
-        id: 'ycnl',
-        label: 'Yêu cầu năng lực',
-        styleClass: 'border-b',
-        command: async () => {
 
-          let is_close: boolean;
-          if (this.menu === 'canhan') {
-            is_close = await this.checkUpdatePage();
-            if (is_close != null && is_close) {
-              this.shareData.sendMessage(NHAN_SU.PAGE, 'ycnl');
-              // this.menu = 'ycnl'
-            }
-          } else {
-            this.shareData.sendMessage(NHAN_SU.PAGE, 'ycnl');
-            // this.menu = 'ycnl'
-          }
-        }
-      },
+      // {
+      //   id: 'ycnl',
+      //   label: 'Yêu cầu năng lực',
+      //   styleClass: 'border-b',
+      //   command: async () => {
+
+      //     let is_close: boolean;
+      //     if (this.menu === 'canhan') {
+      //       is_close = await this.checkUpdatePage();
+      //       if (is_close != null && is_close) {
+      //         this.shareData.sendMessage(NHAN_SU.PAGE, 'ycnl');
+      //         // this.menu = 'ycnl'
+      //       }
+      //     } else {
+      //       this.shareData.sendMessage(NHAN_SU.PAGE, 'ycnl');
+      //       // this.menu = 'ycnl'
+      //     }
+      //   }
+      // },
       {
         id: 'hscn',
         label: 'Hồ sơ cá nhân',
         styleClass: 'border-b',
         command: async () => {
-
           let is_close: boolean;
           if (this.menu === 'canhan') {
             is_close = await this.checkUpdatePage();
@@ -149,15 +147,21 @@ export class ListmenuComponent implements OnInit, OnDestroy {
             this.shareData.sendMessage(NHAN_SU.PAGE, 'hscn');
             // this.menu = 'hscn'
           }
-        }
+        },
       },
     ];
-    this.subData.getMessage(NHAN_SU.IS_EDIT).pipe(takeUntil(this._unsubscribeAll)).subscribe(async (is_change: any) => {
-      this.is_change = is_change;
-    });
-    this.subData.getMessage(NHAN_SU.PAGE).pipe(takeUntil(this._unsubscribeAll)).subscribe(async (page: any) => {
-      this.menu = page;
-    });
+    this.subData
+      .getMessage(NHAN_SU.IS_EDIT)
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(async (is_change: any) => {
+        this.is_change = is_change;
+      });
+    this.subData
+      .getMessage(NHAN_SU.PAGE)
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(async (page: any) => {
+        this.menu = page;
+      });
   }
 
   trackByFn(index: number, item: any): any {
@@ -170,36 +174,35 @@ export class ListmenuComponent implements OnInit, OnDestroy {
         const dialogRef = this._matDialog.open(XacnhanpopupComponent, {
           disableClose: true,
           data: {
-            message: 'Thông tin đang cập nhật chưa được Lưu vào hệ thống! Anh/chị có muốn Lưu lại thông tin này?'
-          }
+            message:
+              'Thông tin đang cập nhật chưa được Lưu vào hệ thống! Anh/chị có muốn Lưu lại thông tin này?',
+          },
         });
 
-        dialogRef.afterClosed()
-          .subscribe((result) => {
-            if (result != null) {
-              if (result == 0) {
-                this.subData.sendMessage(NHAN_SU.UPDATE_TTCN, true);
-                this.is_change = false
-                resolve(true);
-              } else if (result == 1) {
-                this.subData.sendMessage(NHAN_SU.UPDATE_TTCN, false);
-                this.is_change = false
-                resolve(true);
-              } else {
-                resolve(false);
-              }
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result != null) {
+            if (result == 0) {
+              this.subData.sendMessage(NHAN_SU.UPDATE_TTCN, true);
+              this.is_change = false;
+              resolve(true);
+            } else if (result == 1) {
+              this.subData.sendMessage(NHAN_SU.UPDATE_TTCN, false);
+              this.is_change = false;
+              resolve(true);
+            } else {
+              resolve(false);
             }
-
-          });
+          }
+        });
       } else {
         resolve(true);
       }
-    })
+    });
   }
 
   /**
-  * On destroy
-  */
+   * On destroy
+   */
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
     this._unsubscribeAll.next(null);

@@ -37,6 +37,8 @@ import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { DropdownModule } from 'primeng/dropdown';
 import { MatInputModule } from '@angular/material/input';
+import { InputTextModule } from 'primeng/inputtext';
+import { CalendarModule } from 'primeng/calendar';
 
 @Component({
   selector: 'app-khenthuongform',
@@ -52,10 +54,11 @@ import { MatInputModule } from '@angular/material/input';
     MatSelectModule,
     DividerModule,
     TableModule,
-    ChonquyetdinhComponent,
     TooltipModule,
     DropdownModule,
-    MatInputModule
+    MatInputModule,
+    InputTextModule,
+    CalendarModule
   ],
 })
 export class KhenthuongformComponent implements OnInit {

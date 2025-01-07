@@ -21,6 +21,8 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
+import { InputTextModule } from 'primeng/inputtext';
+import { CalendarModule } from 'primeng/calendar';
 @Component({
   selector: 'app-giadinhform',
   templateUrl: './giadinhform.component.html',
@@ -35,14 +37,39 @@ import { MatInputModule } from '@angular/material/input';
     CommonModule,
     MatSelectModule,
     ReactiveFormsModule,
-    MatInputModule
+    MatInputModule,
+    InputTextModule,
+    CalendarModule,
   ],
 })
 export class GiadinhformComponent implements OnInit {
   @ViewChild('registerForm', { static: false }) registerForm: any;
   uploadedFiles: any[] = [];
   _fileForm: any;
-  listQhegd: any[] = [];
+  listQhegd: any[] = [
+    {
+      name: 'Bố',
+      id: 0,
+    },
+    {
+      name: 'Mẹ',
+      id: 1,
+    },
+    {
+      name: 'Anh/Chị/Em',
+      id: 2,
+    },
+  ];
+  listGioiTinh: any[] = [
+    {
+      name: 'Nam',
+      id: 0,
+    },
+    {
+      name: 'Nữ',
+      id: 1,
+    },
+  ];
   isLockform = false;
   lqhegdinh: number;
   isAddnew: boolean = false;

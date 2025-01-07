@@ -16,7 +16,6 @@
       ></p-button>
 
       <!-- <input type="text" class="input w-80 lg:w-100" placeholder="Đơn vị" /> -->
-       <p class="ml-5 mr-10">Công ty TNHH Công Nghệ Phương Đông</p>
       <button
         pButton
         icon="fa-light fa-buildings"
@@ -100,11 +99,15 @@
             [value]="listNhansu"
             styleClass="w-full"
             [scrollable]="true"
-            scrollHeight="calc(100vh - 7.5rem)"
+            [paginator]="true"
+            [rows]="5"
+            [paginatorPosition]="'bottom'"
           >
             <ng-template pTemplate="header">
               <tr class="bg-zinc-300">
-                <th class="w-10 border border-gray-300"></th>
+                <th class="w-10 border font-bold text-black border-gray-300">
+                  STT
+                </th>
                 <th
                   [pSortableColumn]="col.field"
                   *ngFor="let col of columns"
@@ -114,12 +117,19 @@
                   {{ col.columnName }}
                   <p-sortIcon [field]="col.field"></p-sortIcon>
                 </th>
-                <th class="w-30 text-center text-black font-bold border border-gray-300">Xem/ tải SYLL</th>
-                <th class="w-28 text-center text-black font-bold border border-gray-300">Thao tác</th>
+                <th
+                  class="w-28 text-center text-black font-bold border border-gray-300"
+                >
+                  Thao tác
+                </th>
               </tr>
               <tr class="bg-zinc-300">
                 <th class="w-10 border border-gray-300"></th>
-                <th *ngFor="let col of columns" [ngClass]="col.columnWidth" class="border border-gray-300">
+                <th
+                  *ngFor="let col of columns"
+                  [ngClass]="col.columnWidth"
+                  class="border border-gray-300"
+                >
                   <p-columnFilter
                     [matchMode]="'contains'"
                     class="w-full"
@@ -128,7 +138,7 @@
                     display="row"
                   ></p-columnFilter>
                 </th>
-                <th class="w-30 border border-gray-300"></th>
+                <!-- <th class="w-30 border border-gray-300"></th> -->
                 <th class="w-28 border border-gray-300"></th>
 
                 <!-- <th class="w-x">
@@ -142,60 +152,26 @@
             </ng-template>
             <ng-template pTemplate="body" let-rowData let-index="rowIndex">
               <tr>
-                <td class="w-10 text-center">{{ index + 1 }}</td>
+                <td class="w-10 text-center border border-gray-300">
+                  {{ index + 1 }}
+                </td>
 
                 <td
                   *ngFor="let col of columns"
                   [ngClass]="col.columnWidth"
                   style="word-break: break-word"
+                  class="border border-gray-300"
                 >
-                  {{ rowData[col.field] }}
+                  {{
+                    col.field === "gender"
+                      ? rowData[col.field] === 1
+                        ? "Nam"
+                        : "Nữ"
+                      : rowData[col.field]
+                  }}
                 </td>
 
-                <td class="w-30 justify-center">
-                  <button
-                    class=""
-                    mat-icon-button
-                    color="primary"
-                    [matMenuTriggerFor]="menuShowSYLL"
-                    pTooltip="Xem SYLL/ Xem lý lịch trích ngang"
-                  >
-                    <i class="fas fa-eye"></i>
-                  </button>
-                  <button
-                    class=""
-                    mat-icon-button
-                    color="primary"
-                    [matMenuTriggerFor]="menuDownloadSYLL"
-                    pTooltip="Tải SYLL(3 mẫu)"
-                    tooltipPosition="left"
-                  >
-                    <i class="fas fa-download"></i>
-                  </button>
-                  <mat-menu #menuShowSYLL="matMenu">
-                    <button mat-menu-item (click)="viewFileSYLL(3, rowData)">
-                      Xem lý lịch trích ngang
-                    </button>
-                    <button mat-menu-item (click)="viewFileSYLL(2, rowData)">
-                      Xem mẫu 02C/BNV
-                    </button>
-                    <button mat-menu-item (click)="viewFileSYLL(1, rowData)">
-                      Xem mẫu Syll EVN
-                    </button>
-                  </mat-menu>
-                  <mat-menu #menuDownloadSYLL="matMenu">
-                    <button mat-menu-item (click)="downloadMauSYLL(2, rowData)">
-                      Tải Mẫu 02C/BNV
-                    </button>
-                    <button mat-menu-item (click)="downloadMauSYLL(3, rowData)">
-                      Tải Mẫu 02C/TCTW
-                    </button>
-                    <button mat-menu-item (click)="downloadMauSYLL(1, rowData)">
-                      Tải Mẫu Syll EVN
-                    </button>
-                  </mat-menu>
-                </td>
-                <td class="w-28 justify-center">
+                <td class="w-28 justify-center border border-gray-300">
                   <button
                     class=""
                     mat-icon-button
@@ -204,7 +180,7 @@
                     tooltipPosition="left"
                     (click)="onNavigatorHsns(rowData)"
                   >
-                    <i class="fas fa-pencil-square"></i>
+                    <i class="fas fa-pencil-square text-blue-500"></i>
                   </button>
                 </td>
               </tr>

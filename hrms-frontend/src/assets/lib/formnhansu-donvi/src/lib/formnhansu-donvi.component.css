@@ -3,8 +3,7 @@
     flex-direction: column;
     max-width: 80rem;
     overflow: hidden;
-    max-height: 100vh ;
-    margin: -1.5rem;
+    max-height: 90vh ;
 }
 
 .form-header {
