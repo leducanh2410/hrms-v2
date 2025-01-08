@@ -15,55 +15,36 @@
       >
         <div class="flex flex-col justify-center">
           <div class="mat-field-label">Quốc tịch</div>
-          <p-dropdown
-            [style]="{ width: '100%' }"
-            [options]="quocGia"
-            optionLabel="name"
-            optionValue="id"
-            appendTo="body"
-            name="quoctich"
-            placeholder="&nbsp;"
-            [filter]="true"
-            filterBy="name"
-            [showClear]="true"
-            [ngModel]="0"
-          >
-          </p-dropdown>
+          <input
+            pInputText
+            name="quocTich"
+            [readonly]="!is_edit"
+            class="w-full"
+            [(ngModel)]="nsInfo.nationality"
+          />
         </div>
 
         <div class="flex flex-col justify-center">
           <div class="mat-field-label">Dân tộc</div>
-          <p-dropdown
-            [style]="{ width: '100%' }"
-            [options]="danToc"
-            optionLabel="name"
-            optionValue="id"
-            appendTo="body"
-            name="dantoc"
-            placeholder="&nbsp;"
-            [filter]="true"
-            filterBy="name"
-            [showClear]="true"
-            [ngModel]="0"
-          >
-          </p-dropdown>
+          <input
+            pInputText
+            name="danToc"
+            [readonly]="!is_edit"
+            class="w-full"
+            [(ngModel)]="nsInfo.ethnic"
+          />
         </div>
 
         <div class="flex items-center">
           <div class="flex flex-col w-full">
             <div class="mat-field-label">Tôn giáo</div>
-            <p-dropdown
-              [style]="{ width: '100%' }"
-              [options]="tonGiao"
-              optionLabel="name"
-              optionValue="id"
-              appendTo="body"
-              name="tongiao"
-              placeholder="&nbsp;"
-              [showClear]="true"
-              [ngModel]="0"
-            >
-            </p-dropdown>
+            <input
+              pInputText
+              name="tonGiao"
+              [readonly]="!is_edit"
+              class="w-full"
+              [(ngModel)]="nsInfo.tongiao"
+            />
           </div>
         </div>
 
@@ -78,7 +59,7 @@
             name="tinhtranghn"
             placeholder="&nbsp;"
             [showClear]="true"
-            [ngModel]="0"
+            [ngModel]="nsInfo.marriageStatus"
           >
           </p-dropdown>
         </div>
@@ -129,12 +110,14 @@
               [binary]="true"
               (onChange)="changeGDCS()"
               [disabled]="!is_edit"
+              [(ngModel)]="nsInfo.dangDoan.giaDinhChinhSach"
             ></p-checkbox>
             <input
               pInputText
               name="gdchinhsach"
               [readonly]="!is_edit"
               class="!inline-block w-full"
+              [(ngModel)]="nsInfo.dangDoan.loaiChinhSach"
             />
           </div>
         </div>
@@ -147,7 +130,7 @@
               name="bhxh"
               [readonly]="!is_edit"
               class="w-full"
-              value="032541556562"
+              [(ngModel)]="nsInfo.baoHiem.soSoBhxh"
             />
           </div>
         </div>
@@ -160,8 +143,7 @@
               name="mathue"
               [readonly]="!is_edit"
               class="w-full"
-              value="565265512516565"
-
+              [(ngModel)]="nsInfo.maSoThue"
             />
           </div>
           <div>
@@ -171,8 +153,7 @@
               name="sobhyt"
               [readonly]="!is_edit"
               class="w-full"
-              value="1235647895456"
-
+              [(ngModel)]="nsInfo.baoHiem.soBhyt"
             />
           </div>
         </div>
@@ -184,13 +165,20 @@
             name="noikhamchua"
             [readonly]="!is_edit"
             class="w-full"
-            value="Bệnh viện Phương Đông"
+            [(ngModel)]="nsInfo.baoHiem.noiDkKhamBenh"
           />
         </div>
 
         <div class="">
           <div class="">Điện thoại</div>
-          <input pInputText name="dt" [(ngModel)]="nsInfo.phone" [readonly]="!is_edit" class="w-full" />
+          <input
+            pInputText
+            name="dt"
+            [(ngModel)]="nsInfo.phone"
+            [readonly]="!is_edit"
+            class="w-full"
+            [(ngModel)]="nsInfo.contact.phoneNumber"
+          />
         </div>
 
         <div class="flex flex-col justify-start">
@@ -201,7 +189,7 @@
             type="email"
             [readonly]="!is_edit"
             class="w-full"
-            value="emp1_thaco@gmail.com.vn"
+            [(ngModel)]="nsInfo.contact.companyEmail"
           />
         </div>
       </div>

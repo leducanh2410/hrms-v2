@@ -134,8 +134,6 @@ export class DsnhansuComponent implements OnInit, OnDestroy {
     this.columns = COLUMN_INIT_DS_NHANSU;
     this.fetchListNhansu();
 
-    console.log(this.listNhansu);
-
     // this.onSelectColumns();
   }
 
@@ -481,8 +479,6 @@ export class DsnhansuComponent implements OnInit, OnDestroy {
   }
 
   onNavigatorHsns(ns) {
-    console.log(ns);
-
     this._router.navigate(['../hosonhansu'], {
       relativeTo: this._activatedroute,
       state: ns,

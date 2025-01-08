@@ -98,7 +98,6 @@ export class ThongtincanhanComponent implements OnInit, OnChanges, OnDestroy {
       cccd: ['', Validators.required],
     });
 
-    this.nsInfo = new THONG_TIN_CHUNG();
     this.quocGia = [
       {
         name: 'Việt nam',
@@ -120,7 +119,12 @@ export class ThongtincanhanComponent implements OnInit, OnChanges, OnDestroy {
       },
     ];
 
-    this.listTtranghonnhan = [{ name: 'Độc thân', id: 0 }];
+    this.listTtranghonnhan = [
+      { name: 'Độc thân', id: 0 },
+      { name: 'Đã kết hôn', id: 1 },
+      { name: 'Ly hôn', id: 2 },
+      { name: 'Góa', id: 4 },
+    ];
   }
 
   ngOnInit(): void {
@@ -128,7 +132,11 @@ export class ThongtincanhanComponent implements OnInit, OnChanges, OnDestroy {
     this.model = new THONG_TIN_CHUNG();
     if (this.nsInfo) {
       this.resetData();
+      this.cccd_ngayCap = new Date(this.nsInfo.cccdNgaycap)
+    } else {
+      this.nsInfo = new THONG_TIN_CHUNG();
     }
+
     // Xử lý kiểm tra update page khi dùng nút chức năng
     // this.shareData
     //   .getMessage(NHAN_SU.UPDATE_TTCN)
@@ -264,7 +272,7 @@ export class ThongtincanhanComponent implements OnInit, OnChanges, OnDestroy {
 
   save(isValid) {
     if (!isValid) {
-      if (this.model.cccdNumber == null) {
+      if (this.model?.cccdNumber == null) {
         this.messageService.showErrorMessage(
           'Hệ thống',
           'Thông tin nhập thiếu CMND/ Căn cước.'

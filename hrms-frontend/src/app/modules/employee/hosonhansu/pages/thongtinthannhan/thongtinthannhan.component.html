@@ -39,7 +39,7 @@
       </div>
 
       <p-table
-        [value]="people"
+        [value]="nhansu.families"
         responsiveLayout="stack"
         [tableStyle]="{ width: '100%' }"
         [paginator]="true"
@@ -92,25 +92,29 @@
             </th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-person>
+        <ng-template pTemplate="body" let-person let-index>
           <tr class="border border-gray-200">
             <td class="border" style="width: 7%; word-wrap: normal">
-              {{ person.fullName }}
+              {{ person.tenNguoiThan }}
             </td>
             <td class="border" style="width: 10%; word-wrap: normal">
-              {{ person.relationship }}
+              {{ person.moiQuanHe }}
             </td>
-            <td class="border" class="text-center" style="width: 7%; word-wrap: normal">
-              {{ person.dateOfBirth | date : "dd/MM/yyyy" }}
+            <td
+              class="border"
+              class="text-center"
+              style="width: 7%; word-wrap: normal"
+            >
+              {{ person.ngaySinh | date : "dd/MM/yyyy" }}
             </td>
             <td class="border" style="width: 24%; word-wrap: normal">
-              {{ person.gender }}
+              {{ getFieldValue(person, 'gioiTinh') }}
             </td>
             <td class="border" style="width: 25%; word-wrap: normal">
-              {{ person.occupation }}
+              {{ person.ngheNghiep }}
             </td>
             <td class="border" style="width: 10%; word-wrap: normal">
-              {{ person.address }}
+              {{ person.diaChi }}
             </td>
 
             <td style="width: 7%" class="text-center border">

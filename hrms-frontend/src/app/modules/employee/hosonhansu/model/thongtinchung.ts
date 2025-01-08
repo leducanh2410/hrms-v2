@@ -1,5 +1,14 @@
+import { BaoHiem } from './baohiem';
+import { DangDoan } from './dangDoan';
+import { DanhGia } from './danhgia';
+import { HopDong } from './hopdong';
 import { LienHe } from './lienhe';
+import { Luong } from './luong';
+import { NhanThan } from './nhanthan';
+import { PhongBan } from './phongban';
 import { QtrinhlamviecBean } from './qtrinhlamviecbean';
+import { TrinhDoChuyenMon } from './trinhdochuyenmon';
+import { TrinhDoTinHoc } from './trinhdotinhoc';
 
 export class THONG_TIN_CHUNG {
   id: number; // int, không null
@@ -22,7 +31,14 @@ export class THONG_TIN_CHUNG {
   tongiao: string; // varchar(45)
   contact: LienHe;
   quaTrinhCongTac: QtrinhlamviecBean;
-  phongban: string; // varchar(255)
+  baoHiem: BaoHiem;
+  luong: Luong[];
+  hopDong: HopDong[];
+  danhGia: DanhGia[];
+  trinhDoChuyenMon: TrinhDoChuyenMon[];
+  trinhDoTinHoc: TrinhDoTinHoc[];
+  families: NhanThan[];
+  dangDoan: DangDoan;
   trangThai: boolean;
 
   constructor(
@@ -46,7 +62,14 @@ export class THONG_TIN_CHUNG {
     tongiao: string = '',
     contact: LienHe = new LienHe(),
     quaTrinhCongTac: QtrinhlamviecBean = new QtrinhlamviecBean(),
-    phongban: string = '',
+    baoHiem: BaoHiem = new BaoHiem(),
+    luong: Luong[] = [],
+    hopDong: HopDong[] = [],
+    danhGia: DanhGia[] = [],
+    trinhDoChuyenMon: TrinhDoChuyenMon[] = [],
+    trinhDoTinHoc: TrinhDoTinHoc[] = [],
+    families: NhanThan[] = [],
+    dangDoan: DangDoan = new DangDoan(),
     trangThai: boolean = false
   ) {
     this.id = id;
@@ -69,7 +92,14 @@ export class THONG_TIN_CHUNG {
     this.tongiao = tongiao;
     this.contact = contact;
     this.quaTrinhCongTac = quaTrinhCongTac;
-    this.phongban = phongban;
+    this.baoHiem = baoHiem,
+    this.luong = luong,
+    this.hopDong = hopDong,
+    this.danhGia = danhGia,
+    this.trinhDoChuyenMon = trinhDoChuyenMon,
+    this.trinhDoTinHoc = trinhDoTinHoc,
+    this.families = families,
+    this.dangDoan = dangDoan;
     this.trangThai = trangThai;
   }
 }

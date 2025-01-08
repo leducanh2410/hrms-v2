@@ -15,6 +15,7 @@ import { TableModule } from 'primeng/table';
 import { CheckboxModule } from 'primeng/checkbox';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { THONG_TIN_CHUNG } from '../../model/thongtinchung';
 
 interface Person {
   fullName: string;
@@ -37,37 +38,9 @@ interface Person {
   ],
 })
 export class ThongtinthannhanComponent implements OnInit {
-  @Input('nsInfo') nhansu: any;
+  @Input('nsInfo') nhansu: THONG_TIN_CHUNG;
   thannhan: any;
   nguoiphuthuoc: any;
-
-  people: Person[] = [
-    {
-      fullName: 'Nguyễn Văn A',
-      relationship: 'Bố',
-      dateOfBirth: new Date('1980-01-01'),
-      gender: 'Nam',
-      occupation: 'Kỹ sư',
-      address: 'Hà Nội',
-    },
-    {
-      fullName: 'Trần Thị B',
-      relationship: 'Mẹ',
-      dateOfBirth: new Date('1985-05-05'),
-      gender: 'Nữ',
-      occupation: 'Giáo viên',
-      address: 'Hà Nội',
-    },
-    {
-      fullName: 'Lê Văn C',
-      relationship: 'Em trai',
-      dateOfBirth: new Date('2000-10-10'),
-      gender: 'Nam',
-      occupation: 'Sinh viên',
-      address: 'Hà Nội',
-    },
-    // Thêm nhiều dữ liệu nếu cần
-  ];
   //nhansu: any = {donviId: 115, nsId : 115000000000002};
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -86,7 +59,7 @@ export class ThongtinthannhanComponent implements OnInit {
   loadData() {
     if (this.nhansu) {
       this.http
-        .get(llnsURL.getDsPTGiaDinh(this.nhansu.nsID))
+        .get(llnsURL.getDsPTGiaDinh(this.nhansu.id))
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((res: any) => {
           if (!res || !res.state) return;
@@ -94,7 +67,7 @@ export class ThongtinthannhanComponent implements OnInit {
         });
 
       this.http
-        .get(llnsURL.getDsNguoiPT(this.nhansu.nsID))
+        .get(llnsURL.getDsNguoiPT(this.nhansu.id))
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((res: any) => {
           if (!res || !res.state) return;
@@ -123,7 +96,7 @@ export class ThongtinthannhanComponent implements OnInit {
     const dialogRef = this._matDialog.open(GiadinhformComponent, {
       width: '900px',
       disableClose: true,
-      data: { giadinh: data, nhansu: this.nhansu, addNew: false },
+      data: { nhanthan: data, addNew: false },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -255,5 +228,17 @@ export class ThongtinthannhanComponent implements OnInit {
           });
       }
     });
+  }
+
+  getFieldValue(rowData: any, field: string) {
+    if (typeof rowData[field] == 'number') {
+      return rowData[field] === 1
+        ? 'Nam'
+        : rowData[field] === 2
+        ? 'LGBT'
+        : 'Nữ';
+    }
+
+    return rowData[field];
   }
 }

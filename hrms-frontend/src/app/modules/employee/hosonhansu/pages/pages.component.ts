@@ -19,6 +19,7 @@ import { SxKinhdoanhComponent } from './ngangnghesxkd/sxkinhdoanh.component';
 import { HosocanhanComponent } from './hosocanhan/hosocanhan.component';
 import { QtrlamviecComponent } from './qtrlamviec/qtrlamviec.component';
 import { THONG_TIN_CHUNG } from '../model/thongtinchung';
+import { log } from 'node:util';
 @Component({
   selector: 'app-pages',
   templateUrl: './pages.component.html',
@@ -56,6 +57,8 @@ export class PagesComponent implements OnInit, OnDestroy {
       .subscribe(async (nsInfo: any) => {
         this.nsInfo = nsInfo;
       });
+
+    console.log(this.nsInfo);
   }
 
   /**

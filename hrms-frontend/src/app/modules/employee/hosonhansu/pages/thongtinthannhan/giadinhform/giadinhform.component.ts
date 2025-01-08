@@ -23,6 +23,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { InputTextModule } from 'primeng/inputtext';
 import { CalendarModule } from 'primeng/calendar';
+import { NhanThan } from '../../../model/nhanthan';
 @Component({
   selector: 'app-giadinhform',
   templateUrl: './giadinhform.component.html',
@@ -73,6 +74,7 @@ export class GiadinhformComponent implements OnInit {
   isLockform = false;
   lqhegdinh: number;
   isAddnew: boolean = false;
+  nhanThan: NhanThan;
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
@@ -81,7 +83,11 @@ export class GiadinhformComponent implements OnInit {
     private messageService: MessageService,
     private http: CommonApiService,
     private formBuilder: FormBuilder
-  ) {}
+  ) {
+    this.nhanThan = data?.nhanthan
+
+    
+  }
 
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group({
@@ -90,13 +96,13 @@ export class GiadinhformComponent implements OnInit {
       lqhegdinh: new FormControl('', Validators.required),
     });
 
-    this.http
-      .get(DanhMucURL.getListQhegiadinh())
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listQhegd = res.data;
-      });
+    // this.http
+    //   .get(DanhMucURL.getListQhegiadinh())
+    //   .pipe(takeUntil(this._unsubscribeAll))
+    //   .subscribe((res: any) => {
+    //     if (!res || !res.state) return;
+    //     this.listQhegd = res.data;
+    //   });
   }
 
   myUploader(event, fileForm) {

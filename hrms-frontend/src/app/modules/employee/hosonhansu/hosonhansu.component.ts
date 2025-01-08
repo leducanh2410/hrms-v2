@@ -90,6 +90,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ChonquyetdinhModule } from '../../components/chonquyetdinh/chonquyetdinh.module';
 import { CommonModule } from '@angular/common';
+import { THONG_TIN_CHUNG } from './model/thongtinchung';
+import { NHAN_SU } from '../../../shared/appkeymessages';
 
 @Component({
   selector: 'app-hosonhansu',
@@ -160,6 +162,8 @@ import { CommonModule } from '@angular/common';
   ],
 })
 export class HosonhansuComponent implements OnInit {
+  receiveData: THONG_TIN_CHUNG;
+
   constructor(private shareData: ShareData) {
     const title: TitleHead = {
       title: 'Nhân sự',
@@ -169,5 +173,8 @@ export class HosonhansuComponent implements OnInit {
     this.shareData.sendMessage(MessageKey.FN_HEADER_NAME, title);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.receiveData = history.state;
+    this.shareData.sendMessage(NHAN_SU.VIEW_TTIN, this.receiveData);
+  }
 }

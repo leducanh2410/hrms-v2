@@ -1,69 +1,72 @@
-import { filter, map } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 
 import { Injectable } from '@angular/core';
-import { Observable, Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 @Injectable({
-	providedIn: 'root',
+  providedIn: 'root',
 })
 export class ShareData {
-	private subject = new Subject<any>();
-	public storage: any;
+  private subject = new BehaviorSubject<any>(null);
+  public storage: any;
 
-	public dataShare: any;
+  public dataShare: any;
 
-	public eLoading: boolean = false;
+  public eLoading: boolean = false;
 
-	/**
-	 * Các biến share của project managersystem
-	 */
-	eAuthenToken: any; // Lưu giá trị token
-	eNavigation: any; // Lưu menu tương ứng với user
+  /**
+   * Các biến share của project managersystem
+   */
+  eAuthenToken: any; // Lưu giá trị token
+  eNavigation: any; // Lưu menu tương ứng với user
 
-	/////////////////////////////////////
+  /////////////////////////////////////
 
-	/**
-	 * Các biến share của project document
-	 */
+  /**
+   * Các biến share của project document
+   */
 
-	/////////////////////////////////////
+  /////////////////////////////////////
 
-	/**
-	 * Các biến share của project chat
-	 */
+  /**
+   * Các biến share của project chat
+   */
 
-	/////////////////////////////////////
+  /////////////////////////////////////
 
-	public constructor() {}
+  public constructor() {}
 
-	// Kiểu truyền Event Bus
-	sendMessage(key : any, value : any) {
-		this.subject.next({
-			key: key,
-			value: value,
-		});
-	}
-	getMessage(key: any): Observable<any> {
-		return this.subject.pipe(
-			filter((e) => e.key === key),
-			map((e) => e['value']),
-			// map((e) => {
-			//     e["value"];
-			//     console.log("Dữ liệu nhận từ Event Bus " + key + ": ", e["value"]);
-			// })
-		);
+  // Kiểu truyền Event Bus
+  sendMessage(key: any, value: any) {
+	
+    this.subject.next({
+      key: key,
+      value: value,
+    });
 
-		// return this.subject.asObservable();
-	}
+	
+  }
+  getMessage(key: any): Observable<any> {
+    return this.subject.pipe(
+      filter((e) => e.key == key),
+      map((e) => e['value'])
+      // map((e) => {
+      //     e["value"];
+      //     console.log("Dữ liệu nhận từ Event Bus " + key + ": ", e["value"]);
+      // })
+    );
 
-	clearMessage() {
-		this.subject = new Subject<any>();
-	}
+    // return this.subject.asObservable();
+  }
 
-	// on(eventName: string, action: any): Subscription {
-	//     return this.subject.pipe(
-	//         filter((e) => e.name === eventName),
-	//         map((e) => e["value"])).subscribe(action);
-	// }
-	/////////////////////////
+  clearMessage() {
+    this.subject = new BehaviorSubject<any>(null);
+  }
+
+  // on(eventName: string, action: any): Subscription {
+  //     return this.subject.pipe(
+  //         filter((e) => e.name === eventName),
+  //         map((e) => e["value"])).subscribe(action);
+  // }
+  /////////////////////////
 }
