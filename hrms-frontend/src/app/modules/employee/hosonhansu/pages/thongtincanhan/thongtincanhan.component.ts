@@ -264,7 +264,7 @@ export class ThongtincanhanComponent implements OnInit, OnChanges, OnDestroy {
 
   save(isValid) {
     if (!isValid) {
-      if (this.model.cccd_number == null) {
+      if (this.model.cccdNumber == null) {
         this.messageService.showErrorMessage(
           'Hệ thống',
           'Thông tin nhập thiếu CMND/ Căn cước.'
@@ -320,7 +320,7 @@ export class ThongtincanhanComponent implements OnInit, OnChanges, OnDestroy {
   chonTuQtrinh() {
     let listQtlamviec;
     this.http
-      .get(HSNhansuURL.getQtlamviec(this.model.employee_id))
+      .get(HSNhansuURL.getQtlamviec(this.model.id))
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((res: any) => {
         if (!res || !res.state) return;

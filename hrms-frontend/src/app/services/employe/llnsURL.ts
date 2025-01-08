@@ -136,7 +136,7 @@ export class llnsURL extends BaseURL{
     }
     //------------------------------- danh sach nhan su ---------------------------------
     static getDsNhanSu() {
-        return `${this.getOrigin()}/hrms/employe/v1/hoso/dsnhansu`;
+        return `${this.getOrigin()}/employee/list`;
     }
 
     static khongnhanhoso(checkAll: any) {

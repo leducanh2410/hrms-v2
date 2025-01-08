@@ -162,13 +162,7 @@
                   style="word-break: break-word"
                   class="border border-gray-300"
                 >
-                  {{
-                    col.field === "gender"
-                      ? rowData[col.field] === 1
-                        ? "Nam"
-                        : "Nữ"
-                      : rowData[col.field]
-                  }}
+                  {{ getFieldValue(rowData, col.field) }}
                 </td>
 
                 <td class="w-28 justify-center border border-gray-300">

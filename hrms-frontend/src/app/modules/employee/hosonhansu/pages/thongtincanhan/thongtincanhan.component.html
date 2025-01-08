@@ -94,7 +94,7 @@
             pattern="[0-9.]+"
             required
             class="w-full"
-            [(ngModel)]="nsInfo.cccd_number"
+            [(ngModel)]="nsInfo.cccdNumber"
           />
         </div>
 
@@ -115,7 +115,7 @@
             name="noicap"
             [readonly]="!is_edit"
             class="!inline-block w-2/3"
-            [(ngModel)]="nsInfo.cccd_noicap"
+            [(ngModel)]="nsInfo.cccdNoicap"
           />
         </div>
 
@@ -354,7 +354,7 @@
     <!-- Xac nhan -->
     <div class="flex items-center fixed right-4 bottom-2 p-2 z-10">
       <button
-        [disabled]="!model.employee_id || is_edit"
+        [disabled]="!model.id || is_edit"
         class="mx-1 btn btn-primary"
         mat-flat-button
         (click)="edit()"
@@ -363,7 +363,7 @@
       </button>
 
       <button
-        [disabled]="!model.employee_id || !is_edit"
+        [disabled]="!model.id || !is_edit"
         type="submit"
         class="mx-1 btn btn-primary"
         mat-flat-button
@@ -372,7 +372,7 @@
       </button>
 
       <button
-        [disabled]="!model.employee_id || !is_edit"
+        [disabled]="!model.id || !is_edit"
         class="mx-1 btn btn-warning"
         mat-flat-button
         (click)="back()"

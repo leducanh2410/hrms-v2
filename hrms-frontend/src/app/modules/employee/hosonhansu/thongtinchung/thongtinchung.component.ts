@@ -78,9 +78,9 @@ export class ThongtinchungComponent implements OnInit, OnDestroy {
 
     this.nsInfo = state;
 
-    if (state && state.employee_id) {
+    if (state && state.id) {
       // this.http
-      //   .get(HSNhansuURL.getHsNs(state.employee_id))
+      //   .get(HSNhansuURL.getHsNs(state.id))
       //   .pipe(takeUntil(this._unsubscribeAll))
       //   .subscribe((res: any) => {
       //     if (!res || !res.state) return;
@@ -133,7 +133,7 @@ export class ThongtinchungComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(async (is_refresh: any) => {
         this.http
-          .get(HSNhansuURL.getHsNs(this.nsInfo.employee_id))
+          .get(HSNhansuURL.getHsNs(this.nsInfo.id))
           .pipe(takeUntil(this._unsubscribeAll))
           .subscribe((res: any) => {
             if (!res || !res.state) return;
@@ -170,9 +170,9 @@ export class ThongtinchungComponent implements OnInit, OnDestroy {
     //       });
 
     //       dialogRef.afterClosed().subscribe((result) => {
-    //         if (result && result.employee_id) {
+    //         if (result && result.id) {
     //           this.http
-    //             .get(HSNhansuURL.getHsNs(result.employee_id))
+    //             .get(HSNhansuURL.getHsNs(result.id))
     //             .pipe(takeUntil(this._unsubscribeAll))
     //             .subscribe((res: any) => {
     //               if (!res || !res.state) return;
@@ -222,9 +222,9 @@ export class ThongtinchungComponent implements OnInit, OnDestroy {
         },
       });
       dialogRef.afterClosed().subscribe((result) => {
-        if (result && result.employee_id) {
+        if (result && result.id) {
           this.http
-            .get(HSNhansuURL.getHsNs(result.employee_id))
+            .get(HSNhansuURL.getHsNs(result.id))
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((res: any) => {
               if (!res || !res.state) return;
@@ -247,9 +247,9 @@ export class ThongtinchungComponent implements OnInit, OnDestroy {
         data: this.nsInfo,
       });
       dialogRef.afterClosed().subscribe((result) => {
-        if (result && result.employee_id) {
+        if (result && result.id) {
           this.http
-            .get(HSNhansuURL.getHsNs(result.employee_id))
+            .get(HSNhansuURL.getHsNs(result.id))
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((res: any) => {
               if (!res || !res.state) return;
@@ -272,7 +272,7 @@ export class ThongtinchungComponent implements OnInit, OnDestroy {
       dialog.dialogResult$.subscribe((result) => {
         if (result) {
           this.http
-            .delete(HSNhansuURL.deleteHsNs(this.nsInfo.employee_id))
+            .delete(HSNhansuURL.deleteHsNs(this.nsInfo.id))
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((res: any) => {
               if (!res || !res.state) {
@@ -301,7 +301,7 @@ export class ThongtinchungComponent implements OnInit, OnDestroy {
     switch (type) {
       case 1: {
         this.http
-          .get(HSNhansuURL.xuatSyllMauEvn(this.nsInfo.employee_id, true))
+          .get(HSNhansuURL.xuatSyllMauEvn(this.nsInfo.id, true))
           .pipe(takeUntil(this._unsubscribeAll))
           .subscribe((res: any) => {
             if (!res || !res.state) {
@@ -327,7 +327,7 @@ export class ThongtinchungComponent implements OnInit, OnDestroy {
       }
       case 2: {
         this.http
-          .get(HSNhansuURL.xuatSyllMau02c(this.nsInfo.employee_id, true))
+          .get(HSNhansuURL.xuatSyllMau02c(this.nsInfo.id, true))
           .pipe(takeUntil(this._unsubscribeAll))
           .subscribe((res: any) => {
             if (!res || !res.state) {
@@ -353,7 +353,7 @@ export class ThongtinchungComponent implements OnInit, OnDestroy {
       }
       case 3: {
         this.http
-          .get(HSNhansuURL.xuatSyllMau02cTCTW(this.nsInfo.employee_id, true))
+          .get(HSNhansuURL.xuatSyllMau02cTCTW(this.nsInfo.id, true))
           .pipe(takeUntil(this._unsubscribeAll))
           .subscribe((res: any) => {
             if (!res || !res.state) {
@@ -385,7 +385,7 @@ export class ThongtinchungComponent implements OnInit, OnDestroy {
     switch (type) {
       case 1: {
         this.http
-          .get(HSNhansuURL.xuatSyllMauEvn(this.nsInfo.employee_id, false))
+          .get(HSNhansuURL.xuatSyllMauEvn(this.nsInfo.id, false))
           .pipe(takeUntil(this._unsubscribeAll))
           .subscribe((res: any) => {
             if (!res || !res.state) {
@@ -399,7 +399,7 @@ export class ThongtinchungComponent implements OnInit, OnDestroy {
       }
       case 2: {
         this.http
-          .get(HSNhansuURL.xuatSyllMau02c(this.nsInfo.employee_id, false))
+          .get(HSNhansuURL.xuatSyllMau02c(this.nsInfo.id, false))
           .pipe(takeUntil(this._unsubscribeAll))
           .subscribe((res: any) => {
             if (!res || !res.state) {
@@ -413,7 +413,7 @@ export class ThongtinchungComponent implements OnInit, OnDestroy {
       }
       case 3: {
         this.http
-          .get(HSNhansuURL.xuatSyllMau02cTCTW(this.nsInfo.employee_id, false))
+          .get(HSNhansuURL.xuatSyllMau02cTCTW(this.nsInfo.id, false))
           .pipe(takeUntil(this._unsubscribeAll))
           .subscribe((res: any) => {
             if (!res || !res.state) {

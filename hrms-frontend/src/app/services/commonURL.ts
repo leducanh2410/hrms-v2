@@ -1,4 +1,3 @@
-import { Environment } from "../core/config/app.config";
 import { BaseURL } from "./baseURL";
 
 export class CommonURL extends BaseURL{

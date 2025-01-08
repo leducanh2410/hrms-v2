@@ -37,34 +37,10 @@ import { THONG_TIN_CHUNG } from '../model/thongtinchung';
 export class PagesComponent implements OnInit, OnDestroy {
   @ViewChild('thongtincanhan') ttcanhan: ThongtincanhanComponent;
   page: any = 'canhan';
-  nsInfo: THONG_TIN_CHUNG = {
-    employee_id: 1,
-    employee_name: 'Nguyễn Văn A',
-    employee_code: 'EMP001',
-    birthday: '1985-05-15',
-    gender: 1,
-    cccd_number: '123456789012',
-    cccd_ngaycap: '2010-05-15',
-    cccd_noicap: 'Hà Nội',
-    phone: '0359666458',
-    marriage_status: 1,
-    noi_sinh: 'Hà Nội',
-    que_quan: 'Hà Nội',
-    dia_chi: '123 Đường ABC, Hà Nội',
-    nationality: 'Việt Nam',
-    ethnic: 'Kinh',
-    ma_so_thue: '0123456789',
-    ngay_vao_lam: '2010-06-01',
-    tongiao: 'Không',
-    phongban: 'Phòng Kinh Doanh',
-    ngayvaodonvi: '2010-06-01',
-    vitrichucdanh: 'Nhân viên bán hàng',
-    ngayKiHdld: '2010-12-31',
-  };
+  nsInfo: THONG_TIN_CHUNG;
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  constructor(private subData: ShareData) {
-  }
+  constructor(private subData: ShareData) {}
 
   ngOnInit(): void {
     // Xử lý kiểm tra update page khi chuyển tab

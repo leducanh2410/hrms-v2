@@ -1,72 +1,75 @@
+import { LienHe } from './lienhe';
+import { QtrinhlamviecBean } from './qtrinhlamviecbean';
+
 export class THONG_TIN_CHUNG {
-  employee_id: number; // int, không null
-  employee_name: string; // varchar(255)
-  employee_code: string; // varchar(255)
+  id: number; // int, không null
+  employeeName: string; // varchar(255)
+  employeeCode: string; // varchar(255)
   birthday: string; // string
   gender: number; // int
-  cccd_number: string; // varchar(255)
-  cccd_ngaycap: string; // string
-  cccd_noicap: string; // varchar(255)
-  phone: string; //
-  marriage_status: number; // int
-  noi_sinh: string; // varchar(255)
-  que_quan: string; // varchar(255)
-  dia_chi: string;
+  cccdNumber: string; // varchar(255)
+  cccdNgaycap: string; // string
+  cccdNoicap: string; // varchar(255)
+  phone: string; // varchar(255)
+  marriageStatus: number; // int
+  noiSinh: string; // varchar(255)
+  queQuan: string; // varchar(255)
+  diaChi: string; // varchar(255)
   nationality: string; // varchar(255)
   ethnic: string; // varchar(255)
-  ma_so_thue: string; // varchar(45)
-  ngay_vao_lam: string; // string
+  maSoThue: string; // varchar(45)
+  ngayVaoLam: string; // string
   tongiao: string; // varchar(45)
-  phongban: string;
-  ngayvaodonvi: string;
-  vitrichucdanh: string;
-  ngayKiHdld: string;
+  contact: LienHe;
+  quaTrinhCongTac: QtrinhlamviecBean;
+  phongban: string; // varchar(255)
+  trangThai: boolean;
 
   constructor(
-    employee_id: number = 0,
-    employee_name: string = '',
-    employee_code: string = '',
+    id: number = 0,
+    employeeName: string = '',
+    employeeCode: string = '',
     birthday: string = '',
     gender: number = 0,
-    cccd_number: string = '',
-    cccd_ngaycap: string = '',
-    cccd_noicap: string = '',
+    cccdNumber: string = '',
+    cccdNgaycap: string = '',
+    cccdNoicap: string = '',
     phone: string = '',
-    marriage_status: number = 0,
-    noi_sinh: string = '',
-    que_quan: string = '',
-    dia_chi: string = '',
+    marriageStatus: number = 0,
+    noiSinh: string = '',
+    queQuan: string = '',
+    diaChi: string = '',
     nationality: string = '',
     ethnic: string = '',
-    ma_so_thue: string = '',
-    ngay_vao_lam: string = '',
+    maSoThue: string = '',
+    ngayVaoLam: string = '',
     tongiao: string = '',
+    contact: LienHe = new LienHe(),
+    quaTrinhCongTac: QtrinhlamviecBean = new QtrinhlamviecBean(),
     phongban: string = '',
-    ngayvaodonvi: string = '',
-    vitrichucdanh: string = '',
-    ngayKiHdld: string = ''
+    trangThai: boolean = false
   ) {
-    this.employee_id = employee_id;
-    this.employee_name = employee_name;
-    this.employee_code = employee_code;
+    this.id = id;
+    this.employeeName = employeeName;
+    this.employeeCode = employeeCode;
     this.birthday = birthday;
     this.gender = gender;
-    this.cccd_number = cccd_number;
-    this.cccd_ngaycap = cccd_ngaycap;
-    this.cccd_noicap = cccd_noicap;
+    this.cccdNumber = cccdNumber;
+    this.cccdNgaycap = cccdNgaycap;
+    this.cccdNoicap = cccdNoicap;
     this.phone = phone;
-    this.marriage_status = marriage_status;
-    this.noi_sinh = noi_sinh;
-    this.que_quan = que_quan;
-    this.dia_chi = dia_chi;
+    this.marriageStatus = marriageStatus;
+    this.noiSinh = noiSinh;
+    this.queQuan = queQuan;
+    this.diaChi = diaChi;
     this.nationality = nationality;
     this.ethnic = ethnic;
-    this.ma_so_thue = ma_so_thue;
-    this.ngay_vao_lam = ngay_vao_lam;
+    this.maSoThue = maSoThue;
+    this.ngayVaoLam = ngayVaoLam;
     this.tongiao = tongiao;
+    this.contact = contact;
+    this.quaTrinhCongTac = quaTrinhCongTac;
     this.phongban = phongban;
-    this.ngayvaodonvi = ngayvaodonvi;
-    this.vitrichucdanh = vitrichucdanh;
-    this.ngayKiHdld = ngayKiHdld;
+    this.trangThai = trangThai;
   }
 }

@@ -1,30 +1,46 @@
+import { CapDoNS } from './capdonhansu';
+import { ChucDanh } from './chucdanh';
+import { DongXe } from './dongxe';
+import { LoaiLaoDong } from './loailaodong';
+import { LoaiQTCT } from './loaiQtct';
+import { NghiepVu } from './nghiepvu';
+import { PhapNhan } from './phapnhan';
+import { PhongBan } from './phongban';
+import { ThanhPhanNS } from './thanhphannhansu';
+import { VanPhongLamViec } from './vanphonglamviec';
+
 export class QtrinhlamviecBean {
-    qtlamviecId?: number;
-    nsID?: number;
-    isNow?: boolean;
-    truockhivao?: boolean;
-    isManager?:boolean;
-    tungay?: Date;
-    denngay?: Date;
-    donviId?: number;
-    tendonvi?: string;
-    tenbophan?: string;
-    phonbanId?: number;
-    nghecnktId?: number;
-    nghecnkt?: string;
-    isKiemNghiem?: boolean;
-    mota?: string;
-    isWaitingfor?: boolean;
-    bhxhSoNam?: number;
-    bhxhSoThang?: number;
-    bhxhSoNamDocHai?: number;
-    bhxhSoThangDocHai?: number;
-    vtricdanhId?: number;
-    vtricdanh?: string;
-    fileAttach?: any;
+  id: number;
+  ngayHieuLuc: string;
+  ngayQuyetDinh: string;
+  trangthai: boolean;
+  ghiChu: string;
+  loaiQtct: LoaiQTCT;
+  department: PhongBan;
+  chucdanh: ChucDanh;
+  thanhphannhansu: ThanhPhanNS;
+  capdonhansu: CapDoNS;
+  dongxe: DongXe;
+  loailaodong: LoaiLaoDong;
+  nghiepvu: NghiepVu;
+  phapnhan: PhapNhan;
+  vanphonglamviec: VanPhongLamViec;
 
-
-    isQuaTrinhTruocKhiVaoDonVi: boolean;
-    isQuaTrinhGoc: boolean;
-    isQuaTrinhAnhHuong: boolean;
+  constructor(
+    id: number = null,
+    ngayHieuLuc: string = '',
+    ngayQuyetDinh: string = '',
+    trangthai: boolean = true,
+    ghiChu: string = '',
+    loaiQtct: LoaiQTCT = new LoaiQTCT(),
+    department: PhongBan = new PhongBan(),
+    chucdanh: ChucDanh = new ChucDanh(),
+    thanhphannhansu: ThanhPhanNS = new ThanhPhanNS(),
+    capdonhansu: CapDoNS = new CapDoNS(),
+    dongxe: DongXe = new DongXe(),
+    loailaodong: LoaiLaoDong = new LoaiLaoDong(),
+    nghiepvu: NghiepVu = new NghiepVu(),
+    phapnhan: PhapNhan = new PhapNhan(),
+    vanphonglamviec: VanPhongLamViec = new VanPhongLamViec()
+  ) {}
 }
