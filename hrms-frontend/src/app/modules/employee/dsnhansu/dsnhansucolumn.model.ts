@@ -50,13 +50,13 @@ export const COLUMN_INIT_DS_NHANSU: DsNhansuColumnModel[] = [
     width: '200',
   },
   {
-    field: 'quaTrinhCongTac.chucdanh.tenchucanh',
+    field: 'chucdanh.tenchucanh',
     columnName: 'Chức danh',
     columnWidth: 'w-[30vh]',
     width: '200',
   },
   {
-    field: 'quaTrinhCongTac.department.departmentName',
+    field: 'department.departmentName',
     columnName: 'Phòng ban',
     columnWidth: 'w-[48vh] grow',
     width: '320',

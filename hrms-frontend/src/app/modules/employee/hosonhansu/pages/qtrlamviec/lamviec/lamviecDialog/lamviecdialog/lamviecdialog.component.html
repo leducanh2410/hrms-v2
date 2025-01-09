@@ -23,7 +23,7 @@
     <div class="mb-5">
       <h2 class="text-blue-500 border-b text-lg ml-2">Thông tin cơ bản</h2>
       <div
-        class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 w-full min-w-0 px-4 overflow-y-auto"
+        class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 w-full min-w-0 px-4"
       >
         <div class="flex flex-col justify-center">
           <div class="mat-field-label">
@@ -34,31 +34,26 @@
             [showIcon]="true"
             [showOnFocus]="false"
             class="!w-full"
-            [(ngModel)]="data.ngayHieuLuc"
+            [(ngModel)]="ngayHieuLuc"
           />
         </div>
         <div class="flex flex-col justify-center">
           <div class="mat-field-label">
-            Loại QTCT<span
-              class="font-bold text-red-500 text-lg"
-              >*</span
-            >
+            Loại QTCT<span class="font-bold text-red-500 text-lg">*</span>
           </div>
           <p-dropdown
             panelStyleClass="max-w-full"
             [style]="{ width: '100%' }"
-            [options]="listChucdanh"
-            optionLabel="name"
+            [options]="listLoaiQTCT"
+            optionLabel="tenLoaiQtct"
             optionValue="id"
             name="vtricdanh"
             appendTo="body"
             [filter]="true"
             filterBy="name"
-            [(ngModel)]="data.chucdanh.id"
-            *ngIf="!isVisiableVtriCdanh"
+            [(ngModel)]="data.loaiQtct.id"
             (onChange)="onChangeChucdanh()"
             [required]="true"
-            [disabled]="isQuaTrinhAnhHuong"
             placeholder="&nbsp;"
           >
           </p-dropdown>
@@ -76,18 +71,16 @@
           <p-dropdown
             panelStyleClass="max-w-full"
             [style]="{ width: '100%' }"
-            [options]="listChucdanh"
-            optionLabel="name"
+            optionLabel="departmentName"
             optionValue="id"
             name="vtricdanh"
             appendTo="body"
             [filter]="true"
             filterBy="name"
-            [(ngModel)]="data.chucdanh.id"
-            *ngIf="!isVisiableVtriCdanh"
-            (onChange)="onChangeChucdanh()"
+            [options]="listPhongBan"
+            [(ngModel)]="data.department.id"
+            (onChange)="onChangeChucdanh()" 
             [required]="true"
-            [disabled]="isQuaTrinhAnhHuong"
             placeholder="&nbsp;"
           >
           </p-dropdown>
@@ -99,17 +92,15 @@
             panelStyleClass="max-w-full"
             [style]="{ width: '100%' }"
             [options]="listChucdanh"
-            optionLabel="name"
+            optionLabel="tenchucanh"
             optionValue="id"
             name="vtricdanh"
             appendTo="body"
             [filter]="true"
             filterBy="name"
             [(ngModel)]="data.chucdanh.id"
-            *ngIf="!isVisiableVtriCdanh"
             (onChange)="onChangeChucdanh()"
             [required]="true"
-            [disabled]="isQuaTrinhAnhHuong"
             placeholder="&nbsp;"
           >
           </p-dropdown>
@@ -120,18 +111,16 @@
           <p-dropdown
             panelStyleClass="max-w-full"
             [style]="{ width: '100%' }"
-            [options]="listChucdanh"
-            optionLabel="name"
+            [options]="listThanhPhanNS"
+            optionLabel="tenThanhphannhansu"
             optionValue="id"
             name="vtricdanh"
             appendTo="body"
             [filter]="true"
             filterBy="name"
-            [(ngModel)]="data.chucdanh.id"
-            *ngIf="!isVisiableVtriCdanh"
+            [(ngModel)]="data.thanhphannhansu.id"
             (onChange)="onChangeChucdanh()"
             [required]="true"
-            [disabled]="isQuaTrinhAnhHuong"
             placeholder="&nbsp;"
           >
           </p-dropdown>
@@ -142,18 +131,16 @@
           <p-dropdown
             panelStyleClass="max-w-full"
             [style]="{ width: '100%' }"
-            [options]="listChucdanh"
-            optionLabel="name"
+            [options]="listCapDoNS"
+            optionLabel="tenCapdonhansu"
             optionValue="id"
             name="vtricdanh"
             appendTo="body"
             [filter]="true"
             filterBy="name"
-            [(ngModel)]="data.chucdanh.id"
-            *ngIf="!isVisiableVtriCdanh"
+            [(ngModel)]="data.capdonhansu.id"
             (onChange)="onChangeChucdanh()"
             [required]="true"
-            [disabled]="isQuaTrinhAnhHuong"
             placeholder="&nbsp;"
           >
           </p-dropdown>
@@ -164,18 +151,16 @@
           <p-dropdown
             panelStyleClass="max-w-full"
             [style]="{ width: '100%' }"
-            [options]="listChucdanh"
-            optionLabel="name"
+            [options]="listPhapNhan"
+            optionLabel="tenPhapNhan"
             optionValue="id"
             name="vtricdanh"
             appendTo="body"
             [filter]="true"
             filterBy="name"
-            [(ngModel)]="data.chucdanh.id"
-            *ngIf="!isVisiableVtriCdanh"
+            [(ngModel)]="data.phapnhan.id"
             (onChange)="onChangeChucdanh()"
             [required]="true"
-            [disabled]="isQuaTrinhAnhHuong"
             placeholder="&nbsp;"
           >
           </p-dropdown>
@@ -186,18 +171,16 @@
           <p-dropdown
             panelStyleClass="max-w-full"
             [style]="{ width: '100%' }"
-            [options]="listChucdanh"
-            optionLabel="name"
+            [options]="listDongXe"
+            optionLabel="tendongxe"
             optionValue="id"
             name="vtricdanh"
             appendTo="body"
             [filter]="true"
             filterBy="name"
-            [(ngModel)]="data.chucdanh.id"
-            *ngIf="!isVisiableVtriCdanh"
+            [(ngModel)]="data.dongxe.id"
             (onChange)="onChangeChucdanh()"
             [required]="true"
-            [disabled]="isQuaTrinhAnhHuong"
             placeholder="&nbsp;"
           >
           </p-dropdown>
@@ -208,18 +191,16 @@
           <p-dropdown
             panelStyleClass="max-w-full"
             [style]="{ width: '100%' }"
-            [options]="listChucdanh"
-            optionLabel="name"
+            [options]="listLoaiLaoDong"
+            optionLabel="tenLoailaodong"
             optionValue="id"
             name="vtricdanh"
             appendTo="body"
             [filter]="true"
             filterBy="name"
-            [(ngModel)]="data.chucdanh.id"
-            *ngIf="!isVisiableVtriCdanh"
+            [(ngModel)]="data.loailaodong.id"
             (onChange)="onChangeChucdanh()"
             [required]="true"
-            [disabled]="isQuaTrinhAnhHuong"
             placeholder="&nbsp;"
           >
           </p-dropdown>
@@ -230,18 +211,16 @@
           <p-dropdown
             panelStyleClass="max-w-full"
             [style]="{ width: '100%' }"
-            [options]="listChucdanh"
-            optionLabel="name"
+            [options]="listNghiepVu"
+            optionLabel="tenNghiepvu"
             optionValue="id"
             name="vtricdanh"
             appendTo="body"
             [filter]="true"
             filterBy="name"
-            [(ngModel)]="data.chucdanh.id"
-            *ngIf="!isVisiableVtriCdanh"
+            [(ngModel)]="data.nghiepvu.id"
             (onChange)="onChangeChucdanh()"
             [required]="true"
-            [disabled]="isQuaTrinhAnhHuong"
             placeholder="&nbsp;"
           >
           </p-dropdown>
@@ -252,18 +231,16 @@
           <p-dropdown
             panelStyleClass="max-w-full"
             [style]="{ width: '100%' }"
-            [options]="listChucdanh"
-            optionLabel="name"
+            [options]="listVPLamViec"
+            optionLabel="tenVanphonglamviec"
             optionValue="id"
             name="vtricdanh"
             appendTo="body"
             [filter]="true"
             filterBy="name"
-            [(ngModel)]="data.chucdanh.id"
-            *ngIf="!isVisiableVtriCdanh"
+            [(ngModel)]="data.vanphonglamviec.id"
             (onChange)="onChangeChucdanh()"
             [required]="true"
-            [disabled]="isQuaTrinhAnhHuong"
             placeholder="&nbsp;"
           >
           </p-dropdown>

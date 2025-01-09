@@ -31,38 +31,6 @@ import { QtrinhlamviecBean } from '../../../model/qtrinhlamviecbean';
   imports: [DividerModule, CommonModule, FormsModule, TableModule],
 })
 export class LamviecComponent implements OnInit, OnChanges {
-  data: any[] = [
-    {
-      type: 'Chính thức',
-      effectiveDate: new Date('2023-01-01'),
-      position: 'Quản lý',
-      department: 'Kinh doanh',
-      office: 'Hà Nội',
-      carBrand: "Mazda",
-      creationDate: new Date('2022-12-01'),
-      updateDate: new Date('2023-01-15'),
-    },
-    {
-      type: 'Thử việc',
-      effectiveDate: new Date('2023-02-01'),
-      position: 'Nhân viên',
-      department: 'Hỗ trợ',
-      office: 'Hồ Chí Minh',
-      carBrand: "Honda",
-      creationDate: new Date('2023-01-05'),
-      updateDate: new Date('2023-02-10'),
-    },
-    {
-      type: 'Hợp đồng',
-      effectiveDate: new Date('2023-03-01'),
-      position: 'Kỹ sư',
-      department: 'Kỹ thuật',
-      office: 'Đà Nẵng',
-      carBrand: "Toyota",
-      creationDate: new Date('2023-01-10'),
-      updateDate: new Date('2023-03-05'),
-    },
-  ];
   @Input('nsInfo') nsInfo: THONG_TIN_CHUNG;
 
   listQuaTrinhLamViec: QtrinhlamviecBean[];
@@ -87,22 +55,13 @@ export class LamviecComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.listQuaTrinhLamViec = this.nsInfo.quaTrinhCongTac;
+    this.listQuaTrinhLamViec = this.nsInfo?.quaTrinhCongTac;
     this.loadData();
-    console.log(this.nsInfo);
     
   }
 
   loadData(): void {
-    if (this.nsInfo != null && this.nsInfo?.id != null) {
-      this.http
-        .get(HSNhansuURL.getQtlamviec(this.nsInfo?.id))
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((res: any) => {
-          if (!res || !res.state) return;
-          this.data = res.data;
-        });
-    }
+    
   }
 
   themchucdanh() {

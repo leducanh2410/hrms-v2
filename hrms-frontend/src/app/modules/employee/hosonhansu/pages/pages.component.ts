@@ -56,9 +56,9 @@ export class PagesComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(async (nsInfo: any) => {
         this.nsInfo = nsInfo;
+        console.log(nsInfo);
+        
       });
-
-    console.log(this.nsInfo);
   }
 
   /**

@@ -17,6 +17,7 @@ export class Luong {
   datDo: number; // number (đạt do)
   phuCap: number; // number (phụ cấp)
   trangThai: boolean; // boolean (trạng thái)
+  updatedAt: Date;
 
   constructor(
     id: number = null,
@@ -33,7 +34,8 @@ export class Luong {
     vungMien: number = 0,
     datDo: number = 0,
     phuCap: number = 0,
-    trangThai: boolean = false
+    trangThai: boolean = false,
+    updatedAt: Date = new Date()
   ) {
     this.id = id;
     this.ngachLuong = ngachLuong;

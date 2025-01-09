@@ -81,13 +81,17 @@ export class ThongtinchungComponent implements OnInit, OnDestroy {
     const state: any = location.getState();
 
     this.nsInfo = state;
-    this.hopDongHienTai = state?.hopDong.find((hd) => {
-      return hd.trangThai;
-    });
+    if (state) {
+      this.hopDongHienTai =
+        state?.hopDong?.find((hd) => {
+          return hd.trangThai;
+        }) || new HopDong();
 
-    this.qTrinhLamViecHienTai = state?.quaTrinhCongTac.find((qtct) => {
-      return qtct.trangthai == true;
-    });
+      this.qTrinhLamViecHienTai =
+        state?.quaTrinhCongTac?.find((qtct) => {
+          return qtct.trangthai == true;
+        }) || new QtrinhlamviecBean();
+    }
 
     if (state && state.id) {
       ` `;

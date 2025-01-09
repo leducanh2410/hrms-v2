@@ -41,6 +41,7 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { StoreModule } from '@ngrx/store';
 import { FormdonviTreeComponent } from '../../../../assets/lib/formdonvi-tree/src/public-api';
 import { THONG_TIN_CHUNG } from '../hosonhansu/model/thongtinchung';
+import { QtrinhlamviecBean } from '../hosonhansu/model/qtrinhlamviecbean';
 
 @Component({
   selector: 'app-dsnhansu',
@@ -153,11 +154,17 @@ export class DsnhansuComponent implements OnInit, OnDestroy {
     //   });
   }
 
+  getCurrentQTCT(data: QtrinhlamviecBean[]){
+    return data?.find(qtct => qtct.trangthai)
+  }
+
   getFieldValue(rowData: any, field: string) {
+    const currentQTCT = this.getCurrentQTCT(rowData?.quaTrinhCongTac)
+
     if (field.includes('.')) {
       return field.split('.').reduce((o, key) => {
         return o ? o[key] : '';
-      }, rowData);
+      }, currentQTCT);
     }
 
     if (typeof rowData[field] == 'number') {

@@ -174,7 +174,11 @@ export class HosonhansuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.receiveData = history.state;
-    this.shareData.sendMessage(NHAN_SU.VIEW_TTIN, this.receiveData);
+    const { id } = history?.state;
+
+    if (id) {
+      this.receiveData = history.state
+      this.shareData.sendMessage(NHAN_SU.VIEW_TTIN, this.receiveData);
+    }
   }
 }

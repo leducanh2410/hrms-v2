@@ -13,7 +13,7 @@ export class QtrinhlamviecBean {
   id: number;
   createdAt: Date;
   updatedAt: Date;
-  ngayHieuLuc: string;
+  ngayHieuLuc: Date;
   ngayQuyetDinh: string;
   trangthai: boolean;
   ghiChu: string;
@@ -32,7 +32,7 @@ export class QtrinhlamviecBean {
     id: number = null,
     createdAt: Date = new Date(),
     updatedAt: Date = new Date(),
-    ngayHieuLuc: string = '',
+    ngayHieuLuc: Date = new Date(),
     ngayQuyetDinh: string = '',
     trangthai: boolean = true,
     ghiChu: string = '',

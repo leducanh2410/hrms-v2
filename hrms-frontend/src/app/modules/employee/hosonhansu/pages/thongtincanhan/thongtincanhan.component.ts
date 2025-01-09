@@ -130,11 +130,12 @@ export class ThongtincanhanComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     // this.loadDanhmuc();
     this.model = new THONG_TIN_CHUNG();
+    console.log(this.nsInfo);
+    
     if (this.nsInfo) {
-      this.resetData();
-      this.cccd_ngayCap = new Date(this.nsInfo.cccdNgaycap)
+      this.model = this.nsInfo;
+      this.cccd_ngayCap = new Date(this.nsInfo.cccdNgaycap);
     } else {
-      this.nsInfo = new THONG_TIN_CHUNG();
     }
 
     // Xử lý kiểm tra update page khi dùng nút chức năng

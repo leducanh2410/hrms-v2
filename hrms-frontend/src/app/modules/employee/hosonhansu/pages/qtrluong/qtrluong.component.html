@@ -33,7 +33,7 @@
           </mat-expansion-panel-header>
 
           <p-table
-            [value]="data"
+            [value]="listLuong"
             responsiveLayout="stack"
             [breakpoint]="'960px'"
             [tableStyle]="{ width: '100%' }"
@@ -45,19 +45,22 @@
                 <th style="width: 10%" class="text-black border">
                   Ngày hiệu lực
                 </th>
-                <th style="width: 16%" class="text-black border">
+                <th style="width: 8%" class="text-black border">
                   Lương thu nhập
                 </th>
                 <th style="width: 8%" class="text-black border">Thâm niên</th>
                 <th style="width: 8%" class="text-black border">Kiêm nhiệm</th>
-                <th style="width: 8%" class="text-black border">Chức danh</th>
                 <th style="width: 8%" class="text-black border">Thu hút</th>
                 <th style="width: 8%" class="text-black border">Biệt phái</th>
                 <th style="width: 8%" class="text-black border">Trách nhiệm</th>
-                <th style="width: 13%" class="text-black border">
+                <th style="width: 8%" class="text-black border">Vùng miền</th>
+                <th style="width: 8%" class="text-black border">Đắt đỏ</th>
+                <th style="width: 8%" class="text-black border">Phụ cấp</th>
+                <th style="width: 8%" class="text-black border">
                   Ngày cập nhật
                 </th>
                 <th style="width: 8%" class="text-black border">Trạng thái</th>
+                <th style="width: 8%" class="text-black border">Thao tác</th>
               </tr>
             </ng-template>
             <ng-template
@@ -68,18 +71,25 @@
             >
               <tr class="border border-gray-200">
                 <td class="border">
-                  {{ luong.effectiveDate | date : "dd/MM/yyyy" }}
+                  {{ luong.ngayHieuLuc | date : "dd/MM/yyyy" }}
                 </td>
-                <td class="border">{{ luong.income | currency : "VND" }}</td>
-                <td class="border">{{ luong.seniority }} năm</td>
-                <td class="border">{{ luong.expertise }}</td>
-                <td class="border">{{ luong.position }}</td>
-                <td class="border">{{ luong.attraction }}</td>
-                <td class="border">{{ luong.specialAssignment }}</td>
-                <td class="border">{{ luong.responsibility }}</td>
                 <td class="border">
-                  {{ luong.updateDate | date : "dd/MM/yyyy" }}
+                  {{ luong.luongThuNhap | currency : "VND" }}
                 </td>
+                <td class="border">{{ luong.thamNien | currency : "VND" }}</td>
+                <td class="border">{{ luong.kiemNhiem | currency : "VND" }}</td>
+                <td class="border">{{ luong.thuHut | currency : "VND" }}</td>
+                <td class="border">{{ luong.bietPhai | currency : "VND" }}</td>
+                <td class="border">
+                  {{ luong.trachNhiem | currency : "VND" }}
+                </td>
+                <td class="border">{{ luong.vungMien | currency : "VND" }}</td>
+                <td class="border">{{ luong.datDo | currency : "VND" }}</td>
+                <td class="border">{{ luong.phuCap | currency : "VND" }}</td>
+                <td class="border">
+                  {{ luong.updatedAt | date : "dd/MM/yyyy" }}
+                </td>
+                <td class="border">{{ luong.trangThai ? "Duyệt" : "Chưa duyệt" }}</td>
 
                 <td style="width: 7%" class="text-center border">
                   <span class="p-column-title">Thao tác</span>
