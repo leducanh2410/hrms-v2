@@ -1,0 +1,9 @@
+<ng-container [ngSwitch]="page">
+    <app-thongtincanhan #thongtincanhan [nsInfo]="nsInfo" [hidden]="page != 'canhan'"></app-thongtincanhan>   
+    <app-thongtinthannhan [nsInfo]="nsInfo" *ngSwitchCase="'thannhan'"></app-thongtinthannhan>
+    <app-khenthuongkyluat [nsInfo]="nsInfo" *ngSwitchCase="'khenthuongkyluat'"></app-khenthuongkyluat>
+    <app-qtrlamviec [nsInfo]="nsInfo" *ngSwitchCase="'qtlamviec'"></app-qtrlamviec>
+    <app-qtrluong [nsInfo]="nsInfo" *ngSwitchCase="'qtrluong'"></app-qtrluong>
+    <app-sxkd [nsInfo]="nsInfo" *ngSwitchCase="'ngnghekt'"></app-sxkd>
+    <app-hosocanhan [nsInfo]="nsInfo" *ngSwitchCase="'hscn'"></app-hosocanhan>
+</ng-container>

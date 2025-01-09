@@ -1,0 +1,826 @@
+<div class="bg-white">
+  <mat-drawer-container class="h-full" [hasBackdrop]="false">
+    <!-- Drawer -->
+    <mat-drawer
+      class="dark:bg-gray-900 !rounded-none"
+      [autoFocus]="false"
+      ngClass=""
+      [mode]="drawerMode"
+      [position]="'start'"
+      [(opened)]="drawerOpened"
+      #drawer
+    >
+      <app-list-employee></app-list-employee>
+    </mat-drawer>
+    <!-- Drawer content -->
+    <mat-drawer-content class="border border-collapse-l">
+      <div class="tab-container flex items-center justify-between">
+        <mat-tab-group
+          class="!m-0 w-fit"
+          (selectedIndexChange)="onTabChange($event)"
+        >
+          <mat-tab label="Hợp đồng"></mat-tab>
+          <mat-tab label="Thông tin bảo hiểm"></mat-tab>
+          <mat-tab label="Danh sách bằng cấp"></mat-tab>
+          <mat-tab label="Đảng đoàn"></mat-tab>
+        </mat-tab-group>
+
+        <div class="content my-2 px-2" *ngIf="selectedTabIndex === 0">
+          <div class="buttons">
+            <button
+              mat-raised-button
+              color="success"
+              (click)="onTaoHopDong()"
+              class="rounded-md bg-gray-200 py-2 px-3 border border-collapse border-collapse-gray-300 hover:bg-gray-300"
+            >
+              <mat-icon class="align-middle mr-1 text-green-600"
+                >add_circle</mat-icon
+              >
+              <span>Tạo mới</span>
+            </button>
+            <button
+              mat-raised-button
+              color="warn"
+              (click)="onXoaHopDong()"
+              class="rounded-md bg-gray-200 py-2 px-3  border border-collapse-gray-300 hover:bg-gray-300"
+            >
+              <mat-icon class="align-middle mr-1">restore_from_trash</mat-icon>
+              <span>Xóa</span>
+            </button>
+            <button
+              mat-raised-button
+              color="warning"
+              (click)="handleButtonClick('Đổi cột')"
+              class="rounded-md bg-gray-200 py-2 px-3  border border-collapse-gray-300 hover:bg-gray-300"
+            >
+              <mat-icon class="align-middle mr-1">settings</mat-icon>
+              <span>Cấu hình cột</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main -->
+      <div
+        #mainxeoto
+        class="max-h-[80vh] overflow-y-auto border border-collapse-gray-300 rounded bg-white"
+      >
+        <p-table
+          [value]="nsHopdongList"
+          styleClass="w-full"
+          [scrollable]="true"
+          scrollHeight="80vh"
+          class="overflow-x-auto"
+          *ngIf="selectedTabIndex === 0"
+        >
+          <ng-template pTemplate="header" let-columns>
+            <tr class="border border-collapse">
+              <th
+                class="text-left text-black font-bold border border-collapse w-[5%]"
+              >
+                Stt
+              </th>
+              <th
+                class="text-left text-black font-bold border border-collapse w-[10%]"
+              >
+                Loại hợp đồng
+              </th>
+              <th
+                class="text-left text-black font-bold border border-collapse w-[10%]"
+              >
+                Ngày ký hợp đồng
+              </th>
+              <th
+                class="text-left text-black font-bold border border-collapse w-[10%]"
+              >
+                Ngày bắt đầu
+              </th>
+              <th
+                class="text-left text-black font-bold border border-collapse w-[10%]"
+              >
+                Ngày kết thúc
+              </th>
+              <th
+                class="text-left text-black font-bold border border-collapse w-[10%]"
+              >
+                Ngày chấm dứt hợp đồng
+              </th>
+              <th
+                class="text-left text-black font-bold border border-collapse w-[10%]"
+              >
+                Số hợp đồng
+              </th>
+              <th
+                class="text-left text-black font-bold border border-collapse w-[10%]"
+              >
+                Ngày tạo
+              </th>
+              <th
+                class="text-left text-black font-bold border border-collapse w-[10%]"
+              >
+                Ngày cập nhật
+              </th>
+              <th
+                class="text-left text-black font-bold border border-collapse w-[10%]"
+              >
+                Thao tác
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-hd let-i="rowIndex">
+            <tr
+              class="border border-collapse-gray-200"
+              #tableRow
+              [class.selected]="hd.nsId === selectedNsId"
+              [ngClass]="{ 'text-blue-600': hd.nsId === selectedNsId }"
+            >
+              <td class="border border-collapse w[5%]">{{ hd.index }}</td>
+              <td class="border border-collapse w-[10%]">
+                {{ hd.contractType }}
+              </td>
+              <td class="border border-collapse w-[10%]">
+                {{ hd.contractSignDate | date : "dd/MM/yyyy" }}
+              </td>
+              <td class="border border-collapse w-[10%]">
+                {{ hd.startDate | date : "dd/MM/yyyy" }}
+              </td>
+              <td class="border border-collapse w-[10%]">
+                {{ hd.endDate | date : "dd/MM/yyyy" }}
+              </td>
+              <td class="border border-collapse w-[10%]">
+                {{
+                  hd.terminationDate
+                    ? (hd.terminationDate | date : "dd/MM/yyyy")
+                    : "Chưa có"
+                }}
+              </td>
+              <td class="border border-collapse w-[10%]">
+                {{ hd.contractNumber }}
+              </td>
+              <td class="border border-collapse w-[10%]">
+                {{ hd.creationDate | date : "dd/MM/yyyy" }}
+              </td>
+              <td class="border border-collapse w-[10%]">
+                {{ hd.updateDate | date : "dd/MM/yyyy" }}
+              </td>
+
+              <!-- <td class="text-center border border-collapse" style="width: 9%">
+                <button
+                  type="button"
+                  class="mr-2"
+                  (click)="viewFileDuthao(hd)"
+                  *ngIf="
+                    hd.fileDuthaoName !== null &&
+                    hd.trangthaiky !== 'CHOTAODUTHAO'
+                  "
+                  [disabled]="disabledInput"
+                >
+                  <i class="fa-light fa-eye icon-size-5" matTooltip="Xem"></i>
+                </button>
+                <button
+                  type="button"
+                  class="mr-2"
+                  (click)="downFileDuthao(hd)"
+                  *ngIf="
+                    hd.fileDuthaoName !== null &&
+                    hd.trangthaiky !== 'CHOTAODUTHAO'
+                  "
+                  [disabled]="disabledInput"
+                >
+                  <i
+                    class="fa-light fa-file-arrow-down icon-size-5"
+                    matTooltip="Download"
+                  ></i>
+                </button>
+                <button
+                  type="button"
+                  class="mr-2"
+                  (click)="triggerFileInput($event, hd, i)"
+                  [disabled]="hd.id === null || hd.id === undefined"
+                  *ngIf="hd.trangthaiky == 'CHOTAODUTHAO'"
+                >
+                  <i class="pi pi-upload" matTooltip="Upload file dự thảo"></i>
+                </button>
+                <input
+                  type="file"
+                  #fileInput
+                  style="display: none"
+                  (change)="onFileChange($event)"
+                  [disabled]="disabledInput"
+                />
+                <span class="w-full">{{ hd.fileName }}</span>
+              </td> -->
+
+              <td class="text-center w-[10%]">
+                <button
+                  type="button"
+                  class="mr-2"
+                  (click)="onXoa(hd)"
+                  [disabled]="disabledInput"
+                >
+                  <i
+                    class="fa-light fa-trash-can icon-size-5"
+                    matTooltip="Xóa"
+                  ></i>
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+
+        <ng-container *ngIf="selectedTabIndex === 1">
+          <div class="container" class="!p-0">
+            <h2
+              class="text-blue-400 border border-collapse-b mb-3 font-bold pb-2 ml-2 mt-3"
+            >
+              Bảo hiểm xã hội
+            </h2>
+            <form class="grid grid-cols-2 px-2">
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Tham gia BHXH</label>
+                <input type="checkbox" class="scale-125" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Số sổ BHXH</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Nơi cấp BHXH</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Số BHXH cũ</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Đã nhận sổ BHXH bảo lưu</label>
+                <input type="checkbox" class="scale-125" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Mã số BHXH</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left"
+                  >Ngày nhận sổ BHXH bảo lưu</label
+                >
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày cấp BHXH</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày bảo lưu sổ</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày tham gia BHXH</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày trả sổ bảo hiểm</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Nộp sổ BHXH</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày hẹn nhân sổ</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày nộp sổ BHXH</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Trạng thái sổ BHXH</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left align-top">Ghi chú</label>
+                <textarea
+                  name=""
+                  id=""
+                  rows="3"
+                  class="outline-none border border-collapse indent-2 w-[60%]"
+                ></textarea>
+              </div>
+            </form>
+          </div>
+
+          <div>
+            <h2
+              class="text-blue-400 border border-collapse-b mb-3 font-bold pb-2 ml-2 mt-3"
+            >
+              Bảo hiểm y tế
+            </h2>
+
+            <div class="content my-2 px-2 text-right">
+              <div class="buttons">
+                <button
+                  mat-raised-button
+                  color="success"
+                  (click)="handleButtonClick('Tạo mới')"
+                  class="rounded-md bg-gray-200 py-2 px-3 mr-3 border border-collapse border border-collapse-gray-300 hover:bg-gray-300"
+                >
+                  <mat-icon class="align-middle mr-1 text-green-600"
+                    >add_circle</mat-icon
+                  >
+                  <span>Tạo mới</span>
+                </button>
+                <button
+                  mat-raised-button
+                  color="warn"
+                  (click)="handleButtonClick('Xóa')"
+                  class="rounded-md bg-gray-200 py-2 px-3 mr-3 border border-collapse border border-collapse-gray-300 hover:bg-gray-300"
+                >
+                  <mat-icon class="align-middle mr-1"
+                    >restore_from_trash</mat-icon
+                  >
+                  <span>Xóa</span>
+                </button>
+                <button
+                  mat-raised-button
+                  color="warning"
+                  (click)="handleButtonClick('Đổi cột')"
+                  class="rounded-md bg-gray-200 py-2 px-3 border border-collapse border border-collapse-gray-300 hover:bg-gray-300"
+                >
+                  <mat-icon class="align-middle mr-1">settings</mat-icon>
+                  <span>Cấu hình cột</span>
+                </button>
+              </div>
+            </div>
+
+            <p-table
+              styleClass="w-full"
+              [scrollable]="true"
+              scrollHeight="80vh"
+              class="overflow-x-auto"
+            >
+              <ng-template
+                pTemplate="headergrouped"
+                let-columns
+                class="border border-collapse"
+              >
+                <tr
+                  class="border border-collapse border border-collapse-collapse"
+                >
+                  <th
+                    class="text-left text-black font-bold border border-collapse whitespace-nowrap inline-block w-fit"
+                  >
+                    <input type="checkbox" class="scale-125" />
+                  </th>
+                  <th
+                    class="text-left text-black font-bold border border-collapse whitespace-nowrap inline-block w-fit"
+                  >
+                    Số thẻ BHYT
+                  </th>
+                  <th
+                    class="text-left text-black font-bold border border-collapse whitespace-nowrap inline-block w-fit"
+                  >
+                    Nơi đăng kí khám bệnh
+                  </th>
+                  <th
+                    class="text-left text-black font-bold border border-collapse whitespace-nowrap inline-block w-fit"
+                  >
+                    Mã bệnh viện đăng ký khám
+                  </th>
+                  <th
+                    class="text-left text-black font-bold border border-collapse whitespace-nowrap inline-block w-fit"
+                  >
+                    Tham gia BHYT
+                  </th>
+
+                  <th
+                    class="text-left text-black font-bold border border-collapse whitespace-nowrap inline-block w-fit"
+                  >
+                    Thao tác
+                  </th>
+                </tr>
+                <tr></tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="selectedTabIndex === 2">
+          <div class="max-h-[50%]">
+            <div
+              class="flex items-center justify-between border border-collapse"
+            >
+              <h2 class="text-blue-400 font-bold ml-2">DS Bằng cấp</h2>
+
+              <div class="content my-2 px-2 text-right">
+                <div class="buttons">
+                  <button
+                    mat-raised-button
+                    color="success"
+                    (click)="handleButtonClick('Tạo mới')"
+                    class="rounded-md bg-gray-200 py-2 px-3 mr-3 border border-collapse border border-collapse-gray-300 hover:bg-gray-300"
+                  >
+                    <mat-icon class="align-middle mr-1 text-green-600"
+                      >add_circle</mat-icon
+                    >
+                    <span>Tạo mới</span>
+                  </button>
+                  <button
+                    mat-raised-button
+                    color="warn"
+                    (click)="handleButtonClick('Xóa')"
+                    class="rounded-md bg-gray-200 py-2 px-3 mr-3 border border-collapse border border-collapse-gray-300 hover:bg-gray-300"
+                  >
+                    <mat-icon class="align-middle mr-1"
+                      >restore_from_trash</mat-icon
+                    >
+                    <span>Xóa</span>
+                  </button>
+                  <button
+                    mat-raised-button
+                    color="warning"
+                    (click)="handleButtonClick('Đổi cột')"
+                    class="rounded-md bg-gray-200 py-2 px-3 border border-collapse border border-collapse-gray-300 hover:bg-gray-300"
+                  >
+                    <mat-icon class="align-middle mr-1">settings</mat-icon>
+                    <span>Cấu hình cột</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <p-table
+              styleClass="w-full"
+              [scrollable]="true"
+              class="overflow-x-auto"
+            >
+              <ng-template
+                pTemplate="headergrouped"
+                let-columns
+                class="border border-collapse"
+              >
+                <tr
+                  class="border border-collapse border border-collapse-collapse"
+                >
+                  <th
+                    class="text-left text-black font-bold border border-collapse whitespace-nowrap"
+                  >
+                    <input type="checkbox" class="scale-125" />
+                  </th>
+                  <th
+                    class="text-left text-black font-bold border border-collapse whitespace-nowrap"
+                  >
+                    Bằng cấp
+                  </th>
+                  <th
+                    class="text-left text-black font-bold border border-collapse whitespace-nowrap"
+                  >
+                    Đơn vị đào tạo
+                  </th>
+                  <th
+                    class="text-left text-black font-bold border border-collapse whitespace-nowrap"
+                  >
+                    Chuyên nghành
+                  </th>
+                  <th
+                    class="text-left text-black font-bold border border-collapse whitespace-nowrap"
+                  >
+                    Xếp loại
+                  </th>
+
+                  <th
+                    class="text-left text-black font-bold border border-collapse whitespace-nowrap"
+                  >
+                    Ngày bắt đầu
+                  </th>
+
+                  <th
+                    class="text-left text-black font-bold border border-collapse whitespace-nowrap"
+                  >
+                    Ngày kết thúc
+                  </th>
+
+                  <th
+                    class="text-left text-black font-bold border border-collapse whitespace-nowrap"
+                  >
+                    Ngày tốt nghiệp
+                  </th>
+                </tr>
+                <tr></tr>
+              </ng-template>
+            </p-table>
+          </div>
+          <div>
+            <div
+              class="flex items-center justify-between border border-collapse"
+            >
+              <h2 class="text-blue-400 font-bold ml-2">Chứng chỉ tin học</h2>
+
+              <div class="content my-2 px-2 text-right">
+                <div class="buttons">
+                  <button
+                    mat-raised-button
+                    color="success"
+                    (click)="handleButtonClick('Tạo mới')"
+                    class="rounded-md bg-gray-200 py-2 px-3 mr-3 border border-collapse border border-collapse-gray-300 hover:bg-gray-300"
+                  >
+                    <mat-icon class="align-middle mr-1 text-green-600"
+                      >add_circle</mat-icon
+                    >
+                    <span>Tạo mới</span>
+                  </button>
+                  <button
+                    mat-raised-button
+                    color="warn"
+                    (click)="handleButtonClick('Xóa')"
+                    class="rounded-md bg-gray-200 py-2 px-3 mr-3 border border-collapse border border-collapse-gray-300 hover:bg-gray-300"
+                  >
+                    <mat-icon class="align-middle mr-1"
+                      >restore_from_trash</mat-icon
+                    >
+                    <span>Xóa</span>
+                  </button>
+                  <button
+                    mat-raised-button
+                    color="warning"
+                    (click)="handleButtonClick('Đổi cột')"
+                    class="rounded-md bg-gray-200 py-2 px-3 border border-collapse border border-collapse-gray-300 hover:bg-gray-300"
+                  >
+                    <mat-icon class="align-middle mr-1">settings</mat-icon>
+                    <span>Cấu hình cột</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <p-table
+              styleClass="w-full"
+              [scrollable]="true"
+              scrollHeight="80vh"
+              class="overflow-x-auto"
+            >
+              <ng-template
+                pTemplate="headergrouped"
+                let-columns
+                class="border border-collapse"
+              >
+                <tr
+                  class="border border-collapse border border-collapse-collapse"
+                >
+                  <th
+                    class="text-left text-black font-bold border border-collapse whitespace-nowrap"
+                  >
+                    <input type="checkbox" class="scale-125" />
+                  </th>
+                  <th
+                    class="text-left text-black font-bold border border-collapse whitespace-nowrap"
+                  >
+                    Loại kỹ năng
+                  </th>
+                  <th
+                    class="text-left text-black font-bold border border-collapse whitespace-nowrap"
+                  >
+                    Xếp loại
+                  </th>
+                  <th
+                    class="text-left text-black font-bold border border-collapse whitespace-nowrap"
+                  >
+                    Là kỹ năng chính
+                  </th>
+                </tr>
+                <tr></tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="selectedTabIndex === 3" class="w-[100vw]">
+          <div class="container" class="ml-2 mt-3">
+            <h2
+              class="text-blue-400 border border-collapse-b mb-3 font-bold pb-2"
+            >
+              Bộ đội
+            </h2>
+            <form class="grid grid-cols-2 px-2">
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày nhập ngũ bộ đội</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Chức vụ bộ đội</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày xuất ngũ bộ đội</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Đơn vị công tác</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Quân hàm</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+            </form>
+          </div>
+          <div class="container" class="ml-2 mt-3">
+            <h2
+              class="text-blue-400 border border-collapse-b mb-3 font-bold pb-2"
+            >
+              Đảng viên
+            </h2>
+            <form class="grid grid-cols-2 px-2">
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Là Đảng viên</label>
+                <input type="checkbox" class="scale-125" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Chức vụ Đảng</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày chính thức</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left"
+                  >Ngày giữ chức vụ Đảng viên</label
+                >
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày vào Đảng</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Trình độ chính trị</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+            </form>
+          </div>
+          <div class="container" class="ml-2 mt-3">
+            <h2
+              class="text-blue-400 border border-collapse-b mb-3 font-bold pb-2"
+            >
+              Đoàn viên
+            </h2>
+            <form class="grid grid-cols-2 px-2">
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Là Đoàn viên</label>
+                <input type="checkbox" class="scale-125" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Chức vụ Đoàn</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày kết nạp Đoàn</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left"
+                  >Ngày giữ chức vụ Đoàn viên</label
+                >
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Nơi kết nạp Đoàn viên</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+            </form>
+          </div>
+          <div class="container" class="ml-2 mt-3">
+            <h2
+              class="text-blue-400 border border-collapse-b mb-3 font-bold pb-2"
+            >
+              Cách mạng
+            </h2>
+            <form class="grid grid-cols-2 px-2">
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày nhập ngũ</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày xuất ngũ CM</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Chức vụ cách mạng</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Loại thương binh</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+            </form>
+          </div>
+          <div class="container" class="ml-2 mt-3">
+            <h2
+              class="text-blue-400 border border-collapse-b mb-3 font-bold pb-2"
+            >
+              Hội cựu chiến binh
+            </h2>
+            <form class="grid grid-cols-2 px-2">
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Là thành viên HCCB</label>
+                <input type="checkbox" class="scale-125" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Số thẻ</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày kết nạp HCCB</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Chức vụ Đoàn viên</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+            </form>
+          </div>
+          <div class="container" class="ml-2 mt-3">
+            <h2
+              class="text-blue-400 border border-collapse-b mb-3 font-bold pb-2"
+            >
+              Dân quân tự vệ
+            </h2>
+            <form class="grid grid-cols-2 px-2">
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Dân quân tự vệ</label>
+                <input type="checkbox" class="scale-125" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Chức vụ DQTV</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày kết nạp DQTV</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Ngày xuất ngũ DQTV</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+            </form>
+          </div>
+          <div class="container" class="ml-2 mt-3">
+            <h2
+              class="text-blue-400 border border-collapse-b mb-3 font-bold pb-2"
+            >
+              Gia đình chính sách
+            </h2>
+            <form class="grid grid-cols-2 px-2">
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Là gia đình chính sách</label>
+                <input type="checkbox" class="scale-125" />
+              </div>
+
+              <div class="field mb-2">
+                <label class="w-[30%] text-left">Loại chính sách</label>
+                <input pInputText class="py-1 rounded-sm w-[60%]" />
+              </div>
+            </form>
+          </div>
+        </ng-container>
+      </div>
+    </mat-drawer-content>
+  </mat-drawer-container>
+</div>

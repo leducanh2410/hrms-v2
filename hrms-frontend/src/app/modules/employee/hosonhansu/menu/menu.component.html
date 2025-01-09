@@ -1,0 +1,31 @@
+<div class="flex flex-col h-full flex-auto overflow-y-auto lg:overflow-hidden bg-card dark:bg-default">
+    <app-thongtinchung #thongtinchung></app-thongtinchung>
+    <ng-container>
+        <mat-drawer-container class="flex-auto h-full" [hasBackdrop]="false">
+            <!-- Drawer -->
+            <mat-drawer class="dark:bg-gray-900" [autoFocus]="false" ngClass="" [mode]="drawerMode"
+                [position]="'start'" [(opened)]="drawerOpened" #drawer (openedChange)="onOpenedChange($event)">
+                <app-listmenu></app-listmenu>
+            </mat-drawer>
+            <!-- Drawer content -->
+            <mat-drawer-content class="flex flex-col overflow-hidden h-full">
+                <!-- Main -->
+                <div class="flex-auto h-full shadow bg-card bg-gray-100">
+                    <!-- CONTENT GOES HERE -->
+                    <div class="h-full border-gray-300 rounded bg-white">
+                        <!-- Menu page -->
+                        <app-pages></app-pages>
+                    </div>
+                </div>
+            </mat-drawer-content>
+        </mat-drawer-container>
+    </ng-container>
+
+    <!-- Select chat or start new template -->
+    <!-- <app-uploadfile [hidden]="!is_new_phieu" #app_uploadfile></app-uploadfile> -->
+    <!-- <ng-template #addFile>
+        <div class="flex flex-col flex-auto items-center justify-center bg-gray-100 dark:bg-transparent">
+        </div>
+    </ng-template> -->
+
+</div>

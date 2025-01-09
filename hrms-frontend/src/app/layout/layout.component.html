@@ -1,4 +1,5 @@
 <!-- <app-header></app-header> -->
+<!-- <app-header></app-header> -->
 <div class="">
   <mat-toolbar class="!bg-gray-300 justify-between items-center">
     <div class="flex items-center">
@@ -25,10 +26,11 @@
 
     <div>
       <button
+        mat-icon-button
         matTooltip="My Account"
         [matMenuTriggerFor]="userAccountMenu"
       >
-        <mat-icon class="!text-4xl !overflow-unset !w-[40px] !h-[40px] align-bottom cursor-pointer">account_circle</mat-icon>
+        <mat-icon>account_circle</mat-icon>
       </button>
       <mat-menu #userAccountMenu [overlapTrigger]="false" yPosition="below">
         <button mat-menu-item routerLink="#">
@@ -44,21 +46,18 @@
   </mat-toolbar>
 </div>
 
-<mat-sidenav-container class="h-[90%] m-0">
+<mat-sidenav-container class="h-full m-0">
   <mat-sidenav
     #sidenav
     mode="side"
     [class.mat-elevation-z4]="true"
-    class="!bg-gray-200 !w-[230px]"
+    class="!bg-gray-200 !w-[230px] !rounded-none"
   >
     <mat-nav-list>
       <mat-list-item routerLink="#">
         <span>Dashboard</span>
       </mat-list-item>
-      <mat-expansion-panel
-        [class.mat-elevation-z0]="true"
-        class="!bg-gray-200 flex flex-row"
-      >
+      <mat-expansion-panel [class.mat-elevation-z0]="true" class="!bg-gray-200">
         <!-- <mat-icon>supervisor_account</mat-icon> -->
         <mat-expansion-panel-header>
           <div class="flex flex-row space-x-4">
@@ -67,15 +66,18 @@
           </div>
         </mat-expansion-panel-header>
         <mat-nav-list>
-          <a mat-list-item routerLink="#">
+          <a mat-list-item routerLink="/phongban">
             <span>Tổ chức phòng ban</span>
           </a>
-          <a mat-list-item routerLink="#">
-            <span>Chi tiết nhân viên</span>
+          <a mat-list-item routerLink="/dsachnhansu">
+            <span>Danh sách nhân sự</span>
+          </a>
+          <a mat-list-item routerLink="/hosonhansu">
+            <span>Hồ sơ nhân sự</span>
           </a>
         </mat-nav-list>
       </mat-expansion-panel>
-      <mat-expansion-panel [class.mat-elevation-z0]="true" class="!bg-gray-200">
+      <!-- <mat-expansion-panel [class.mat-elevation-z0]="true" class="!bg-gray-200">
         <mat-expansion-panel-header>
           <div class="flex flex-row space-x-4">
             <mat-icon>security</mat-icon>
@@ -87,120 +89,14 @@
           <a mat-list-item routerLink="#">Hibernate</a>
           <a mat-list-item routerLink="#">Struts</a>
         </mat-nav-list>
-      </mat-expansion-panel>
+      </mat-expansion-panel> -->
+      <mat-list-item class="" routerLink="/hdld">
+        <!-- <mat-icon>library_books</mat-icon> -->
+        <span>Chi tiết nhân viên</span>
+      </mat-list-item>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <router-outlet>
-      <div class="flex h-full items-center justify-center">
-        <!-- table thong ke-->
-        <div
-          class="flex flex-col gap-4 w-3/4 max-w-md mx-auto absolute left-5 top-5 !important"
-        >
-          <mat-table
-            [dataSource]="thongKe"
-            class="!border-spacing-4 !border-collapse !border !border-slate-500 !w-[250px] !top-1"
-          >
-            <!-- Column 1: Icon + Text -->
-            <ng-container matColumnDef="column1">
-              <mat-header-cell
-                *matHeaderCellDef
-                class="!bg-blue-900 !text-white"
-              >
-                Thống kê
-              </mat-header-cell>
-              <mat-cell
-                *matCellDef="let element"
-                class="flex items-center gap-2"
-              >
-                <ng-container *ngIf="element.icon; else textOnly">
-                  <mat-icon class="text-blue-500">{{ element.icon }}</mat-icon>
-                  <span>{{ element.column1 }}</span>
-                </ng-container>
-                <ng-template #textOnly>
-                  {{ element.column1 }}
-                </ng-template>
-              </mat-cell>
-            </ng-container>
-
-            <!-- Column 2: Text -->
-            <ng-container matColumnDef="column2">
-              <mat-header-cell
-                *matHeaderCellDef
-                class="!bg-blue-900 !text-white"
-              >
-              </mat-header-cell>
-              <mat-cell *matCellDef="let element">
-                {{ element.column2 }}
-              </mat-cell>
-            </ng-container>
-
-            <!-- Table Rows -->
-            <mat-header-row
-              *matHeaderRowDef="displayedColumns"
-            ></mat-header-row>
-            <mat-row
-              *matRowDef="let row; columns: displayedColumns"
-              class="border-t"
-            >
-            </mat-row>
-          </mat-table>
-
-          <mat-table
-            [dataSource]="thongTinCaNhan"
-            class="!border-spacing-4 !border-collapse !border !border-slate-500 !w-[250px] !top-1"
-          >
-            <!-- Column 1: Icon + Text -->
-            <ng-container matColumnDef="column1">
-              <mat-header-cell
-                *matHeaderCellDef
-                class="!bg-blue-900 !text-white"
-              >
-                Thông tin cá nhân
-              </mat-header-cell>
-              <mat-cell
-                *matCellDef="let element"
-                class="flex items-center gap-2"
-              >
-                <ng-container *ngIf="element.icon; else textOnly">
-                  <span>{{ element.column1 }}</span>
-                </ng-container>
-                <ng-template #textOnly>
-                  {{ element.column1 }}
-                </ng-template>
-              </mat-cell>
-            </ng-container>
-
-            <!-- Column 2: Text -->
-            <ng-container matColumnDef="column2">
-              <mat-header-cell
-                *matHeaderCellDef
-                class="!bg-blue-900 !text-white"
-              >
-              </mat-header-cell>
-              <mat-cell *matCellDef="let element">
-                {{ element.column2 }}
-              </mat-cell>
-            </ng-container>
-
-            <!-- Table Rows -->
-            <mat-header-row
-              *matHeaderRowDef="displayedColumns"
-            ></mat-header-row>
-            <mat-row
-              *matRowDef="let row; columns: displayedColumns"
-              class="border-t"
-            >
-            </mat-row>
-          </mat-table>
-        </div>
-
-        <!-- table thong tin ca nhan -->
-        <!-- <div class="border-collapse border border-slate-500  w-3/4 max-w-md mx-auto relative top-5 left-5 bottom-5">
-                
-                    
-                 </div>  -->
-      </div>
-    </router-outlet>
+    <router-outlet> </router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

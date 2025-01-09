@@ -1,0 +1,100 @@
+<div class="flex justify-between items-center">
+    <p-divider align="left">
+        <div class="inline-flex align-items-center justify-between">
+            <b class="text-blue-600">Quá trình chức vụ</b>
+        </div>
+    </p-divider>
+    <div class="flex">
+        <button style="margin-right: 20px;" color="primary" class="mx-1" [disabled]="!nsInfo" mat-flat-button  (click)="xuatExcel()">
+            <i class="fa-regular fa-file-excel" matTooltip="Xuất excel"></i>
+        </button>
+        <button style="margin-right: 20px;" color="primary" class="mx-1" [disabled]="!nsInfo" mat-flat-button  (click)="addChucVu('STATE_INSERT')">
+            <i class="fa-light fa-circle-plus" matTooltip="Thêm mới chức vụ"></i>
+        </button>
+        <button style="margin-right: 20px;" color="primary" class="mx-1" mat-flat-button  (click)="addChucVu('STATE_BO_NHIEM_LAI')"
+        [disabled]="!selectedCvTduong?.duongchuc"
+        >   
+            Bổ nhiệm lại/giao nhiệm vụ lại
+        </button>
+        <button style="margin-right: 20px;" color="primary" class="mx-1" mat-flat-button  (click)="addChucVu('STATE_BAI_NHIEM')"  
+        [disabled]="!selectedCvTduong?.duongchuc">
+            Thôi giữ chức vụ
+        </button>
+    </div>
+</div>
+<p-table [value]="listChucVu"  [tableStyle]="{ width: '100%'}" [(selection)]="selectedCvTduong" selectionMode="single" >
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th class="text-center" style="width: 10%">Ngày hiệu lực</th>
+            <th class="text-center" style="width: 10%">Phân loại</th>
+            <th class="text-center" style="width: 15%">Chức vụ</th>
+            <th class="text-center" style="width: 28%">Phòng ban/Đơn vị</th>
+            <th class="text-center" style="width: 7.5%">Đương chức</th>
+            <th class="text-center" style="width: 7.5%">Kiêm nhiệm</th>
+            <th class="text-center" style="width: 15%">Quyết định</th>
+            <th class="text-center" style="width: 7%" >Thao tác</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product let-columns="columns" let-i="rowIndex">
+        <tr class="border-b border-gray-200"  [pSelectableRow]="product">
+            <td class="text-center" style="width: 10%" >{{ product.ngayBD | date:'dd/MM/yyyy' }}
+            </td>
+            <td style="width: 10%" >{{product.strPhanloai}}
+            </td>
+            <td style="width: 15%">{{ product.chucvu}}
+            </td>
+            <td style="width: 28%">
+                <div class="flex flex-col">
+                <span style="font-size: 12;">
+                {{ product.phongto}}
+                </span>
+                <p class="text-sm">
+                    {{ product.donvi }}
+                </p>
+            </div>
+            </td>
+            <td style="width: 7.5%">
+                <div class="grid justify-items-center" style="width: 100%;">
+                {{ product.duongchuc == true ? 'X' : '' }}
+                </div>
+            </td>
+            <td style="width: 7.5%" >
+                <div class="grid justify-items-center" style="width: 100%;">
+                {{ product.cvChinh == true ? '' : 'X' }}
+            </div>
+               
+            </td>
+            <td style="width: 15%">
+                <div *ngIf="product.nsQdnoidungId" class="flex flex-row " style="width: 100%;">
+                                <div class="flex flex-col justify-between" style="width: 100%;">
+                                    {{ product?.soQD }}
+                                    <p class="text-sm">Ngày ký: {{ product.ngayky | date:'dd/MM/yyyy' }}</p>
+                                    
+                                </div>
+                                <div *ngIf="product.fileName" class="flex flex-row justify-between">
+                                    <button type="button" class="mr-5"
+                                        (click)="viewFileQD(product.nsQdnoidungId)">
+                                        <i class="fa-light fa-eye icon-size-5" matTooltip="Xem"></i>
+                                    </button>
+                                    <button type="button" class="mr-2"
+                                        (click)="downloadFileQD(product.nsQdnoidungId)">
+                                        <i class="fa-light fa-file-arrow-down icon-size-5"
+                                            matTooltip="Download"></i>
+                                    </button>
+                                </div>
+                            </div>
+            </td>
+            <td style="width: 7%" class="text-center">
+                <div class="flex flex-row justify-between pl-3 pr-3">
+                    <button type="button" [disabled]="product.disableEdit" class="mr-2" (click)="editChucVu(product)">
+                        <i class="fa-light fa-pencil icon-size-5" matTooltip="Sửa"></i>
+                    </button>
+
+                    <button type="button" [disabled]="product.disableDelete" (click)="deleteNsChucvu(product.quatrinhCvId)">
+                        <i class="fa-light fa-trash-can icon-size-5" matTooltip="Xóa"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>

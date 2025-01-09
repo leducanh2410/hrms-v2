@@ -1,0 +1,117 @@
+<div class="flex flex-col max-h-screen -m-6 overflow-hidden">
+    <div class="flex items-center justify-between py-2 pl-6 pr-3 flex-0 sm:pr-5 sm:pl-8 bg-primary" mat-dialog-title>
+        <div class="text-lg font-medium text-white head-modal">
+            Chọn nhân sự
+        </div>
+        <button mat-icon-button mat-dialog-close [tabIndex]="-1" (click)="close()">
+            <i class="fa-light fa-xmark icon-size-5"></i>
+        </button>
+    </div>
+
+    <div class="flex flex-col px-4 pt-4 w-full" mat-dialog-content>
+        <div style="max-height: 500px;" class="w-full">
+            <form  id="nsdenhanForm">
+                <div class="flex items-center w-full">
+                    <mat-label>Đơn vị: </mat-label>
+                    <mat-label style="padding-left: 10px;"><b>{{tenDonvi}}</b></mat-label>
+                    <button class="mx-1 -mr-2" color="primary" mat-flat-button (click)="onChonDonvi()">
+                        <span>Chọn đơn vị</span>
+                    </button>                
+                </div>
+    
+                <div class="flex items-center w-full">    
+                    <p-radioButton class="mr-1 ml-3" name="rdoChonNhansu" [value]="1" inputId="rdoNsChuaky" [(ngModel)]="selectedValue" (change)="onRadioButtonChange($event)"></p-radioButton>       
+                    <label for="rdoNsChuaky">Nhân sự chưa ký HĐLD</label>
+                    <p-radioButton class="mr-1 ml-3" name="rdoChonNhansu" [value]="2" inputId="rdoNsAll" [(ngModel)]="selectedValue" (change)="onRadioButtonChange($event)"></p-radioButton>       
+                    <label for="rdoNsAll">Hiển thị tất cả nhân sự</label>                             
+                    <p-radioButton class="mr-1 ml-3" name="rdoChonNhansu" [value]="3" inputId="rdoNsTrongkhoang" [(ngModel)]="selectedValue" (change)="onRadioButtonChange($event)"></p-radioButton>       
+                    <label for="rdoNsTrongkhoang">Nhân sự đến hạn ký HĐLĐ, trong khoảng</label>
+                    <mat-form-field style="width:150px; margin-left: 10px;">                        
+                        <input placeholder="Từ ngày" matInput [matDatepicker]="tuNgay" name="tuNgay" [(ngModel)]="fDate" />
+                        <mat-datepicker-toggle matSuffix [for]="tuNgay"></mat-datepicker-toggle>
+                        <mat-datepicker #tuNgay></mat-datepicker>
+                    </mat-form-field>
+                    <mat-form-field style="width:150px; margin-left: 10px;">                        
+                        <input placeholder="Đến ngày" matInput [matDatepicker]="denNgay" name="denNgay" [(ngModel)]="tDate" />
+                        <mat-datepicker-toggle matSuffix [for]="denNgay"></mat-datepicker-toggle>
+                        <mat-datepicker #denNgay></mat-datepicker>
+                    </mat-form-field>
+                </div>               
+                
+
+                <div class="flex w-full">
+                    <div #mainxeoto class="border-1 w-panel border-gray-300 rounded bg-white p-2 w-full">
+                        <p-table (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)" [value]="nsList1" class="w-full" responsiveLayout="stack" [scrollable]="true" scrollHeight="85vh" [tableStyle]="{height: '150px', overflow: 'auto'}" [hidden]="isTableVisible">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="width:5%" class="text-center">Chọn</th>
+                                    <th style="width:5%" class="text-center">Stt</th>
+                                    <th style="width:10%" class="text-left">Số hiệu</th>
+                                    <th style="width:15%" class="text-left">Họ tên</th>
+                                    <th style="width:18%" class="text-left">Phòng ban</th>
+                                    <th style="width:18%" class="text-left">Chức vụ/ Chức danh</th>
+                                    <th style="width:16%" class="text-left">Loại HĐLĐ</th>
+                                    <th style="width:13%" class="text-left">Ngày đến hạn</th>                            
+                                </tr>                
+                            </ng-template>
+                            <ng-template pTemplate="body" let-ns let-i="rowIndex">
+                                <tr class="border-b border-gray-200">
+                                    <td style="width:5%" class="text-center">
+                                        <p-tableCheckbox [value]="ns" selectionMode="multiple"></p-tableCheckbox>
+                                    </td>                                    
+                                    <td style="width:5%" class="text-center">{{i+1}}</td>
+                                    <td style="width:10%" class="text-left">{{ns.sohieu}}</td>
+                                    <td style="width:15%" class="text-left">{{ns.tenkhaisinh}}</td>
+                                    <td style="width:18%" class="text-left">{{ns.phongban}}</td>
+                                    <td style="width:18%" class="text-left">{{ns.vtricdanh}}</td>
+                                    <td style="width:16%" class="text-left">{{ns.loaihopdong}}</td>
+                                    <td style="width:13%" class="text-left">{{ns.strNgayketthuchopdong}}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table> 
+
+                        <p-table (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)" [value]="nsList2" class="w-full" responsiveLayout="stack" [scrollable]="true" scrollHeight="85vh" [tableStyle]="{height: '150px', overflow: 'auto'}" [hidden]="!isTableVisible">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="width:5%" class="text-center">Chọn 2</th>
+                                    <th style="width:5%" class="text-center">Stt</th>
+                                    <th style="width:10%" class="text-left">Số hiệu</th>
+                                    <th style="width:15%" class="text-left">Họ tên</th>
+                                    <th style="width:18%" class="text-left">Phòng ban</th>
+                                    <th style="width:18%" class="text-left">Chức vụ/ Chức danh</th>
+                                    <th style="width:16%" class="text-left">Loại HĐLĐ</th>
+                                    <th style="width:13%" class="text-left">Ngày đến hạn</th>                            
+                                </tr>                
+                            </ng-template>
+                            <ng-template pTemplate="body" let-ns let-i="rowIndex">
+                                <tr class="border-b border-gray-200">
+                                    <td style="width:5%" class="text-center">
+                                        <p-tableCheckbox [value]="ns" selectionMode="multiple"></p-tableCheckbox>
+                                    </td>
+                                    <td style="width:5%" class="text-center">{{i+1}}</td>
+                                    <td style="width:10%" class="text-left">{{ns.sohieunhansu}}</td>
+                                    <td style="width:15%" class="text-left">{{ns.hoten}}</td>
+                                    <td style="width:18%" class="text-left">{{ns.bophanlamviec}}</td>
+                                    <td style="width:18%" class="text-left">{{ns.chucvu}}</td>
+                                    <td style="width:16%" class="text-left">{{ns.loaihopdong}}</td>
+                                    <td style="width:13%" class="text-left">{{ns.strNgayketthuchopdong}}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table> 
+                    </div>   
+                    
+                </div>
+                
+            </form>
+        </div>
+    </div>
+
+    
+    <div mat-dialog-actions [align]="'end'" class="py-2 pr-6">        
+        <div class="flex items-center w-full">
+            <button color="primary" mat-flat-button (click)="onChonNS()">
+                <span>Chọn nhân sự</span>
+            </button>                
+        </div>        
+    </div>
+</div>

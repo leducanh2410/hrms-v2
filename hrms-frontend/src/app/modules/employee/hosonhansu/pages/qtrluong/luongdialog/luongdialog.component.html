@@ -1,0 +1,184 @@
+<form
+  id="rightForm"
+  (ngSubmit)="rightForm.form.valid && onSave()"
+  #rightForm="ngForm"
+  class="flex flex-col max-w-310 md:min-w-310 overflow-hidden max-h-[90vh]"
+>
+  <!-- Header -->
+  <div
+    class="flex flex-0 items-center justify-between h-12 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary"
+  >
+    <div class="text-lg font-medium head-modal text-white">
+      <span>Tạo mới lương thu nhập</span>
+    </div>
+    <button mat-icon-button [tabIndex]="-1" (click)="onClose()">
+      <i class="fa-light fa-xmark icon-size-5 text-white text-xl"></i>
+    </button>
+  </div>
+
+  <div
+    #mainns
+    class="flex flex-col flex-auto h-modal max-h-130 overflow-y-auto"
+  >
+    <div>
+      <h2 class="text-blue-500 border-b text-lg ml-2">Thông tin nhân viên</h2>
+      <div class="grid grid-cols-2 gap-4 px-4">
+        <div class="">
+          <div class="mat-field-label">Họ và tên</div>
+          <input pInputText class="w-full" [disabled]="true" />
+        </div>
+
+        <div class="">
+          <div class="mat-field-label">Ngạch lương</div>
+          <p-dropdown
+            panelStyleClass="max-w-full"
+            [style]="{ width: '100%' }"
+            optionLabel="name"
+            optionValue="id"
+            name="vtricdanh"
+            appendTo="body"
+            [filter]="true"
+            filterBy="name"
+            [required]="true"
+            placeholder="&nbsp;"
+          >
+          </p-dropdown>
+        </div>
+
+        <div class="">
+          <div class="mat-field-label">Phòng ban</div>
+          <input pInputText class="w-full" [disabled]="true" />
+        </div>
+
+        <div class="">
+          <div class="mat-field-label">Bậc lương</div>
+          <p-dropdown
+            panelStyleClass="max-w-full"
+            [style]="{ width: '100%' }"
+            optionLabel="name"
+            optionValue="id"
+            name="vtricdanh"
+            appendTo="body"
+            [filter]="true"
+            filterBy="name"
+            [required]="true"
+            placeholder="&nbsp;"
+          >
+          </p-dropdown>
+        </div>
+
+        <div class="">
+          <div class="mat-field-label">Chức danh công việc</div>
+          <input pInputText class="w-full" [disabled]="true" />
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-5">
+      <h2 class="text-blue-500 border-b text-lg ml-2">Thông tin lương</h2>
+      <div class="grid grid-cols-2 gap-4 px-4">
+        <div class="flex flex-col justify-center">
+          <div class="mat-field-label">
+            Ngày hiệu lực<span class="font-bold text-red-500 text-lg">*</span>
+          </div>
+          <p-calendar
+            name="ngayHieuLuc"
+            [showIcon]="true"
+            [showOnFocus]="false"
+            class="!w-full"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-5">
+      <h2 class="text-blue-500 border-b text-lg ml-2">
+        Thông tin lương hợp đồng
+      </h2>
+      <div class="grid grid-cols-2 gap-4 px-4">
+        <div class="flex flex-col justify-center">
+          <div class="mat-field-label">
+            Lương thu nhập (VNĐ)<span class="font-bold text-red-500 text-lg"
+              >*</span
+            >
+          </div>
+          <input pInputText class="w-full" [disabled]="true" />
+        </div>
+        <div class="flex flex-col justify-center">
+          <div class="mat-field-label">Thâm niên (VNĐ)</div>
+          <input pInputText class="w-full" [disabled]="true" />
+        </div>
+        <div class="flex flex-col justify-center">
+          <div class="mat-field-label">Mức tạm ứng chung (VNĐ)</div>
+          <input pInputText class="w-full" [disabled]="true" />
+        </div>
+        <div class="flex flex-col justify-center">
+          <div class="mat-field-label">Kiêm nhiệm (VNĐ) ></div>
+          <input pInputText class="w-full" [disabled]="true" />
+        </div>
+        <div class="flex flex-col justify-center">
+          <div class="mat-field-label">Chức danh (VNĐ)</div>
+          <input pInputText class="w-full" [disabled]="true" />
+        </div>
+        <div class="flex flex-col justify-center">
+          <div class="mat-field-label">Biệt phái (VNĐ)</div>
+          <input pInputText class="w-full" [disabled]="true" />
+        </div>
+        <div class="flex flex-col justify-center">
+          <div class="mat-field-label">Trách nhiệm (VNĐ)</div>
+          <input pInputText class="w-full" [disabled]="true" />
+        </div>
+        <div class="flex flex-col justify-center">
+          <div class="mat-field-label">Đắt đỏ (VNĐ)</div>
+          <input pInputText class="w-full" [disabled]="true" />
+        </div>
+        <div class="flex flex-col justify-center">
+          <div class="mat-field-label">Vùng miền (VNĐ)</div>
+          <input pInputText class="w-full" [disabled]="true" />
+        </div>
+        <div class="flex flex-col justify-center">
+          <div class="mat-field-label">Phụ cấp (VNĐ)</div>
+          <input pInputText class="w-full" [disabled]="true" />
+        </div>
+        <div class="flex flex-col justify-center">
+          <div class="mat-field-label">Thu hút (VNĐ)</div>
+          <input pInputText class="w-full" [disabled]="true" />
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-5">
+      <h2 class="text-blue-500 border-b text-lg ml-2">
+        Thông tin phê duyệt lương thu nhập
+      </h2>
+      <div class="grid grid-cols-2 gap-4 px-4">
+        <div class="flex flex-col justify-center">
+          <div class="mat-field-label">Trạng thái</div>
+          <p-dropdown
+            [(ngModel)]="selectedPheDuyet"
+            name="pheDuyet"
+            [options]="pheDuyetOptions"
+            optionLabel="label"
+          >
+          </p-dropdown>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="flex flex-0 items-center justify-end h-12 mr-2 pr-3 pl-6 sm:pl-8 mt-2 text-on-primary"
+  >
+    <div mat-dialog-actions class="h-toolbar flex justify-end">
+      <button
+        *ngIf="isNghiviec == null || isNghiviec == false"
+        type="submit"
+        class="mx-1 bg-slate-200 hover:bg-slate-300 px-3 py-2 rounded-md"
+        mat-flat-button
+      >
+        <i class="fa-light fa-check icon-size-5 text-green-500"></i>
+        <span class="ml-2">Lưu</span>
+      </button>
+    </div>
+  </div>
+</form>

@@ -1,17 +1,17 @@
 export interface User
 {
-    // status?: string;
+    status?: string;
     dienthoai?: number;
-    // applications?: [];
+    applications?: [];
     hoten?: string;
-    // chucdanh?: string;
+    chucdanh?: string;
     username?: string;
-    // iddonvi?: any;
-    // idnv?: any;
-    // idphongban?: any;
-    // madonvi?: any;
-    // tendonvi?: string;
-    // tenphongban?: string;
+    iddonvi?: any;
+    idnv?: any;
+    idphongban?: any;
+    madonvi?: any;
+    tendonvi?: string;
+    tenphongban?: string;
     tokenType?: string;
     email?: string;
 }

@@ -1,16 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatIconModule} from '@angular/material/icon';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { CommonModule } from '@angular/common';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatButtonModule} from '@angular/material/button';
 import {UntypedFormBuilder, UntypedFormGroup, NgForm, Validators, ReactiveFormsModule } from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
-import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-sign-in',
-  imports: [MatFormFieldModule,
+  imports: [
+    MatFormFieldModule,
     MatIconModule,
     MatCheckboxModule,
     CommonModule,
@@ -19,14 +19,12 @@ import { ActivatedRoute, Router } from '@angular/router';
   // FormGroup,
   // FormBuilder,
   ReactiveFormsModule,
-  MatInputModule,
+  MatInputModule
   ],
   templateUrl: './sign-in.component.html',
-  styleUrl: './sign-in.component.css'
+  styleUrl: './sign-in.component.css',
 })
 export class SignInComponent implements OnInit{
-  // @ViewChild('signInNgForm') signInNgForm: NgForm;
-
   signInForm!: UntypedFormGroup;
   showAlert: boolean = false;
 
@@ -34,23 +32,16 @@ export class SignInComponent implements OnInit{
     private _activatedRoute: ActivatedRoute,
     // private _authService: AuthService,
     private _formBuilder: UntypedFormBuilder,
-    private _router: Router,
+    // private _router: Router,
     // private _deviceDetectorService: DeviceDetectorService
   ) {}
-  // -----------------------------------------------------------------------------------------------------
-    // @ Lifecycle hooks
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * On init
-     */
   ngOnInit(): void {
     // Create the form
     this.signInForm = this._formBuilder.group({
-        email: ['', [Validators.required]],
-        password: ['', Validators.required],
-        // otp: [''],
-        rememberMe: ['']
+      email: ['', [Validators.required]],
+      password: ['', Validators.required],
+      // otp: [''],
+      rememberMe: [''],
     });
 
     // let deviceId = localStorage.getItem("DEVICE_ID") || '';
@@ -81,16 +72,15 @@ export class SignInComponent implements OnInit{
     //     operatingSystem: this.deviceInfo.os,
     //     osVersion: this.deviceInfo.os_version
     // }
-    
   }
-   /**
-     * Sign in
-     */
-   signIn(): void {
+  /**
+   * Sign in
+   */
+  signIn(): void {
     // Return if the form is invalid
-    if (this.signInForm.invalid) {
-        return;
-    }
+    // if (this.signInForm.invalid) {
+    //     return;
+    // }
 
     // // Disable the form
     this.signInForm.disable();
@@ -126,5 +116,5 @@ export class SignInComponent implements OnInit{
     //     this.callSignInAPI();
     // }
     // this.callSignInAPI(deviceId);
-}
+  }
 }

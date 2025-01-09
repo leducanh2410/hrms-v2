@@ -1,0 +1,267 @@
+<form
+  id="rightForm"
+  (ngSubmit)="rightForm.form.valid && onSave()"
+  #rightForm="ngForm"
+  class="flex flex-col max-w-310 md:min-w-310 overflow-hidden max-h-[90vh]"
+>
+  <!-- Header -->
+  <div
+    class="flex flex-0 items-center justify-between h-12 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary"
+  >
+    <div class="text-lg font-medium head-modal">
+      <span class="text-white">Cập nhật quá trình làm việc</span>
+    </div>
+    <button mat-icon-button [tabIndex]="-1" (click)="onClose()">
+      <i class="fa-light fa-xmark icon-size-5 text-white text-2xl"></i>
+    </button>
+  </div>
+
+  <div
+    #mainns
+    class="flex flex-col flex-auto h-modal max-h-130 overflow-y-auto"
+  >
+    <div class="mb-5">
+      <h2 class="text-blue-500 border-b text-lg ml-2">Thông tin cơ bản</h2>
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 w-full min-w-0 px-4"
+      >
+        <div class="flex flex-col justify-center">
+          <div class="mat-field-label">
+            Ngày hiệu lực<span class="font-bold text-red-500 text-lg">*</span>
+          </div>
+          <p-calendar
+            name="ngayHieuLuc"
+            [showIcon]="true"
+            [showOnFocus]="false"
+            class="!w-full"
+            [(ngModel)]="ngayHieuLuc"
+          />
+        </div>
+        <div class="flex flex-col justify-center">
+          <div class="mat-field-label">
+            Loại QTCT<span class="font-bold text-red-500 text-lg">*</span>
+          </div>
+          <p-dropdown
+            panelStyleClass="max-w-full"
+            [style]="{ width: '100%' }"
+            [options]="listLoaiQTCT"
+            optionLabel="tenLoaiQtct"
+            optionValue="id"
+            name="vtricdanh"
+            appendTo="body"
+            [filter]="true"
+            filterBy="name"
+            [(ngModel)]="data.loaiQtct.id"
+            (onChange)="onChangeChucdanh()"
+            [required]="true"
+            placeholder="&nbsp;"
+          >
+          </p-dropdown>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h2 class="text-blue-500 border-b text-lg ml-2">Thông tin chi tiết</h2>
+      <div class="grid grid-cols-2 gap-4 px-4">
+        <div class="">
+          <div class="mat-field-label">
+            Phòng ban<span class="font-bold text-red-500 text-lg">*</span>
+          </div>
+          <p-dropdown
+            panelStyleClass="max-w-full"
+            [style]="{ width: '100%' }"
+            optionLabel="departmentName"
+            optionValue="id"
+            name="vtricdanh"
+            appendTo="body"
+            [filter]="true"
+            filterBy="name"
+            [options]="listPhongBan"
+            [(ngModel)]="data.department.id"
+            (onChange)="onChangeChucdanh()" 
+            [required]="true"
+            placeholder="&nbsp;"
+          >
+          </p-dropdown>
+        </div>
+
+        <div class="">
+          <div class="mat-field-label">Chức danh</div>
+          <p-dropdown
+            panelStyleClass="max-w-full"
+            [style]="{ width: '100%' }"
+            [options]="listChucdanh"
+            optionLabel="tenchucanh"
+            optionValue="id"
+            name="vtricdanh"
+            appendTo="body"
+            [filter]="true"
+            filterBy="name"
+            [(ngModel)]="data.chucdanh.id"
+            (onChange)="onChangeChucdanh()"
+            [required]="true"
+            placeholder="&nbsp;"
+          >
+          </p-dropdown>
+        </div>
+
+        <div class="">
+          <div class="mat-field-label">Thành phần nhân sự</div>
+          <p-dropdown
+            panelStyleClass="max-w-full"
+            [style]="{ width: '100%' }"
+            [options]="listThanhPhanNS"
+            optionLabel="tenThanhphannhansu"
+            optionValue="id"
+            name="vtricdanh"
+            appendTo="body"
+            [filter]="true"
+            filterBy="name"
+            [(ngModel)]="data.thanhphannhansu.id"
+            (onChange)="onChangeChucdanh()"
+            [required]="true"
+            placeholder="&nbsp;"
+          >
+          </p-dropdown>
+        </div>
+
+        <div class="">
+          <div class="mat-field-label">Cấp độ nhân sự</div>
+          <p-dropdown
+            panelStyleClass="max-w-full"
+            [style]="{ width: '100%' }"
+            [options]="listCapDoNS"
+            optionLabel="tenCapdonhansu"
+            optionValue="id"
+            name="vtricdanh"
+            appendTo="body"
+            [filter]="true"
+            filterBy="name"
+            [(ngModel)]="data.capdonhansu.id"
+            (onChange)="onChangeChucdanh()"
+            [required]="true"
+            placeholder="&nbsp;"
+          >
+          </p-dropdown>
+        </div>
+
+        <div class="">
+          <div class="mat-field-label">Pháp nhân</div>
+          <p-dropdown
+            panelStyleClass="max-w-full"
+            [style]="{ width: '100%' }"
+            [options]="listPhapNhan"
+            optionLabel="tenPhapNhan"
+            optionValue="id"
+            name="vtricdanh"
+            appendTo="body"
+            [filter]="true"
+            filterBy="name"
+            [(ngModel)]="data.phapnhan.id"
+            (onChange)="onChangeChucdanh()"
+            [required]="true"
+            placeholder="&nbsp;"
+          >
+          </p-dropdown>
+        </div>
+
+        <div class="">
+          <div class="mat-field-label">Dòng xe</div>
+          <p-dropdown
+            panelStyleClass="max-w-full"
+            [style]="{ width: '100%' }"
+            [options]="listDongXe"
+            optionLabel="tendongxe"
+            optionValue="id"
+            name="vtricdanh"
+            appendTo="body"
+            [filter]="true"
+            filterBy="name"
+            [(ngModel)]="data.dongxe.id"
+            (onChange)="onChangeChucdanh()"
+            [required]="true"
+            placeholder="&nbsp;"
+          >
+          </p-dropdown>
+        </div>
+
+        <div class="">
+          <div class="mat-field-label">Loại lao động</div>
+          <p-dropdown
+            panelStyleClass="max-w-full"
+            [style]="{ width: '100%' }"
+            [options]="listLoaiLaoDong"
+            optionLabel="tenLoailaodong"
+            optionValue="id"
+            name="vtricdanh"
+            appendTo="body"
+            [filter]="true"
+            filterBy="name"
+            [(ngModel)]="data.loailaodong.id"
+            (onChange)="onChangeChucdanh()"
+            [required]="true"
+            placeholder="&nbsp;"
+          >
+          </p-dropdown>
+        </div>
+
+        <div class="">
+          <div class="mat-field-label">Nghiệp vụ</div>
+          <p-dropdown
+            panelStyleClass="max-w-full"
+            [style]="{ width: '100%' }"
+            [options]="listNghiepVu"
+            optionLabel="tenNghiepvu"
+            optionValue="id"
+            name="vtricdanh"
+            appendTo="body"
+            [filter]="true"
+            filterBy="name"
+            [(ngModel)]="data.nghiepvu.id"
+            (onChange)="onChangeChucdanh()"
+            [required]="true"
+            placeholder="&nbsp;"
+          >
+          </p-dropdown>
+        </div>
+
+        <div class="">
+          <div class="mat-field-label">Văn phòng làm việc</div>
+          <p-dropdown
+            panelStyleClass="max-w-full"
+            [style]="{ width: '100%' }"
+            [options]="listVPLamViec"
+            optionLabel="tenVanphonglamviec"
+            optionValue="id"
+            name="vtricdanh"
+            appendTo="body"
+            [filter]="true"
+            filterBy="name"
+            [(ngModel)]="data.vanphonglamviec.id"
+            (onChange)="onChangeChucdanh()"
+            [required]="true"
+            placeholder="&nbsp;"
+          >
+          </p-dropdown>
+        </div>
+
+        <div class="">
+          <div class="mat-field-label">Ghi chú</div>
+          <textarea rows="3" class="w-full border rounded-md"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div mat-dialog-actions class="h-toolbar flex justify-end">
+    <button
+      type="submit"
+      class="mx-1 border bg-slate-200 hover:bg-slate-300 px-3 py-2 mr-8 rounded-md"
+      mat-flat-button
+    >
+      <i class="fa-light fa-check icon-size-5 text-green-500"></i>
+      <span class="ml-2">Lưu</span>
+    </button>
+  </div>
+</form>

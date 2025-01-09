@@ -1,0 +1,63 @@
+<div class="flex flex-col max-w-310 md:min-w-310 overflow-hidden max-h-screen -m-6">
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-12 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium head-modal search-head">
+            <span>Chọn tham số lương</span>
+            <mat-form-field style="width: 320px !important; margin-left: 16px;">
+                <input #textInput autofocus="true" style="width: 300px !important;" matInput type="text"
+                    (input)="dtns.filterGlobal(textInput.value, 'contains')" placeholder="Tìm kiếm">
+            </mat-form-field>
+        </div>
+        <div class="flex">
+            <button style="margin-right: 8px;" class="header-button" mat-icon-button matTooltip="Bỏ chọn" [tabIndex]="0" (click)="unSelectAndClose()">
+                <i class="fal fa-circle-minus icon-size-6"></i>
+            </button>
+            <button mat-icon-button style="margin-right: 8px;" [tabIndex]="0" (click)="saveAndClose()" matTooltip="Chọn">
+                <i class="fal fa-check-circle icon-size-6"></i>
+            </button>
+            <button mat-icon-button [tabIndex]="-1" (click)="onClose()" matTooltip="Thoát">
+                <i class="fa-light fa-xmark icon-size-6"></i>
+            </button>
+        </div>
+    </div>
+
+    <div #mainns class="flex flex-col flex-auto h-modal">
+        <p-table #dtns id="table" [value]="listNgachLuong" dataKey="ngachluongId" responsiveLayout="scroll"        scrollHeight="{{mainns.offsetHeight - 54}}px"
+            [globalFilterFields]="['ngachluongCode', 'ngachluongName']" [scrollable]="true">
+            <ng-template pTemplate="caption">
+                <div #caption class="flex items-center justify-between">
+                    <div style="width: 15%;" class="mat-field-label">Bảng lương</div>
+                    <mat-form-field style="width: 35%;" class="fuse-mat-no-subscript ml-2">
+                        <input matInput name="soqd" [(ngModel)]="idBangLuong" placeholder="" readonly/>
+                        <button type="button" class="mx-1 -mr-2" (click)="onChonBangluong()" color="primary" mat-flat-button>
+                            <span>Chọn</span>
+                        </button>
+                    </mat-form-field>
+                    <mat-form-field style="width: 50%;" class="fuse-mat-no-subscript ml-2">
+                        <input matInput name="soqd" [(ngModel)]="tenBangLuong" placeholder="" readonly/>
+                    </mat-form-field>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pFrozenColumn style="width: 60px; text-align: center;"><span>STT</span></th>
+                    <th pFrozenColumn pSortableColumn="ngachluongCode" style="width: 160px;">Mã ngạch lương</th>
+                    <th pFrozenColumn pSortableColumn="ngachluongName" style="width: 360px;">Tên ngạch lương</th>
+                    <th *ngFor="let item of columns; trackBy: trackByFn" class="w-16 text-center" style="width: 100%; text-align: center;"><span class="w-full">{{item}}</span></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-bangluong let-index="rowIndex">
+                <tr>
+                    <td pFrozenColumn style="width: 60px; text-align: center;"><span class="w-full">{{index + 1}}</span></td>
+                    <td pFrozenColumn style="width: 160px;">{{bangluong.ngachluongCode}}</td>
+                    <td pFrozenColumn style="width: 360px;">{{bangluong.ngachluongName}}</td>
+                    <td *ngFor="let cell of bangluong.ngachluongcon.slice(3, bangluong.ngachluongcon.length); trackBy: trackByFn" class="flex justify-center items-center w-16">
+                        <div [ngClass]="{'bg-blue-400': cell.id && cell?.id == selected?.id }" class="w-full cursor-pointer text-center py-3" (click)="onSelectBacluong(cell)" (dblclick)="onSelectBacluong(cell); saveAndClose()">
+                            <span>{{cell.name}}</span>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

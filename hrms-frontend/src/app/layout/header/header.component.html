@@ -7,12 +7,13 @@
     <!-- logo -->
     <ng-container>
       <div class="flex items-center">
-       
-        <img
-          src="../../../assets/image/logo.png"
-          alt="Company Logo"
-          class="w-48 h-6 object-contain"
-        />
+        <a [routerLink]="['/']" >
+          <img
+            src="../../../assets/image/logo.png"
+            alt="Company Logo"
+            class="w-48 h-6 object-contain"
+          />
+        </a>
       </div>
     </ng-container>
 
@@ -66,19 +67,23 @@
         <span>Sign out</span>
       </button>
     </mat-menu> -->
-    <button mat-icon-button matTooltip="My Account" [matMenuTriggerFor]="userAccountMenu">
+    <button
+      mat-icon-button
+      matTooltip="My Account"
+      [matMenuTriggerFor]="userAccountMenu"
+    >
       <mat-icon>account_circle</mat-icon>
-  </button>
-  <mat-menu #userAccountMenu [overlapTrigger]="false" yPosition="below">
+    </button>
+    <mat-menu #userAccountMenu [overlapTrigger]="false" yPosition="below">
       <button mat-menu-item routerLink="#">
-          <mat-icon>person</mat-icon><span>Name</span>
+        <mat-icon>person</mat-icon><span>Name</span>
       </button>
-      
+
       <mat-divider></mat-divider>
       <button mat-menu-item routerLink="#" (click)="signOut()">
-          <mat-icon>exit_to_app</mat-icon>Logout
+        <mat-icon>exit_to_app</mat-icon>Logout
       </button>
-  </mat-menu>
+    </mat-menu>
   </div>
 
 </div>

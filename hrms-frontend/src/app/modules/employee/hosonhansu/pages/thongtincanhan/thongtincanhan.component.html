@@ -1,0 +1,371 @@
+<!-- <div class="flex-auto sm:p-2 shadow overflow-y-auto h-full w-full" cdkScrollable> -->
+<form
+  class="h-full absolute inset-0 flex flex-col min-w-0 overflow-hidden bg-gray-100 w-full"
+  #form1="ngForm"
+  (ngSubmit)="save(form1.form.valid)"
+>
+  <div
+    class="p-2 shadow overflow-x-hidden overflow-y-auto bg-gray-100 w-full"
+    cdkScrollable
+  >
+    <!-- Thông tin cá nhân -->
+    <div class="w-full p-4 flex border-1 border-gray-300 rounded bg-white">
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-8 w-full min-w-0 overflow-hidden"
+      >
+        <div class="flex flex-col justify-center">
+          <div class="mat-field-label">Quốc tịch</div>
+          <input
+            pInputText
+            name="quocTich"
+            [readonly]="!is_edit"
+            class="w-full"
+            [(ngModel)]="model.nationality"
+          />
+        </div>
+
+        <div class="flex flex-col justify-center">
+          <div class="mat-field-label">Dân tộc</div>
+          <input
+            pInputText
+            name="danToc"
+            [readonly]="!is_edit"
+            class="w-full"
+            [(ngModel)]="model.ethnic"
+          />
+        </div>
+
+        <div class="flex items-center">
+          <div class="flex flex-col w-full">
+            <div class="mat-field-label">Tôn giáo</div>
+            <input
+              pInputText
+              name="tonGiao"
+              [readonly]="!is_edit"
+              class="w-full"
+              [(ngModel)]="model.tongiao"
+            />
+          </div>
+        </div>
+
+        <div class="flex flex-col justify-center">
+          <div class="mat-field-label">Tình trạng hôn nhân</div>
+          <p-dropdown
+            [style]="{ width: '100%' }"
+            [options]="listTtranghonnhan"
+            optionLabel="name"
+            optionValue="id"
+            appendTo="body"
+            name="tinhtranghn"
+            placeholder="&nbsp;"
+            [showClear]="true"
+            [ngModel]="model.marriageStatus"
+          >
+          </p-dropdown>
+        </div>
+
+        <div class="">
+          <div class="mat-field-label">CMND/ Căn cước</div>
+          <input
+            #cccdInput
+            pInputText
+            placeholder=""
+            name="cccd"
+            maxlength="12"
+            pattern="[0-9.]+"
+            required
+            class="w-full"
+            [(ngModel)]="model.cccdNumber"
+          />
+        </div>
+
+        <div class="">
+          <div class="mat-field-label">Ngày, nơi cấp</div>
+          <p-calendar
+            name="ngaycap"
+            [showIcon]="true"
+            inputId="buttondisplay"
+            [showOnFocus]="false"
+            [readonlyInput]="!is_edit"
+            class="!w-1/3 !inline-block"
+            [(ngModel)]="cccd_ngayCap"
+          />
+
+          <input
+            pInputText
+            name="noicap"
+            [readonly]="!is_edit"
+            class="!inline-block w-2/3"
+            [(ngModel)]="model.cccdNoicap"
+          />
+        </div>
+
+        <div class="flex flex-col justify-center">
+          <div>Gia đình chính sách</div>
+          <div class="flex">
+            <!-- <mat-checkbox name="isgdcs" [ngModel]="model.giadinhchinhsach" [disabled]="!is_edit" ()></mat-checkbox> -->
+            <p-checkbox
+              class="mr-2"
+              name="isgdcs"
+              [binary]="true"
+              (onChange)="changeGDCS()"
+              [(ngModel)]="model.dangDoan.giaDinhChinhSach"
+            ></p-checkbox>
+            <input
+              pInputText
+              name="gdchinhsach"
+              [readonly]="!is_edit"
+              class="!inline-block w-full"
+              [(ngModel)]="model.dangDoan.loaiChinhSach"
+            />
+          </div>
+        </div>
+
+        <div class="">
+          <div class="">Số sổ BHXH</div>
+          <div>
+            <input
+              pInputText
+              name="bhxh"
+              [readonly]="!is_edit"
+              class="w-full"
+              [(ngModel)]="model.baoHiem.soSoBhxh"
+            />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <div class="">Mã số thuế</div>
+            <input
+              pInputText
+              name="mathue"
+              [readonly]="!is_edit"
+              class="w-full"
+              [(ngModel)]="model.maSoThue"
+            />
+          </div>
+          <div>
+            <div class="">Số thẻ BHYT</div>
+            <input
+              pInputText
+              name="sobhyt"
+              [readonly]="!is_edit"
+              class="w-full"
+              [(ngModel)]="model.baoHiem.soBhyt"
+            />
+          </div>
+        </div>
+
+        <div class="">
+          <div class="">Nơi khám chữa BĐ</div>
+          <input
+            pInputText
+            name="noikhamchua"
+            [readonly]="!is_edit"
+            class="w-full"
+            [(ngModel)]="model.baoHiem.noiDkKhamBenh"
+          />
+        </div>
+
+        <div class="">
+          <div class="">Điện thoại</div>
+          <input
+            pInputText
+            name="dt"
+            [(ngModel)]="model.phone"
+            [readonly]="!is_edit"
+            class="w-full"
+            [(ngModel)]="model.contact.phoneNumber"
+          />
+        </div>
+
+        <div class="flex flex-col justify-start">
+          <div class="">Email</div>
+          <input
+            pInputText
+            name="email"
+            type="email"
+            [readonly]="!is_edit"
+            class="w-full"
+            [(ngModel)]="model.contact.companyEmail"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Địa chỉ -->
+    <div
+      class="w-full px-4 pb-4 flex flex-col border-1 border-gray-300 rounded bg-white mt-2"
+    >
+      <p-divider align="left">
+        <div class="inline-flex align-items-center">
+          <b class="text-blue-600">Địa chỉ</b>
+        </div>
+      </p-divider>
+
+      <div
+        class="grid grid-cols-1 sm:grid-cols-3 gap-y-3 gap-x-8 w-full min-w-0 overflow-hidden"
+      >
+        <!-- Noi sinh -->
+        <div class="flex flex-col justify-center">
+          <div class="mat-field-label">Nơi sinh Tỉnh/ TP</div>
+          <p-dropdown
+            [style]="{ width: '100%' }"
+            [options]="thanhPho"
+            optionLabel="label"
+            optionValue="value"
+            [filter]="true"
+            filterBy="label"
+            appendTo="body"
+            name="nsTP"
+            [disabled]="!is_edit"
+            (onChange)="getDsQhNoisinh($event.value)"
+            placeholder="&nbsp;"
+            [showClear]="true"
+          >
+          </p-dropdown>
+        </div>
+
+        <div class="flex flex-col justify-center">
+          <div class="mat-field-label">Quận huyện</div>
+          <p-dropdown
+            [style]="{ width: '100%' }"
+            [options]="qhNoisinh"
+            optionLabel="name"
+            optionValue="id"
+            appendTo="body"
+            name="nsQH"
+            [disabled]="!is_edit"
+            placeholder="&nbsp;"
+            [filter]="true"
+            filterBy="label"
+            [showClear]="true"
+          >
+          </p-dropdown>
+        </div>
+
+        <div class="flex flex-col justify-start">
+          <div class="">Phường xã</div>
+          <input pInputText name="nsPX" type="text" class="w-full" />
+        </div>
+
+        <!-- Que quan -->
+        <div class="flex flex-col justify-center">
+          <div class="mat-field-label">Quê quán Tỉnh/ TP</div>
+          <p-dropdown
+            [style]="{ width: '100%' }"
+            [options]="thanhPho"
+            optionLabel="label"
+            optionValue="value"
+            [filter]="true"
+            filterBy="label"
+            appendTo="body"
+            name="qqTP"
+            [disabled]="!is_edit"
+            (onChange)="getDsQhQuequan($event.value)"
+            placeholder="&nbsp;"
+            [showClear]="true"
+          >
+          </p-dropdown>
+        </div>
+
+        <div class="flex flex-col justify-center">
+          <div class="mat-field-label">Quận huyện</div>
+          <p-dropdown
+            [style]="{ width: '100%' }"
+            [options]="qhQuequan"
+            optionLabel="name"
+            optionValue="id"
+            appendTo="body"
+            name="qqQH"
+            [disabled]="!is_edit"
+            placeholder="&nbsp;"
+            [filter]="true"
+            filterBy="label"
+            [showClear]="true"
+          >
+          </p-dropdown>
+        </div>
+
+        <div class="flex flex-col justify-start">
+          <div class="">Phường xã</div>
+          <input pInputText name="qqPX" type="text" class="w-full" />
+        </div>
+
+        <!-- Cho o -->
+        <div class="flex flex-col justify-center">
+          <div class="mat-field-label">Chỗ ở Tỉnh/ TP</div>
+          <p-dropdown
+            [style]="{ width: '100%' }"
+            [options]="thanhPho"
+            optionLabel="label"
+            optionValue="value"
+            [filter]="true"
+            filterBy="label"
+            appendTo="body"
+            name="chnTP"
+            [disabled]="!is_edit"
+            (onChange)="getDsQhNoio($event.value)"
+            placeholder="&nbsp;"
+            [showClear]="true"
+          >
+          </p-dropdown>
+        </div>
+
+        <div class="flex flex-col justify-center">
+          <div class="mat-field-label">Quận huyện</div>
+          <p-dropdown
+            [style]="{ width: '100%' }"
+            [options]="qhNoio"
+            optionLabel="name"
+            optionValue="id"
+            appendTo="body"
+            name="chnQH"
+            [disabled]="!is_edit"
+            placeholder="&nbsp;"
+            [filter]="true"
+            filterBy="label"
+            [showClear]="true"
+          >
+          </p-dropdown>
+        </div>
+
+        <div class="flex flex-col justify-start">
+          <div class="">Phường xã</div>
+          <input pInputText name="chnPX" type="text" class="w-full" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Xac nhan -->
+    <div class="flex items-center fixed right-4 bottom-2 p-2 z-10">
+      <button
+        [disabled]="!model.id || is_edit"
+        class="mx-1 btn btn-primary"
+        mat-flat-button
+        (click)="edit()"
+      >
+        <span>Sửa</span>
+      </button>
+
+      <button
+        [disabled]="!model.id || !is_edit"
+        type="submit"
+        class="mx-1 btn btn-primary"
+        mat-flat-button
+      >
+        <span>Lưu</span>
+      </button>
+
+      <button
+        [disabled]="!model.id || !is_edit"
+        class="mx-1 btn btn-warning"
+        mat-flat-button
+        (click)="back()"
+      >
+        <span>Bỏ qua</span>
+      </button>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,225 @@
+<div class="flex flex-col overflow-y-scroll h-[90vh]">
+  <div
+    class="flex items-center justify-between py-2 pl-6 pr-3 flex-0 sm:pr-5 sm:pl-8 bg-primary"
+    mat-dialog-title
+  >
+    <div class="text-lg font-medium text-white head-modal">
+      Tạo mới hợp đồng
+    </div>
+    <button
+      mat-icon-button
+      mat-dialog-close
+      [tabIndex]="-1"
+      (click)="close()"
+      class="text-white text-2xl"
+    >
+      <i class="fa-light fa-xmark icon-size-5"></i>
+    </button>
+  </div>
+
+  <div class="flex flex-col px-4 pt-4 w-full" mat-dialog-content>
+    <form>
+      <div class="container mb-5">
+        <h2 class="text-blue-400 border-b mb-3 font-bold pb-2">
+          Điều khoản hợp đồng
+        </h2>
+        <div class="ml-3 grid grid-cols-2 gap-2">
+          <div class="field">
+            <label class="w-[30%] text-left font-semibold" for="empName"
+              >Họ và tên</label
+            >
+            <input
+              id="empName"
+              name="empName"
+              pInputText
+              class="py-1"
+              value="Chu diệu linh"
+            />
+          </div>
+
+          <div class="field">
+            <label class="w-[30%] text-left font-semibold" for="phapNhan"
+              >Pháp Nhân</label
+            >
+            <p-dropdown
+              id="phapNhan"
+              name="phapNhan"
+              [options]="phapNhanOptions"
+              placeholder="Vui lòng chọn..."
+              class="py-1"
+            ></p-dropdown>
+          </div>
+
+          <div class="field">
+            <label class="w-[30%] text-left font-semibold" for="loaiHD"
+              >Loại hợp đồng</label
+            >
+            <input id="loaiHD" name="loaiHD" pInputText class="py-1" />
+          </div>
+
+          <div class="field">
+            <label
+              class="w-[30%] text-left font-semibold align-top"
+              for="nguoiDaiDien"
+              >Người đại diện (theo pháp nhân)</label
+            >
+            <input
+              id="nguoiDaiDien"
+              name="nguoiDaiDien"
+              pInputText
+              class="py-1"
+            />
+          </div>
+
+          <div class="field">
+            <label class="w-[30%] text-left font-semibold" for="soHD"
+              >Số hợp đồng</label
+            >
+            <input id="soHD" name="soHD" pInputText class="py-1" />
+          </div>
+
+          <div></div>
+
+          <div class="field">
+            <label class="w-[30%] text-left font-semibold" for="ngayBatDau"
+              >Ngày bắt đầu</label
+            >
+            <p-calendar
+              id="ngayBatDau"
+              name="ngayBatDau"
+              dateFormat="dd/mm/yy"
+              [showIcon]="true"
+            ></p-calendar>
+          </div>
+
+          <div></div>
+
+          <div class="field">
+            <label class="w-[30%] text-left font-semibold" for="ngayKetThuc"
+              >Ngày kết thúc</label
+            >
+            <p-calendar
+              id="ngayKetThuc"
+              name="ngayKetThuc"
+              dateFormat="dd/mm/yy"
+              [showIcon]="true"
+            ></p-calendar>
+          </div>
+
+          <div></div>
+
+          <div class="field">
+            <label class="w-[30%] text-left font-semibold" for="thoiHan"
+              >Thời hạn HD (month)</label
+            >
+            <p-inputnumber
+              id="thoiHan"
+              name="thoiHan"
+              mode="decimal"
+              [min]="0"
+              [max]="100"
+              [step]="1"
+              [showButtons]="true"
+            ></p-inputnumber>
+          </div>
+
+          <div></div>
+
+          <div class="field">
+            <label class="w-[30%] text-left font-semibold" for="chucDanh"
+              >Chức danh</label
+            >
+            <input
+              id="chucDanh"
+              name="chucDanh"
+              pInputText
+              class="py-1"
+              placeholder="Nhập chức danh"
+            />
+          </div>
+
+          <div></div>
+
+          <div class="field">
+            <label class="w-[30%] text-left font-semibold" for="ngayKy"
+              >Ngày ký hợp đồng</label
+            >
+            <p-calendar
+              id="ngayKy"
+              name="ngayKy"
+              [showIcon]="true"
+              placeholder="Chọn ngày ký"
+            ></p-calendar>
+          </div>
+
+          <div></div>
+        </div>
+      </div>
+      <div class="container mb-5">
+        <h2 class="text-blue-400 border-b mb-3 font-bold pb-2">
+          Thông tin lương hợp đồng
+        </h2>
+        <div class="ml-3 grid grid-cols-2 gap-2">
+          <div class="field">
+            <label class="w-[30%] text-left font-semibold" for="luongBHXH"
+              >Lương BHXH</label
+            >
+            <input
+              id="luongBHXH"
+              name="luongBHXH"
+              pInputText
+              class="py-1"
+              placeholder="Nhập lương BHXH"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <h2 class="text-blue-400 border-b mb-3 font-bold pb-2">
+          Thông tin phê duyệt
+        </h2>
+        <div class="ml-3 grid grid-cols-2 gap-2">
+          <div class="field">
+            <label class="w-[30%] text-left font-semibold" for="pheDuyet"
+              >Trạng thái</label
+            >
+            <p-dropdown
+              [(ngModel)]="selectedPheDuyet"
+              name="pheDuyet"
+              [options]="pheDuyetOptions"
+              optionLabel="label"
+            >
+            </p-dropdown>
+          </div>
+          <div></div>
+
+          <div class="field">
+            <label
+              class="w-[30%] text-left font-semibold"
+              for="pheDuyet"
+            ></label>
+            <div class="w-full inline">
+              <button
+                class="border py-2 px-3 bg-gray-200 hover:bg-gray-300 rounded-md border-gray-300 mr-3"
+                mat-flat-button
+              >
+                <mat-icon class="align-middle text-violet-500">save</mat-icon>
+                <span>Lưu</span>
+              </button>
+              <button
+                class="border py-2 px-3 bg-gray-200 hover:bg-gray-300 rounded-md border-gray-300"
+                mat-flat-button
+              >
+                <mat-icon class="align-middle text-violet-500">save</mat-icon>
+                <span>Lưu và đóng</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div mat-dialog-actions [align]="'end'" class="py-2 pr-6"></div>
+</div>

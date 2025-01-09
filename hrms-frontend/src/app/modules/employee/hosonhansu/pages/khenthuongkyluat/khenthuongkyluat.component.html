@@ -1,0 +1,93 @@
+<div
+  class="h-full absolute inset-0 flex flex-col min-w-0 overflow-hidden bg-gray-100 w-full"
+  cdkScrollable
+>
+  <div class="sm:p-2 overflow-x-hidden overflow-y-auto bg-gray-100 w-full">
+    <div
+      class="w-full px-4 pb-4 flex flex-col border-1 border-gray-300 rounded bg-white"
+    >
+      <div class="flex justify-between items-center">
+        <p-divider align="left">
+          <div class="inline-flex align-items-center justify-between">
+            <b class="text-blue-600">Kết quả đánh giá</b>
+          </div>
+        </p-divider>
+        <div class="flex">
+          <button
+            style="margin-right: 20px"
+            color="primary"
+            class="mx-1"
+            mat-flat-button
+            (click)="xuatExcelKhenThuong()"
+          >
+            <i class="fa-regular fa-file-excel" matTooltip="Xuất excel"></i>
+          </button>
+          <button
+            style="margin-right: 20px"
+            color="primary"
+            class="mx-1"
+            mat-flat-button
+            (click)="addKhenThuong()"
+          >
+            <i class="fa-light fa-circle-plus" matTooltip="Thêm mới"></i>
+          </button>
+        </div>
+      </div>
+
+      <p-table [value]="dsKhenthuong" [tableStyle]="{ width: '100%' }">
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th class="text-center text-black border" style="width: 25%">
+              Đợt đánh giá
+            </th>
+            <th class="text-center text-black border" style="width: 25%">
+              Cấp bậc
+            </th>
+            <th class="text-center text-black border" style="width: 35%">
+              Nhận xét
+            </th>
+            <th class="text-center text-black border" style="width: 15%">
+              Thao tác
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template
+          pTemplate="body"
+          let-danhGia
+          let-columns="columns"
+          let-i="rowIndex"
+        >
+          <tr class="border border-gray-200">
+            <td class="border" style="width: 25%">{{ danhGia.evaluationName }}</td>
+            <td class="border" style="width: 25%">{{ danhGia.personalRating }}</td>
+            <td class="border" style="width: 35%">{{ danhGia.comments }}</td>
+
+            <td class="text-center border" style="width: 15%">
+              <div class="flex flex-row justify-between pl-3 pr-3">
+                <button
+                  type="button"
+                  class="mr-2"
+                  (click)="updateKhenThuong(danhGia)"
+                >
+                  <i
+                    class="fa-light fa-pencil icon-size-5"
+                    matTooltip="Sửa"
+                  ></i>
+                </button>
+                <button
+                  type="button"
+                  (click)="deleteKhenthuong(danhGia.danhGiaName)"
+                >
+                  <i
+                    class="fa-light fa-trash-can icon-size-5"
+                    matTooltip="Xóa"
+                  ></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

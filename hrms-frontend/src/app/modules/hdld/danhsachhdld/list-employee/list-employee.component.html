@@ -1,0 +1,37 @@
+<div class="table-container">
+  <div class="bg-white flex items-center">
+    <input
+      pInputText
+      placeholder="Nhập tên hoặc mã NV"
+      class="w-[90%] py-1.5 rounded-none outline-none"
+    />
+    <div
+      class="flex-1 text-center bg-gray-400 cursor-pointer hover:bg-gray-600"
+    >
+      <mat-icon class="text-3xl w-[26px] h-[29px]">search</mat-icon>
+    </div>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <!-- Tên nhân viên -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Tên nhân viên</th>
+      <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+    </ng-container>
+
+    <!-- Mã NV -->
+    <ng-container matColumnDef="code">
+      <th mat-header-cell *matHeaderCellDef>Mã NV</th>
+      <td mat-cell *matCellDef="let element">{{ element.code }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr
+      mat-row
+      class="hover:bg-gray-400 cursor-pointer"
+      [ngClass]="{ 'bg-gray-400': itemActive == row?.id }"
+      *matRowDef="let row; columns: displayedColumns"
+      (click)="onSelectItem(row?.id)"
+    ></tr>
+  </table>
+</div>

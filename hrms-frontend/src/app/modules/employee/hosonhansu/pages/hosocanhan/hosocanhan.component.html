@@ -1,0 +1,81 @@
+<div class="h-full absolute inset-0 flex flex-col min-w-0 overflow-hidden bg-gray-100 w-full" cdkScrollable>
+    <div class="sm:p-2 overflow-x-hidden overflow-y-auto bg-gray-100 w-full">
+        <div class="w-full px-4 pb-4 flex flex-col border-1 border-gray-300 rounded bg-white">
+            <div class="flex justify-between items-center">
+                <p-divider align="left">
+                    <div class="inline-flex align-items-center justify-between">
+                        <b class="text-blue-600">Hồ sơ giấy tờ gốc</b>
+                    </div>
+                </p-divider>
+                <div class="flex">
+                    <button class="px-8 button-primary mr-2" mat-flat-button type="button">
+                        Xuất Excel
+                    </button>
+                    <button class="px-8 button-primary mr-2" mat-flat-button type="button" (click)="add()">
+                        Cập nhật
+                    </button>
+
+                </div>
+            </div>
+
+            <p-table [value]="listNsGiayto" responsiveLayout="stack" [scrollable]="true" scrollHeight="350px"
+                [tableStyle]="{ width: '100%'}">
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th style="width: 5%">STT</th>
+                        <th style="width: 25%">Loại giấy tờ</th>
+                        <th style="width: 15%">Phân loại</th>
+                        <th style="width: 25%">Ghi chú</th>
+                        <th style="width: 20%">File</th>
+                        <th style="width: 10%" class="text-center">Thao tác</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item let-columns="columns" let-i="rowIndex">
+                    <tr class="border-b border-gray-200">
+                        <td style="width: 5%">
+                            <div class="flex flex-1 flex-row justify-center">
+                                {{ i + 1 }}
+                            </div>
+                        </td>
+                        <td style="width: 25%">
+                            {{ item.name }}
+                        </td>
+                        <td style="width: 15%">
+                            {{ item.kieuGiayTo}}
+                        </td>
+                        <td style="width: 25%">
+                            {{ item.ghichu }}
+                        </td>
+
+                        <td style="width: 20%">
+                            <div class="flex flex-1 flex-row">
+                                <div class="flex-auto">
+                                    {{ item.fileName }}
+                                </div>
+
+                                <div *ngIf="item.fileName !== null" class="flex-initial w-10">
+                                    <button type="button" class="mr-2" (click)="viewFileQD(item.id)">
+                                        <i class="fa-light fa-eye icon-size-5" matTooltip="Xem"></i>
+                                    </button>
+                                </div>
+                                <div *ngIf="item.fileName !== null" class="flex-initial w-10">
+                                    <button type="button" class="mr-2" (click)="downloadFileQD(item.id)">
+                                        <i class="fa-light fa-file-arrow-down icon-size-5" matTooltip="Download"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                        <td style="width: 10%" class="text-center">
+                            <div class="flex flex-1 flex-row justify-center">
+                                <button type="button" class="mr-2" (click)="delete(item.id)">
+                                    <i class="fa-light fa-trash-can icon-size-5" matTooltip="Xóa"></i>
+                                </button>
+                            </div>
+
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

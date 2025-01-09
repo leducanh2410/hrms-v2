@@ -1,0 +1,187 @@
+<div class="inset-0 flex flex-col min-w-0 overflow-hidden bg-gray-100">
+  <div
+    class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between sm:pt-1 py-1 px-1 border-b bg-white dark:bg-transparent head-tool mt-2"
+  >
+    <div
+      class="flex flex-auto gap-2 grow shrink items-center bg-white dark:bg-transparent w-auto"
+    >
+      <!-- <button mat-flat-button class="px-1">
+                <i class="far fa-building" (click)="isShowTreeDept= !isShowTreeDept"></i>
+                <i class="fa-thin fa-list-tree"></i>
+            </button> -->
+      <p-button
+        icon="fa-light fa-list-tree"
+        styleClass="bg-white text-black border-none hover:bg-card"
+        (click)="isShowTreeDept = !isShowTreeDept"
+      ></p-button>
+
+      <!-- <input type="text" class="input w-80 lg:w-100" placeholder="Đơn vị" /> -->
+      <button
+        pButton
+        icon="fa-light fa-buildings"
+        type="button"
+        (click)="onSelectOrg()"
+      ></button>
+      <p-inputSwitch
+        class="items-center self-center"
+        [(ngModel)]="status"
+        [pTooltip]="
+          status
+            ? 'Xem danh sách nhân sự nghỉ việc'
+            : 'Xem danh sách nhân sự đang làm việc'
+        "
+        (onChange)="fetchListNhansu()"
+      ></p-inputSwitch>
+    </div>
+    <!-- Actions -->
+    <div class="flex gap-2 items-center">
+      <button
+        (click)="onRefreshList()"
+        class="btn btn-warning px-8"
+        pTooltip="Làm mới danh sách"
+      >
+        <i class="fa-light fa-sync"></i>
+        <!-- <span class="">Cập nhập</span> -->
+      </button>
+      <button class="btn btn-success px-8" pTooltip="Xuất Excel">
+        <i class="fa-light fa-file-excel"></i>
+        <!-- <span class="">Xuất Excel</span> -->
+      </button>
+      <button
+        (click)="onSelectColumns()"
+        class="btn btn-secondary px-8"
+        pTooltip="Cấu hình cột"
+        tooltipPosition="left"
+      >
+        <i class="fas fa-cog"></i>
+        <!-- <span class="">Cấu hình cột cột</span> -->
+      </button>
+      <button
+        (click)="onSelectColumns()"
+        class="btn btn-primary px-8"
+        pTooltip="Cấu hình hiển thị danh sách"
+      >
+        <i class="fa-light fa-list"></i>
+        <!-- <span class="">Hiển thị</span> -->
+      </button>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="flex-auto shadow bg-card w-full">
+    <div class="border-1 w-panel border-gray-300 rounded bg-white h-full">
+      <div class="relative flex w-full h-full gap-1 overflow-y-hidden">
+        <div
+          *ngIf="isShowTreeDept"
+          class="flex flex-col bg-white h-full w-132 absolute z-10"
+        >
+          <!-- <div class="flex w-full">
+                        <div>Danh sách đơn vị</div>
+                    </div> -->
+
+          <p-tree
+            styleClass="tree"
+            #tree
+            [value]="dataTree"
+            selectionMode="single"
+            selectionMode="checkbox"
+            [(selection)]="selectedDeptNodes"
+            scrollHeight="calc(100vh - 10rem)"
+            (onNodeSelect)="fetchListNhansu()"
+            (onNodeUnselect)="fetchListNhansu()"
+          >
+          </p-tree>
+        </div>
+
+        <div class="flex-auto sm:p-2 shadow bg-card w-full h-full">
+          <p-table
+            #table
+            [value]="listNhansu"
+            styleClass="w-full"
+            [scrollable]="true"
+            [paginator]="true"
+            [rows]="5"
+            [paginatorPosition]="'bottom'"
+          >
+            <ng-template pTemplate="header">
+              <tr class="bg-zinc-300">
+                <th class="w-10 border font-bold text-black border-gray-300">
+                  STT
+                </th>
+                <th
+                  [pSortableColumn]="col.field"
+                  *ngFor="let col of columns"
+                  [ngClass]="col.columnWidth"
+                  class="font-bold text-black border border-gray-300"
+                >
+                  {{ col.columnName }}
+                  <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th>
+                <th
+                  class="w-28 text-center text-black font-bold border border-gray-300"
+                >
+                  Thao tác
+                </th>
+              </tr>
+              <tr class="bg-zinc-300">
+                <th class="w-10 border border-gray-300"></th>
+                <th
+                  *ngFor="let col of columns"
+                  [ngClass]="col.columnWidth"
+                  class="border border-gray-300"
+                >
+                  <p-columnFilter
+                    [matchMode]="'contains'"
+                    class="w-full"
+                    type="text"
+                    [field]="col.field"
+                    display="row"
+                  ></p-columnFilter>
+                </th>
+                <!-- <th class="w-30 border border-gray-300"></th> -->
+                <th class="w-28 border border-gray-300"></th>
+
+                <!-- <th class="w-x">
+                  <p-columnFilter
+                    type="text"
+                    [field]="col.field"
+                    display="row"
+                  ></p-columnFilter>
+                </th> -->
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-index="rowIndex">
+              <tr>
+                <td class="w-10 text-center border border-gray-300">
+                  {{ index + 1 }}
+                </td>
+
+                <td
+                  *ngFor="let col of columns"
+                  [ngClass]="col.columnWidth"
+                  style="word-break: break-word"
+                  class="border border-gray-300"
+                >
+                  {{ getFieldValue(rowData, col.field) }}
+                </td>
+
+                <td class="w-28 justify-center border border-gray-300">
+                  <button
+                    class=""
+                    mat-icon-button
+                    color="primary"
+                    pTooltip="Xem/ sửa hồ sơ nhân sự"
+                    tooltipPosition="left"
+                    (click)="onNavigatorHsns(rowData)"
+                  >
+                    <i class="fas fa-pencil-square text-blue-500"></i>
+                  </button>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

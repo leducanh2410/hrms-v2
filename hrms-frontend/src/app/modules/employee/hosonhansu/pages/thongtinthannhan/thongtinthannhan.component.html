@@ -1,0 +1,142 @@
+<div
+  class="h-full absolute inset-0 flex flex-col min-w-0 overflow-hidden bg-gray-100 w-full"
+  cdkScrollable
+>
+  <div class="sm:p-2 overflow-x-hidden overflow-y-auto bg-gray-100 w-full">
+    <div
+      class="w-full px-4 pb-4 flex flex-col border-1 border-gray-300 rounded bg-white"
+    >
+      <div class="flex justify-between items-center">
+        <p-divider align="left">
+          <div class="inline-flex align-items-center justify-between">
+            <b class="text-blue-600"
+              >Thông tin thân nhân(bao gồm: bố, mẹ, vợ, con, anh chị em, bố mẹ
+              vợ/chồng, anh chị em vợ/chồng)</b
+            >
+          </div>
+        </p-divider>
+        <div class="flex">
+          <button
+            [disabled]="!nhansu"
+            style="margin-right: 20px"
+            color="primary"
+            class="mx-1"
+            mat-flat-button
+          >
+            <i class="fa-regular fa-file-excel" matTooltip="Xuất excel"></i>
+          </button>
+          <button
+            [disabled]="!nhansu"
+            style="margin-right: 20px"
+            color="primary"
+            class="mx-1"
+            mat-flat-button
+            (click)="add()"
+          >
+            <i class="fa-light fa-circle-plus" matTooltip="Thêm mới"></i>
+          </button>
+        </div>
+      </div>
+
+      <p-table
+        [value]="nhansu?.families"
+        responsiveLayout="stack"
+        [tableStyle]="{ width: '100%' }"
+        [paginator]="true"
+        [rows]="10"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th
+              style="width: 15%; word-wrap: normal"
+              class="text-center font-bold text-black border"
+            >
+              Họ và tên
+            </th>
+
+            <th
+              style="width: 7%; word-wrap: normal"
+              class="text-center font-bold text-black border"
+            >
+              Quan hệ
+            </th>
+            <th
+              style="width: 15%; word-wrap: normal"
+              class="text-center font-bold text-black border"
+            >
+              Ngày sinh
+            </th>
+            <th
+              style="width: 7%; word-wrap: normal"
+              class="text-center font-bold text-black border"
+            >
+              Giới tính
+            </th>
+            <th
+              style="width: 15%; word-wrap: normal"
+              class="text-center font-bold text-black border"
+            >
+              Nghề nghiệp
+            </th>
+            <th
+              style="width: 20%; word-wrap: normal"
+              class="text-center font-bold text-black border"
+            >
+              Địa chỉ người thân
+            </th>
+            <th
+              style="width: 7%; word-wrap: normal"
+              class="text-center font-bold text-black border"
+            >
+              Thao tác
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-person let-index>
+          <tr class="border border-gray-200">
+            <td class="border" style="width: 7%; word-wrap: normal">
+              {{ person.tenNguoiThan }}
+            </td>
+            <td class="border" style="width: 10%; word-wrap: normal">
+              {{ person.moiQuanHe }}
+            </td>
+            <td
+              class="border"
+              class="text-center"
+              style="width: 7%; word-wrap: normal"
+            >
+              {{ person.ngaySinh | date : "dd/MM/yyyy" }}
+            </td>
+            <td class="border" style="width: 24%; word-wrap: normal">
+              {{ getFieldValue(person, 'gioiTinh') }}
+            </td>
+            <td class="border" style="width: 25%; word-wrap: normal">
+              {{ person.ngheNghiep }}
+            </td>
+            <td class="border" style="width: 10%; word-wrap: normal">
+              {{ person.diaChi }}
+            </td>
+
+            <td style="width: 7%" class="text-center border">
+              <div class="flex flex-row justify-between pl-3 pr-3">
+                <button type="button" class="mr-2" (click)="update(person)">
+                  <i
+                    class="fa-light fa-pencil icon-size-5"
+                    matTooltip="Sửa"
+                  ></i>
+                </button>
+
+                <button type="button" (click)="delete(person.nsGiadinhId)">
+                  <i
+                    class="fa-light fa-trash-can icon-size-5"
+                    matTooltip="Xóa"
+                  ></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

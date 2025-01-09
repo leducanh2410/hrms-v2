@@ -1,0 +1,339 @@
+<form
+  id="rightForm"
+  (ngSubmit)="rightForm.form.valid && onSave()"
+  #rightForm="ngForm"
+  class="flex flex-col max-w-310 md:min-w-310 overflow-hidden max-h-[90vh]"
+>
+  <!-- Header -->
+  <div
+    class="flex flex-0 items-center justify-between h-12 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary"
+  >
+    <div class="text-lg font-medium head-modal text-white">
+      <span>Khởi tạo mới hồ sơ nhân sự</span>
+    </div>
+    <button mat-icon-button [tabIndex]="-1" (click)="onClose()">
+      <i class="fa-light fa-xmark text-lg text-white"></i>
+    </button>
+  </div>
+  <div
+    #mainns
+    class="flex flex-col flex-auto h-modal max-h-130 overflow-y-auto"
+  >
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-8 w-full min-w-0 p-6 overflow-y-auto"
+      style="scrollbar-gutter: stable both-edges"
+    >
+      <div class="flex flex-col justify-center">
+        <!-- <div class="mat-field-label">Tên khai sinh<span class="font-bold text-red-500 text-lg">*</span> :</div> -->
+        <div class="mat-field-label">
+          Tên khai sinh<span class="font-bold text-red-500 text-lg">*</span>
+        </div>
+        <mat-form-field class="fuse-mat-no-subscript w-full">
+          <input
+            [readonly]="this.data && this.data.nsID ? true: false"
+            matInput
+            type="text"
+            id="tenkhaisinh"
+            name="tenkhaisinh"
+            [(ngModel)]="data.tenkhaisinh"
+            maxlength="50"
+            required
+          />
+        </mat-form-field>
+      </div>
+      <div class="flex flex-col justify-center">
+        <!-- <div class="mat-field-label">Số hiệu<span class="font-bold text-red-500 text-lg">*</span></div> -->
+        <div class="mat-field-label">Số hiệu</div>
+        <mat-form-field class="fuse-mat-no-subscript w-full">
+          <input
+            matInput
+            type="text"
+            id="sohieu"
+            name="sohieu"
+            [(ngModel)]="data.sohieu"
+            maxlength="30"
+          />
+        </mat-form-field>
+      </div>
+      <div class="flex items-center">
+        <!-- <div class="mat-field-label">Bí danh</div> -->
+        <mat-form-field class="fuse-mat-no-subscript w-full">
+          <mat-label class="">Mã định danh cá nhân (CCCD)</mat-label>
+          <input
+            type="text"
+            matInput
+            id="dinhdanh"
+            name="dinhdanh"
+            (input)="onInputChange($event)"
+            [(ngModel)]="data.socmnd"
+            maxlength="20"
+            required
+          />
+        </mat-form-field>
+        <div class="flex flex-col justify-center ml-1">
+          <label class="">&nbsp;</label>
+          <div class="flex items-start">
+            <p-radioButton
+              name="gender"
+              [value]="true"
+              [(ngModel)]="data.gioitinh"
+              inputId="radioNam"
+            ></p-radioButton>
+            <label for="radioNam">Nam</label>
+            <p-radioButton
+              class="ml-2"
+              name="gender"
+              [value]="false"
+              [(ngModel)]="data.gioitinh"
+              inputId="radioNu"
+            ></p-radioButton>
+            <label for="radioNu">Nữ</label>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col justify-center">
+        <div class="mat-field-label">
+          Ngày sinh<span class="font-bold text-red-500 text-lg">*</span>
+        </div>
+        <mat-form-field class="fuse-mat-no-subscript w-full">
+          <input
+            matInput
+            [matDatepicker]="ngaysinh"
+            name="ngaysinh"
+            [(ngModel)]="data.ngaysinh"
+            required
+            [readonly]="this.data && this.data.nsID ? true:false"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="ngaysinh"
+          ></mat-datepicker-toggle>
+          <mat-datepicker
+            #ngaysinh
+            [disabled]="this.data && this.data.nsID"
+          ></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <div class="flex flex-col justify-center">
+        <div class="mat-field-label">
+          Đơn vị làm việc<span class="font-bold text-red-500 text-lg">*</span>
+        </div>
+        <p-dropdown
+          panelStyleClass="max-w-full"
+          [style]="{ width: '100%' }"
+          [options]="listDonvi"
+          optionLabel="orgName"
+          optionValue="organizationId"
+          name="donvi"
+          appendTo="body"
+          [filter]="true"
+          filterBy="orgName"
+          [(ngModel)]="data.donviId"
+          [disabled]="this.data && this.data.nsID ? true:false"
+          (onChange)="onChangeDonvi($event.value)"
+          [required]="true"
+        >
+        </p-dropdown>
+      </div>
+
+      <div class="flex items-end">
+        <!-- <div class="mat-field-label">Phòng ban<span class="font-bold text-red-500 text-lg">*</span></div> -->
+        <mat-form-field class="fuse-mat-no-subscript w-full">
+          <mat-label class="">Phòng ban</mat-label>
+          <input
+            matInput
+            id="phongban"
+            name="phongban"
+            [(ngModel)]="data.phongban"
+            readonly="true"
+            required
+          />
+          <button
+            class="mx-1 -mr-2"
+            color="primary"
+            (click)="onChonphongban()"
+            mat-flat-button
+            [disabled]="this.data && this.data.nsID"
+          >
+            <span>Chọn</span>
+          </button>
+        </mat-form-field>
+      </div>
+
+      <div class="flex flex-col justify-center">
+        <div class="mat-field-label">
+          Ngày vào đơn vị<span class="font-bold text-red-500 text-lg">*</span>
+        </div>
+        <mat-form-field class="fuse-mat-no-subscript w-full">
+          <input
+            matInput
+            [matDatepicker]="ngayvaodvi"
+            name="ngayvaodvi"
+            [(ngModel)]="data.ngayvaodonvi"
+            required
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="ngayvaodvi"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #ngayvaodvi></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="flex flex-col justify-center">
+        <div class="mat-field-label">
+          Ngày vào đơn vị ký HĐLĐ<span class="font-bold text-red-500 text-lg"
+            >*</span
+          >
+        </div>
+        <mat-form-field class="fuse-mat-no-subscript w-full">
+          <input
+            matInput
+            [matDatepicker]="ngayvaodvikyhdld"
+            name="ngayvaodvikyhdld"
+            [(ngModel)]="data.ngayvaodonviHdld"
+            required
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="ngayvaodvikyhdld"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #ngayvaodvikyhdld></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="flex flex-col justify-center">
+        <label></label>
+      </div>
+      <div class="flex flex-col justify-center">
+        <div class="mat-field-label">
+          <span class="italic mt-3"
+            >Đơn vị ký HĐLĐ: {{ data.donviKyhdld }}</span
+          >
+        </div>
+      </div>
+      <div class="flex flex-col justify-center">
+        <div class="mat-field-label">
+          Chức danh<span class="font-bold text-red-500 text-lg">*</span>
+        </div>
+        <p-dropdown
+          panelStyleClass="max-w-full"
+          [style]="{ width: '100%' }"
+          [options]="listChucdanh"
+          optionLabel="name"
+          optionValue="id"
+          name="chucdanh"
+          appendTo="body"
+          [filter]="true"
+          filterBy="name"
+          [(ngModel)]="data.vtriId"
+          placeholder="&nbsp;"
+          [disabled]="this.data && this.data.nsID?true:false"
+          (onChange)="onChangeChucdanh()"
+          [required]=""true
+        >
+        </p-dropdown>
+      </div>
+      <div class="flex items-end">
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label class="">Nghề CNKT</mat-label>
+          <input
+            matInput
+            class="form-control"
+            id="nghecnkt"
+            name="nghecnkt"
+            [(ngModel)]="data.nghecnkt"
+            readonly="true"
+          />
+          <button
+            class="mx-1 -mr-2"
+            color="primary"
+            (click)="onChonNgheCNKT()"
+            mat-flat-button
+            [disabled]="this.disableBtnCNKT"
+          >
+            <span>Chọn</span>
+          </button>
+        </mat-form-field>
+      </div>
+      <div class="flex flex-col justify-center">
+        <div class="mat-field-label">
+          HĐLĐ<span class="font-bold text-red-500 text-lg">*</span>
+        </div>
+
+        <p-dropdown
+          panelStyleClass="max-w-full"
+          [style]="{ width: '100%' }"
+          [options]="listLoaiHdld"
+          optionLabel="name"
+          optionValue="id"
+          name="loaihdld"
+          appendTo="body"
+          [filter]="true"
+          filterBy="name"
+          [(ngModel)]="data.loaiHDID"
+          placeholder="&nbsp;"
+          [disabled]="this.data && this.data.nsID ? true : false"
+          [required]="true"
+        >
+        </p-dropdown>
+      </div>
+
+      <!--
+            <div class="flex">
+                <div class="mat-field-label"><span class="italic mt-3">Đơn vị làm việc: {{data.donvi}}</span></div>
+            </div>
+            -->
+
+      <div class="flex flex-col justify-center">
+        <div class="mat-field-label">
+          Nghề nghiệp trước khi vào đơn vị<span
+            class="font-bold text-red-500 text-lg"
+            >*</span
+          >
+        </div>
+        <p-dropdown
+          panelStyleClass="max-w-full"
+          [style]="{ width: '100%' }"
+          [options]="listNghenghiep"
+          optionLabel="name"
+          optionValue="id"
+          name="nntruoctd"
+          appendTo="body"
+          [filter]="true"
+          filterBy="name"
+          [(ngModel)]="data.nntruoctdId"
+          placeholder="&nbsp;"
+          [required]="true"
+        >
+        </p-dropdown>
+      </div>
+      <div class="flex flex-col justify-center">
+        <div class="mat-field-label">Phân loại nhóm ngành nghề kinh tế</div>
+        <p-dropdown
+          panelStyleClass="max-w-full"
+          [style]="{ width: '100%' }"
+          [options]="listNganhNgheKte"
+          optionLabel="name"
+          optionValue="id"
+          name="nganhnghekte"
+          appendTo="body"
+          [filter]="true"
+          filterBy="name"
+          [(ngModel)]="data.nganhSxkdId"
+          [disabled]="this.data && this.data.nsID ? true : false"
+          placeholder="&nbsp;"
+        >
+        </p-dropdown>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-0 items-center justify-end h-12 mt-2 text-on-primary">
+    <div mat-dialog-actions class="h-toolbar flex justify-end mr-8">
+      <button type="submit" class="button-green" mat-flat-button>
+        <i class="fa-light fa-check icon-size-5"></i>
+        <span class="ml-2">Lưu</span>
+      </button>
+    </div>
+  </div>
+</form>

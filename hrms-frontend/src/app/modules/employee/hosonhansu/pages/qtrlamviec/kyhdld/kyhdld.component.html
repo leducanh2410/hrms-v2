@@ -1,0 +1,72 @@
+<div class="flex justify-between items-center">
+    <p-divider align="left">
+        <div class="inline-flex align-items-center justify-between">
+            <b class="text-blue-600">Quá trình ký Hợp đồng lao động</b>
+        </div>
+    </p-divider>
+    <div class="flex">
+        <button class="px-8 button-primary mr-2" mat-flat-button type="button">
+            Xuất Excel
+        </button>
+        <button class="px-8 button-primary" mat-flat-button type="button" (click)="themHDLD()">
+            Thêm HĐLĐ
+        </button>
+    </div>
+</div>
+<p-table [value]="hopdongList" responsiveLayout="stack" [breakpoint]="'960px'" [tableStyle]="{ width: '100%', height: '300px'}">
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th style="width: 10%" class="text-center text-black font-bold border" >Ngày hiệu lực</th>
+            <th style="width: 10%" class="text-center text-black font-bold border" >Ngày kết thúc</th>
+            <th style="width: 20%" class="text-center text-black font-bold border" >Loại hợp đồng</th>
+            <th style="width: 20%" class="text-center text-black font-bold border" >Quá trình hiện tại</th>
+            <th style="width: 10%" class="text-center text-black font-bold border" >Số HĐ</th>
+            <th style="width: 10%" class="text-center text-black font-bold border" >Ngày ký</th>
+            <th style="width: 10%" class="text-center text-black font-bold border" >File</th>            
+            <th style="width: 10%" class="text-center text-black font-bold border" >Thao tác</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-hdld let-i="rowIndex">
+        <tr class="border-b border-gray-200">
+            <td class="text-center">
+                <span class="p-column-title">Ngày hiệu lực</span>{{ hdld.ngaychinhthuc | date:'dd/MM/yyyy' }}
+            </td>
+            <td class="text-center">
+                <span class="p-column-title">Ngày kết thúc</span>{{ hdld.ngayhethan | date:'dd/MM/yyyy'}}
+            </td>
+            <td style="width: 10%">
+                <span class="p-column-title">Loại hợp đồng</span>{{ hdld.loaiHD }}
+            </td>
+            
+            <td style="width: 20%" class="text-center">
+                <span *ngIf="hdld.isHientai; ngIfElse notTrue">X</span>
+                <span #notTrue></span>
+            </td>
+            <td style="width: 5%"
+                class="break-all">
+                <span class="p-column-title">Số HĐ</span>
+                {{ hdld.sohopdong }}
+            </td>
+            <td style="width: 7.5%" class="text-center">
+                <span class="p-column-title">Ngày ký</span>
+                {{ hdld.ngaykyhopdong | date:'dd/MM/yyyy'}}
+            </td>
+            <td style="width: 10%">
+                <span class="p-column-title">File</span>                
+            </td>
+            
+            <td style="width: 7.5%" class="text-center">
+                <span class="p-column-title">Thao tác</span>
+                <div>
+                    <button type="button" class="mr-2" (click)="updateHDLD(hdld)">
+                        <i class="fa-light fa-pencil icon-size-5" matTooltip="Sửa"></i>
+                    </button>
+
+                    <button type="button" class="mr-2" (click)="deleteHDLD(hdld)">
+                        <i class="fa-light fa-trash-can icon-size-5" matTooltip="Xóa"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>

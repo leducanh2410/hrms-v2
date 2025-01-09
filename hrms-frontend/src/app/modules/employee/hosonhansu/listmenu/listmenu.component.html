@@ -1,0 +1,8 @@
+<div class="card flex flex-col justify-content-start items-start  h-full">
+    <!-- <p-menu styleClass="h-full border-none p-0" [model]="items"></p-menu> -->
+    <div *ngFor="let item of items; index as i; trackBy: trackByFn" class="border-b w-full">
+        <button class="w-full enabled:hover:bg-slate-100 enabled:active:border-blue-500 enabled:active:border enabled:cursor-pointer h-10 flex items-center" (click)="item.command()" [disabled]="item.id == menu">
+            <span class="w-full text-left block p-3">{{item.label}}</span>
+        </button>
+    </div>
+</div>

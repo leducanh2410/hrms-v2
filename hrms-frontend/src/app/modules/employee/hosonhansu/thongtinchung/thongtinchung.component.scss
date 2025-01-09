@@ -1,0 +1,9 @@
+:host ::ng-deep .p-fileupload .p-fileupload-choose {
+    background-color: white !important;
+    border: none;
+    color: #1e293b;
+}
+
+:host ::ng-deep .p-fileupload .p-fileupload-choose:focus {
+    box-shadow: none;
+}

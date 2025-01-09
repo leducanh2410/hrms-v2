@@ -1,0 +1,54 @@
+import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatTableModule } from '@angular/material/table';
+import { InputTextModule } from 'primeng/inputtext';
+import { TableModule } from 'primeng/table';
+
+interface Employee {
+  id: number;
+  name: string;
+  code: string;
+}
+
+@Component({
+  selector: 'app-list-employee',
+  imports: [
+    MatFormFieldModule,
+    TableModule,
+    CommonModule,
+    MatTableModule,
+    MatInputModule,
+    InputTextModule,
+    MatIconModule
+  ],
+  templateUrl: './list-employee.component.html',
+  styleUrl: './list-employee.component.css',
+})
+export class ListEmployeeComponent {
+  itemActive: number = 1;
+
+  displayedColumns: string[] = ['name', 'code'];
+  dataSource: Employee[] = [
+    { id: 1, name: 'Chu Diệu Linh', code: '1809225' },
+    { id: 2, name: 'Đỗ Khương Duy', code: '2411302' },
+    { id: 3, name: 'Lê Văn Hiếu', code: '2010324' },
+    { id: 4, name: 'Đặng Đình Hiếu', code: '1711022' },
+    { id: 5, name: 'Đinh Đức Giang', code: '2304267' },
+    { id: 6, name: 'Nguyễn Thế Hòa', code: '1611036' },
+    { id: 7, name: 'Nguyễn Bá Hùng', code: '1405140' },
+    { id: 8, name: 'Nguyễn Tuấn Hùng', code: '1810141' },
+    { id: 9, name: 'Lê Thị Quỳnh Trang', code: '1904602' },
+    { id: 10, name: 'Đỗ Duy Thái', code: '1904622' },
+    { id: 11, name: 'Nguyễn Thị Phương Hạnh', code: '1904623' },
+    { id: 12, name: 'Nguyễn Ngọc Đãi', code: '1904624' },
+    { id: 13, name: 'Nguyễn Văn Mạnh', code: '1904625' },
+    // Thêm dữ liệu tại đây
+  ];
+
+  onSelectItem(id: number){
+    this.itemActive = id;
+  }
+}
