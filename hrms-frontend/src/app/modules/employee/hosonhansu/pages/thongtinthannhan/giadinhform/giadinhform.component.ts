@@ -24,6 +24,7 @@ import { MatInputModule } from '@angular/material/input';
 import { InputTextModule } from 'primeng/inputtext';
 import { CalendarModule } from 'primeng/calendar';
 import { NhanThan } from '../../../model/nhanthan';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 @Component({
   selector: 'app-giadinhform',
   templateUrl: './giadinhform.component.html',
@@ -41,26 +42,13 @@ import { NhanThan } from '../../../model/nhanthan';
     MatInputModule,
     InputTextModule,
     CalendarModule,
+    InputTextareaModule
   ],
 })
 export class GiadinhformComponent implements OnInit {
   @ViewChild('registerForm', { static: false }) registerForm: any;
   uploadedFiles: any[] = [];
   _fileForm: any;
-  listQhegd: any[] = [
-    {
-      name: 'Bố',
-      id: 0,
-    },
-    {
-      name: 'Mẹ',
-      id: 1,
-    },
-    {
-      name: 'Anh/Chị/Em',
-      id: 2,
-    },
-  ];
   listGioiTinh: any[] = [
     {
       name: 'Nam',
@@ -70,11 +58,16 @@ export class GiadinhformComponent implements OnInit {
       name: 'Nữ',
       id: 1,
     },
+    {
+      name: 'LGBT',
+      id: 2,
+    },
   ];
   isLockform = false;
   lqhegdinh: number;
   isAddnew: boolean = false;
   nhanThan: NhanThan;
+  ngaySinh: Date;
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
@@ -84,9 +77,8 @@ export class GiadinhformComponent implements OnInit {
     private http: CommonApiService,
     private formBuilder: FormBuilder
   ) {
-    this.nhanThan = data?.nhanthan
-
-    
+    this.nhanThan = data?.nhanthan;
+    this.ngaySinh = new Date(data?.nhanthan.ngaySinh);
   }
 
   ngOnInit(): void {
@@ -95,6 +87,7 @@ export class GiadinhformComponent implements OnInit {
       hoten: new FormControl('', Validators.required),
       lqhegdinh: new FormControl('', Validators.required),
     });
+    console.log(this.nhanThan.ngaySinh);
 
     // this.http
     //   .get(DanhMucURL.getListQhegiadinh())

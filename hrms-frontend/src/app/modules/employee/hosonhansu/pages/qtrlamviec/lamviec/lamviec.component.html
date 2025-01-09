@@ -24,7 +24,7 @@
   </div>
 </div>
 <p-table
-  [value]="data"
+  [value]="listQuaTrinhLamViec"
   responsiveLayout="stack"
   [breakpoint]="'960px'"
   [tableStyle]="{ width: '100%' }"
@@ -60,14 +60,14 @@
   </ng-template>
   <ng-template pTemplate="body" let-qtct let-columns="columns" let-i="rowIndex">
     <tr class="border-b border-gray-200">
-      <td class="border">{{ qtct.type }}</td>
-      <td class="border">{{ qtct.effectiveDate | date : "dd/MM/yyyy" }}</td>
-      <td class="border">{{ qtct.position }}</td>
-      <td class="border">{{ qtct.department }}</td>
-      <td class="border">{{ qtct.office }}</td>
-      <td class="border">{{ qtct.creationDate | date : "dd/MM/yyyy" }}</td>
-      <td class="border">{{ qtct.updateDate | date : "dd/MM/yyyy" }}</td>
-      <td class="border">{{ qtct.carBrand }}</td>
+      <td class="border">{{ qtct.loaiQtct.tenLoaiQtct }}</td>
+      <td class="border">{{ qtct.ngayHieuLuc | date : "dd/MM/yyyy" }}</td>
+      <td class="border">{{ qtct.chucdanh.tenchucanh }}</td>
+      <td class="border">{{ qtct.department.departmentName }}</td>
+      <td class="border">{{ qtct.vanphonglamviec.tenVanphonglamviec }}</td>
+      <td class="border">{{ qtct.createdAt | date : "dd/MM/yyyy" }}</td>
+      <td class="border">{{ qtct.updatedAt | date : "dd/MM/yyyy" }}</td>
+      <td class="border">{{ qtct.dongxe.tendongxe }}</td>
       <td
         [ngClass]="{
           'text-blue-600': qtct.status != null && qtct.status != 0

@@ -6,7 +6,7 @@ export class NhanThan {
   tenNguoiThan: string;
   moiQuanHe: string;
   gioiTinh: number;
-  ngaySinh: string;
+  ngaySinh: Date;
   ngheNghiep: string;
   diaChi: string;
 
@@ -17,7 +17,7 @@ export class NhanThan {
     tenNguoiThan: string = '',
     moiQuanHe: string = '',
     gioiTinh: number = 0,
-    ngaySinh: string = '',
+    ngaySinh: Date = new Date(),
     ngheNghiep: string = '',
     diaChi: string = ''
   ) {

@@ -110,35 +110,7 @@ export class LamviecdialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isVisiableVtriCdanh = false;
-    this.isQuaTrinhGoc = false;
-    this.isQuaTrinhAnhHuong = false;
-    this.isQuaTrinhAnhHuong = false;
-    this.strLabelThongBao = '';
-    this.disableChkChucdanhnamgiu = false;
-
-    this.disableBtnCNKT = true;
-
-    this.donviThaotacId = 1;
-    if (this.data) this.model = this.data;
-
-    this.http
-      .post(QuatrinhLamviecURL.loadQtlamviec(), this.data)
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        this.isQuaTrinhAnhHuong = res.data.isQuaTrinhAnhHuong;
-        this.isQuaTrinhGoc = res.data.isQuaTrinhGoc;
-        this.isQuaTrinhTruocKhiVaoDonVi = res.data.isQuaTrinhTruocKhiVaoDonVi;
-        this.strLabelThongBao = res.data.strLabelThongBao;
-
-        if (
-          this.isQuaTrinhTruocKhiVaoDonVi ||
-          this.isQuaTrinhAnhHuong ||
-          this.isQuaTrinhGoc
-        ) {
-          this.disableChkChucdanhnamgiu = true;
-        }
-      });
+    console.log(this.data);
   }
 
   onChonphongban(): void {}

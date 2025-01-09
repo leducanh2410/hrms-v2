@@ -11,6 +11,8 @@ import { VanPhongLamViec } from './vanphonglamviec';
 
 export class QtrinhlamviecBean {
   id: number;
+  createdAt: Date;
+  updatedAt: Date;
   ngayHieuLuc: string;
   ngayQuyetDinh: string;
   trangthai: boolean;
@@ -28,6 +30,8 @@ export class QtrinhlamviecBean {
 
   constructor(
     id: number = null,
+    createdAt: Date = new Date(),
+    updatedAt: Date = new Date(),
     ngayHieuLuc: string = '',
     ngayQuyetDinh: string = '',
     trangthai: boolean = true,

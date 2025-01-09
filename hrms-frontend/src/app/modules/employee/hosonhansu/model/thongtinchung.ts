@@ -5,7 +5,6 @@ import { HopDong } from './hopdong';
 import { LienHe } from './lienhe';
 import { Luong } from './luong';
 import { NhanThan } from './nhanthan';
-import { PhongBan } from './phongban';
 import { QtrinhlamviecBean } from './qtrinhlamviecbean';
 import { TrinhDoChuyenMon } from './trinhdochuyenmon';
 import { TrinhDoTinHoc } from './trinhdotinhoc';
@@ -30,7 +29,7 @@ export class THONG_TIN_CHUNG {
   ngayVaoLam: string; // string
   tongiao: string; // varchar(45)
   contact: LienHe;
-  quaTrinhCongTac: QtrinhlamviecBean;
+  quaTrinhCongTac: QtrinhlamviecBean[];
   baoHiem: BaoHiem;
   luong: Luong[];
   hopDong: HopDong[];
@@ -61,7 +60,7 @@ export class THONG_TIN_CHUNG {
     ngayVaoLam: string = '',
     tongiao: string = '',
     contact: LienHe = new LienHe(),
-    quaTrinhCongTac: QtrinhlamviecBean = new QtrinhlamviecBean(),
+    quaTrinhCongTac: QtrinhlamviecBean[] = [],
     baoHiem: BaoHiem = new BaoHiem(),
     luong: Luong[] = [],
     hopDong: HopDong[] = [],
@@ -92,13 +91,13 @@ export class THONG_TIN_CHUNG {
     this.tongiao = tongiao;
     this.contact = contact;
     this.quaTrinhCongTac = quaTrinhCongTac;
-    this.baoHiem = baoHiem,
-    this.luong = luong,
-    this.hopDong = hopDong,
-    this.danhGia = danhGia,
-    this.trinhDoChuyenMon = trinhDoChuyenMon,
-    this.trinhDoTinHoc = trinhDoTinHoc,
-    this.families = families,
+    this.baoHiem = baoHiem;
+    this.luong = luong;
+    this.hopDong = hopDong;
+    this.danhGia = danhGia;
+    this.trinhDoChuyenMon = trinhDoChuyenMon;
+    this.trinhDoTinHoc = trinhDoTinHoc;
+    this.families = families;
     this.dangDoan = dangDoan;
     this.trangThai = trangThai;
   }

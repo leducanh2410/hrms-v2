@@ -25,14 +25,6 @@
       <div
         class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 w-full min-w-0 px-4 overflow-y-auto"
       >
-        <div class="flex flex-col justify-center col-span-2">
-          <label
-            *ngIf="isQuaTrinhAnhHuong"
-            class="mat-field-label font-bold text-blue-500 text-lg"
-            >{{ strLabelThongBao }}</label
-          >
-        </div>
-
         <div class="flex flex-col justify-center">
           <div class="mat-field-label">
             Ngày hiệu lực<span class="font-bold text-red-500 text-lg">*</span>
@@ -42,6 +34,7 @@
             [showIcon]="true"
             [showOnFocus]="false"
             class="!w-full"
+            [(ngModel)]="data.ngayHieuLuc"
           />
         </div>
         <div class="flex flex-col justify-center">

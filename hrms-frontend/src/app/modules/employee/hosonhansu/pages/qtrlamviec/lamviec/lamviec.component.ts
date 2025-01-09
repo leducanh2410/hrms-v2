@@ -22,6 +22,7 @@ import { DividerModule } from 'primeng/divider';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
+import { QtrinhlamviecBean } from '../../../model/qtrinhlamviecbean';
 
 @Component({
   selector: 'app-lamviec',
@@ -62,9 +63,9 @@ export class LamviecComponent implements OnInit, OnChanges {
       updateDate: new Date('2023-03-05'),
     },
   ];
-  @Input('nsInfo') nsInfo: any;
+  @Input('nsInfo') nsInfo: THONG_TIN_CHUNG;
 
-  model: THONG_TIN_CHUNG;
+  listQuaTrinhLamViec: QtrinhlamviecBean[];
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
@@ -74,9 +75,9 @@ export class LamviecComponent implements OnInit, OnChanges {
     private mb: MessageBox
   ) {}
   ngOnChanges(): void {
-    if (this.nsInfo != null && this.nsInfo?.nsID != null) {
+    if (this.nsInfo != null && this.nsInfo?.id != null) {
       // this.http
-      //   .get(HSNhansuURL.getQtlamviec(this.nsInfo?.nsID))
+      //   .get(HSNhansuURL.getQtlamviec(this.nsInfo?.id))
       //   .pipe(takeUntil(this._unsubscribeAll))
       //   .subscribe((res: any) => {
       //     if (!res || !res.state) return;
@@ -86,14 +87,16 @@ export class LamviecComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.model = this.nsInfo;
+    this.listQuaTrinhLamViec = this.nsInfo.quaTrinhCongTac;
     this.loadData();
+    console.log(this.nsInfo);
+    
   }
 
   loadData(): void {
-    if (this.nsInfo != null && this.nsInfo?.nsID != null) {
+    if (this.nsInfo != null && this.nsInfo?.id != null) {
       this.http
-        .get(HSNhansuURL.getQtlamviec(this.nsInfo?.nsID))
+        .get(HSNhansuURL.getQtlamviec(this.nsInfo?.id))
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((res: any) => {
           if (!res || !res.state) return;
@@ -107,12 +110,10 @@ export class LamviecComponent implements OnInit, OnChanges {
       width: '900px',
       disableClose: true,
       data: {
-        nsID: this.nsInfo?.nsID,
+        id: this.nsInfo?.id,
         isNow: true,
-        tenbophan: this.nsInfo?.phongban,
-        phonbanId: this.nsInfo?.phongbanId,
-        tendonvi: this.nsInfo?.donvi,
-        donviId: this.nsInfo?.donviId,
+        tenbophan: this.nsInfo?.quaTrinhCongTac[0].department.departmentName,
+        phonbanId: this.nsInfo?.quaTrinhCongTac[0].department.id,
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
@@ -172,7 +173,7 @@ export class LamviecComponent implements OnInit, OnChanges {
 
   xuatExcel(): void {
     this.http
-      .get(QuatrinhLamviecURL.xuatExcel(this.nsInfo?.nsID))
+      .get(QuatrinhLamviecURL.xuatExcel(this.nsInfo?.id))
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((res: any) => {
         if (!res || !res.state) {

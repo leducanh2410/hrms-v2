@@ -25,6 +25,8 @@ import { CommonModule, Location } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ImageviewComponent } from '../../../components/imageview/imageview.component';
+import { HopDong } from '../model/hopdong';
+import { QtrinhlamviecBean } from '../model/qtrinhlamviecbean';
 
 @Component({
   selector: 'app-thongtinchung',
@@ -36,6 +38,8 @@ export class ThongtinchungComponent implements OnInit, OnDestroy {
   // Model
   nsInfo: THONG_TIN_CHUNG = new THONG_TIN_CHUNG();
   anhHoso: any;
+  hopDongHienTai: HopDong = new HopDong();
+  qTrinhLamViecHienTai: QtrinhlamviecBean = new QtrinhlamviecBean();
 
   isHienthiTtin: boolean = true;
   isHienthiMenu: boolean = true;
@@ -77,42 +81,25 @@ export class ThongtinchungComponent implements OnInit, OnDestroy {
     const state: any = location.getState();
 
     this.nsInfo = state;
+    this.hopDongHienTai = state?.hopDong.find((hd) => {
+      return hd.trangThai;
+    });
+
+    this.qTrinhLamViecHienTai = state?.quaTrinhCongTac.find((qtct) => {
+      return qtct.trangthai == true;
+    });
 
     if (state && state.id) {
+      ` `;
       // this.http
       //   .get(HSNhansuURL.getHsNs(state.id))
       //   .pipe(takeUntil(this._unsubscribeAll))
       //   .subscribe((res: any) => {
       //     if (!res || !res.state) return;
       //     this.nsInfo = res.data;
-
       //     this.shareData.sendMessage(NHAN_SU.VIEW_TTIN, this.nsInfo);
       //   });
     }
-
-    // this.nsInfo = new THONG_TIN_CHUNG(
-    //   1,
-    //   'Nguyễn Văn A',
-    //   'EMP001',
-    //   new Date('1990-01-01'),
-    //   1, // Giới tính: 1 (Nam), 0 (Nữ)
-    //   '123456789',
-    //   new Date('2020-01-01'),
-    //   'Hà Nội',
-    //   0, // Tình trạng hôn nhân: 0 (Chưa kết hôn), 1 (Đã kết hôn)
-    //   'Hà Nội',
-    //   'Hà Nội',
-    //   'Việt Nam',
-    //   'Việt Nam',
-    //   'Kinh',
-    //   '1234567890',
-    //   new Date('2021-01-01'),
-    //   'Không',
-    //   'Phòng Kinh Doanh', // phongban
-    //   new Date('2023-01-01'), // ngayvaodonvi
-    //   'Trưởng Phòng', // vitrichucdanh
-    //   new Date('2023-01-01') // ngayvaodonviHdld
-    // );
   }
 
   ngOnInit(): void {

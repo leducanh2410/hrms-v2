@@ -133,6 +133,8 @@ export class DsnhansuComponent implements OnInit, OnDestroy {
     this.onInitDept();
     this.columns = COLUMN_INIT_DS_NHANSU;
     this.fetchListNhansu();
+    console.log(this.listNhansu);
+    
 
     // this.onSelectColumns();
   }
@@ -177,16 +179,7 @@ export class DsnhansuComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((res: any) => {
         if (res.state) {
-          let data = res.data?.map((emp) => {
-            return {
-              ...emp,
-              quaTrinhCongTac: emp.quaTrinhCongTac?.find(
-                (qtct) => qtct.trangthai
-              ),
-            };
-          });
-
-          this.listNhansu = data;
+          this.listNhansu = res.data;
         } else {
           this.messageService.showErrorMessage('Thông báo', res.message);
         }

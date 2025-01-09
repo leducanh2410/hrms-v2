@@ -152,7 +152,9 @@
         >
           Hợp đồng lao động:
         </div>
-        <div></div>
+        <div class="inline-block">
+          {{ hopDongHienTai.soHopDong}}
+        </div>
       </div>
       <div class="">
         <div
@@ -180,7 +182,7 @@
         >
           Phòng ban:
         </div>
-        <div class="inline-block">{{ nsInfo?.quaTrinhCongTac.department.departmentName }}</div>
+        <div class="inline-block">{{ qTrinhLamViecHienTai?.department.departmentName }}</div>
       </div>
       <div class="">
         <div
@@ -198,7 +200,7 @@
         >
           Chức danh:
         </div>
-        <span>{{ nsInfo?.quaTrinhCongTac.chucdanh.tenchucanh }}</span>
+        <span>{{ qTrinhLamViecHienTai?.chucdanh.tenchucanh }}</span>
       </div>
       <div class="">
         <div
