@@ -27,7 +27,6 @@ import { ParamNsHdldBean } from '../model/NsHdldParam';
 import { TaoHdldDialogComponent } from './taohdld-dialog/taohdld-dialog.component';
 import { MatSelectChange } from '@angular/material/select';
 import { DanhMucURL } from '../../../services/employe/danhmucURL';
-import { ThamsoluongformComponent } from '../../employee/hosonhansu/pages/qtrluong/luongdialog/thamsoluongform/thamsoluongform.component';
 import { QtrinhLuongBean } from '../../employee/hosonhansu/model/qtrinhluongbean';
 import { HesophucapDialogComponent } from './hesophucap-dialog/hesophucap-dialog.component';
 import { Buttons } from '../../../fuse/components/message-box/common';
@@ -1112,39 +1111,6 @@ export class DanhsachhdldComponent {
             this.nsHopdongList = res.data;
           }
         });
-    });
-  }
-
-  onXuatExcel() {}
-
-  onChonThangBangluong(event: any, ns: any): void {
-    const dialogRef = this._matDialog.open(ThamsoluongformComponent, {
-      disableClose: true,
-      data: {
-        id: this.dataLuong?.mabangluong,
-        bacluongId: this.dataLuong?.bacluongId,
-        mangachluong: this.dataLuong?.mangachluong,
-      },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.dataLuong.bacluongId = result.id;
-        ns.luongId = result.id;
-        this.http
-          .get(DanhMucURL.getLuongInfo(result.id))
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (res.state) {
-              ns.strMangachluong =
-                res.data.mangachluong +
-                ', ' +
-                res.data.bacluong +
-                ', ' +
-                res.data.heSo;
-            }
-          });
-      }
     });
   }
 

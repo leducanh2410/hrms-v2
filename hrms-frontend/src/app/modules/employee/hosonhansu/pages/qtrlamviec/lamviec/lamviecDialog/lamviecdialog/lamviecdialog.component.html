@@ -22,9 +22,7 @@
   >
     <div class="mb-5">
       <h2 class="text-blue-500 border-b text-lg ml-2">Thông tin cơ bản</h2>
-      <div
-        class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 w-full min-w-0 px-4"
-      >
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 w-full min-w-0 px-4">
         <div class="flex flex-col justify-center">
           <div class="mat-field-label">
             Ngày hiệu lực<span class="font-bold text-red-500 text-lg">*</span>
@@ -79,7 +77,7 @@
             filterBy="name"
             [options]="listPhongBan"
             [(ngModel)]="data.department.id"
-            (onChange)="onChangeChucdanh()" 
+            (onChange)="onChangeChucdanh()"
             [required]="true"
             placeholder="&nbsp;"
           >
@@ -248,7 +246,12 @@
 
         <div class="">
           <div class="mat-field-label">Ghi chú</div>
-          <textarea rows="3" class="w-full border rounded-md"></textarea>
+          <textarea
+            rows="3"
+            class="w-full border rounded-md p-2 indent-1"
+            [ngModelOptions]="{ standalone: true }"
+            [(ngModel)]="data.ghiChu"
+          ></textarea>
         </div>
       </div>
     </div>

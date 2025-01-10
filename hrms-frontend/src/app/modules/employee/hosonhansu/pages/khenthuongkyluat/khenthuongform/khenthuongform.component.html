@@ -30,7 +30,8 @@
           <p-dropdown
             panelStyleClass="max-w-full"
             [style]="{ width: '100%' }"
-            optionLabel="name"
+            [options]="listDotDanhGia"
+            optionLabel="tenDotDanhGia"
             optionValue="id"
             name="vtricdanh"
             appendTo="body"
@@ -38,12 +39,19 @@
             filterBy="name"
             [required]="true"
             placeholder="&nbsp;"
+            [(ngModel)]="danhGia.dotDanhGia.id"
           >
           </p-dropdown>
         </div>
         <div class="">
           <div class="mat-field-label">Họ và tên</div>
-          <input pInputText class="w-full" [disabled]="true" />
+          <input
+            pInputText
+            class="w-full"
+            [disabled]="true"
+            [ngModelOptions]="{ standalone: true }"
+            [(ngModel)]="nsInfo.employeeName"
+          />
         </div>
 
         <div class="flex flex-col justify-center">
@@ -55,6 +63,7 @@
               [showOnFocus]="false"
               class="!w-full"
               placeholder="Từ ngày"
+              [(ngModel)]="timeDanhGiaTu"
             />
             <p-calendar
               name="tgDanhGia"
@@ -62,6 +71,7 @@
               [showOnFocus]="false"
               class="!w-full"
               placeholder="Đến ngày"
+              [(ngModel)]="timeDanhGiaDen"
             />
           </div>
         </div>
@@ -73,7 +83,8 @@
             [showIcon]="true"
             [showOnFocus]="false"
             class="!w-full"
-            placeholder="Từ ngày"
+            placeholder="Thời hạn"
+            [(ngModel)]="thoiHan"
           />
         </div>
       </div>
@@ -185,7 +196,6 @@
         type="submit"
         class="mx-1 button-green px-3 py-2 mr-8 rounded-md bg-slate-200 hover:bg-slate-300"
         mat-flat-button
-        [disabled]="isLockform"
       >
         <i class="fa-light fa-check icon-size-5 text-green-500"></i>
         <span class="ml-2">Lưu</span>

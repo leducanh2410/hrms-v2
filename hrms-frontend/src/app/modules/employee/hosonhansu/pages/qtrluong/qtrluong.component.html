@@ -13,7 +13,6 @@
               color="primary"
               class="mx-1"
               mat-flat-button
-              (click)="xuatExcel()"
             >
               <i class="fa-regular fa-file-excel" matTooltip="Xuất excel"></i>
             </button>
@@ -49,12 +48,12 @@
                   Lương thu nhập
                 </th>
                 <th style="width: 8%" class="text-black border">Thâm niên</th>
-                <th style="width: 8%" class="text-black border">Kiêm nhiệm</th>
+                <!-- <th style="width: 8%" class="text-black border">Kiêm nhiệm</th>
                 <th style="width: 8%" class="text-black border">Thu hút</th>
                 <th style="width: 8%" class="text-black border">Biệt phái</th>
                 <th style="width: 8%" class="text-black border">Trách nhiệm</th>
                 <th style="width: 8%" class="text-black border">Vùng miền</th>
-                <th style="width: 8%" class="text-black border">Đắt đỏ</th>
+                <th style="width: 8%" class="text-black border">Đắt đỏ</th> -->
                 <th style="width: 8%" class="text-black border">Phụ cấp</th>
                 <th style="width: 8%" class="text-black border">
                   Ngày cập nhật
@@ -77,14 +76,14 @@
                   {{ luong.luongThuNhap | currency : "VND" }}
                 </td>
                 <td class="border">{{ luong.thamNien | currency : "VND" }}</td>
-                <td class="border">{{ luong.kiemNhiem | currency : "VND" }}</td>
+                <!-- <td class="border">{{ luong.kiemNhiem | currency : "VND" }}</td>
                 <td class="border">{{ luong.thuHut | currency : "VND" }}</td>
                 <td class="border">{{ luong.bietPhai | currency : "VND" }}</td>
                 <td class="border">
                   {{ luong.trachNhiem | currency : "VND" }}
                 </td>
                 <td class="border">{{ luong.vungMien | currency : "VND" }}</td>
-                <td class="border">{{ luong.datDo | currency : "VND" }}</td>
+                <td class="border">{{ luong.datDo | currency : "VND" }}</td> -->
                 <td class="border">{{ luong.phuCap | currency : "VND" }}</td>
                 <td class="border">
                   {{ luong.updatedAt | date : "dd/MM/yyyy" }}

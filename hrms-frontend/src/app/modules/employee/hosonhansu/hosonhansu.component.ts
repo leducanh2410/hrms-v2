@@ -43,7 +43,6 @@ import { QuillModule } from 'ngx-quill';
 import { MatButtonModule } from '@angular/material/button';
 import { KhenthuongKyluatComponent } from './pages/khenthuongkyluat/khenthuongkyluat.component';
 import { KhenthuongformComponent } from './pages/khenthuongkyluat/khenthuongform/khenthuongform.component';
-import { KyluatformComponent } from './pages/khenthuongkyluat/kyluatform/kyluatform.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { KhoitaohosonsComponent } from './thongtinchung/khoitaohoso/khoitaohosons/khoitaohosons.component';
 import { FileUploadModule } from 'primeng/fileupload';

@@ -23,7 +23,6 @@ import { FileviewComponent } from '../../../../components/fileview/fileview.comp
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 import { TableModule } from 'primeng/table';
 import { FormsModule } from '@angular/forms';
-import { QtrluongdieuchinhComponent } from '../qtrluongdieuchinh/qtrluongdieuchinh.component';
 import { CommonModule } from '@angular/common';
 import { NumberFormatPipe } from '../../../../../shared/formatNumber';
 import { Luong } from '../../model/luong';
@@ -37,15 +36,13 @@ import { Luong } from '../../model/luong';
     MatExpansionModule,
     TableModule,
     FormsModule,
-    QtrluongdieuchinhComponent,
     CommonModule,
-    NumberFormatPipe,
   ],
 })
 export class QtrluongComponent implements OnInit, OnChanges {
   @Input('nsInfo') nsInfo: any;
   @ViewChild('qtrluongdieuchinh') qtrluongdieuchinh: any;
-  listLuong : Luong[] = [];
+  listLuong: Luong[] = [];
   dataPhucap: any[];
   model: THONG_TIN_CHUNG;
 
@@ -105,28 +102,12 @@ export class QtrluongComponent implements OnInit, OnChanges {
     return;
   }
 
-  downloadFileQD(idQD): void {
-    this.http
-      .get(DanhMucURL.getFileQuyetDinh(idQD))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) {
-          return;
-        }
-        var fileQD = res.data;
-        const blob = AppUltil.base64ToBlob(fileQD.fileContent);
-        FileSaver.saveAs(blob, fileQD.fileName);
-      });
-    return;
-  }
-
   themluong() {
     const dialogRef = this._matDialog.open(LuongdialogComponent, {
       width: '1000px',
       disableClose: true,
       data: {
         nsID: this.nsInfo?.nsID,
-        donviId: this.nsInfo?.donviId,
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
@@ -134,28 +115,19 @@ export class QtrluongComponent implements OnInit, OnChanges {
     });
   }
 
-  xuatExcelLuongdieuchinh() {
-    this.qtrluongdieuchinh.xuatExcel();
-  }
-
-  themluongDieuchinh() {
-    this.qtrluongdieuchinh.themluong();
-  }
-
-
-  sualuong(product): void {
-    const obj = JSON.parse(JSON.stringify(product));
-    obj.isNghiviec = this.nsInfo?.isNghiviec;
+  sualuong(nsLuong): void {
     const dialogRef = this._matDialog.open(LuongdialogComponent, {
       width: '1000px',
       disableClose: true,
-      data: obj,
+      data: {
+        nsLuong: nsLuong,
+        nsInfo: this.nsInfo,
+      },
     });
     dialogRef.afterClosed().subscribe((result) => {
       this.loadDataLuong();
     });
   }
-
 
   delete(id) {
     let dialog = this.mb.showDefault(
@@ -184,63 +156,5 @@ export class QtrluongComponent implements OnInit, OnChanges {
           });
       }
     });
-  }
-
-  deletePhucap(id) {
-    let dialog = this.mb.showDefault(
-      'Bạn có chắc chắn muốn muốn xóa quá phụ cấp này không?',
-      Buttons.YesNo
-    );
-
-    dialog.dialogResult$.subscribe(async (result) => {
-      if (result) {
-        this.http
-          .delete(QuatrinhLuongURL.deleteNsPhucap(id))
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (!res || !res.state) {
-              this.messageService.showErrorMessage(
-                'Hệ thống',
-                'Xóa thông tin không thành công'
-              );
-              return;
-            }
-            this.messageService.showSuccessMessage(
-              'Hệ thống',
-              'Xóa thành công'
-            );
-          });
-      }
-    });
-  }
-
-  xuatExcel(): void {
-    console.log('excel');
-    this.http
-      .get(QuatrinhLuongURL.xuatExcel(this.nsInfo?.nsID))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) {
-          return;
-        }
-
-        const blob = AppUltil.base64ToBlob(res.data);
-        FileSaver.saveAs(blob, 'quatrinhluong.xls');
-      });
-  }
-
-  xuatExcelPhucap(): void {
-    console.log('excel');
-    this.http
-      .get(QuatrinhLuongURL.xuatExcelPhucap(this.nsInfo?.nsID))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) {
-          return;
-        }
-
-        const blob = AppUltil.base64ToBlob(res.data);
-        FileSaver.saveAs(blob, 'quaphucap.xls');
-      });
   }
 }

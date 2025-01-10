@@ -1,9 +1,12 @@
+import { DotDanhGia } from './dotdanhgia';
+
 // Class for DanhGia
 export class DanhGia {
   id: number;
-  thoiGianTuNgay: string;
-  thoiGianDenNgay: string;
-  thoiHan: string;
+  dotDanhGia: DotDanhGia;
+  thoiGianTuNgay: Date;
+  thoiGianDenNgay: Date;
+  thoiHan: Date;
   nhanXet: string;
   caNhanDanhGia: string;
   caNhanXepLoai: string;
@@ -17,9 +20,10 @@ export class DanhGia {
 
   constructor(
     id: number = null,
-    thoiGianTuNgay: string = '',
-    thoiGianDenNgay: string = '',
-    thoiHan: string = '',
+    dotDanhGia: DotDanhGia = new DotDanhGia(),
+    thoiGianTuNgay: Date = new Date(),
+    thoiGianDenNgay: Date = new Date(),
+    thoiHan: Date = new Date(),
     nhanXet: string = '',
     caNhanDanhGia: string = '',
     caNhanXepLoai: string = '',
@@ -32,6 +36,7 @@ export class DanhGia {
     ketQuaThuong: string = ''
   ) {
     this.id = id;
+    this.dotDanhGia = dotDanhGia;
     this.thoiGianTuNgay = thoiGianTuNgay;
     this.thoiGianDenNgay = thoiGianDenNgay;
     this.thoiHan = thoiHan;
