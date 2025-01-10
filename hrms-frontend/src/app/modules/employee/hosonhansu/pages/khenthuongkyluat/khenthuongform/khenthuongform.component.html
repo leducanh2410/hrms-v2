@@ -18,7 +18,7 @@
 
   <div
     #mainns
-    class="flex flex-col flex-auto h-modal max-h-200 overflow-y-auto"
+    class="flex flex-col flex-auto h-modal max-h-200 overflow-y-auto pb-3"
   >
     <div class="mt-5">
       <h2 class="text-blue-500 border-b text-lg ml-2 mb-3">
@@ -58,17 +58,15 @@
           <div class="mat-field-label">Thời gian đánh giá</div>
           <div class="flex items-center gap-2">
             <p-calendar
-              name="tgDanhGia"
+              name="tgDanhGiaTu"
               [showIcon]="true"
-              [showOnFocus]="false"
               class="!w-full"
               placeholder="Từ ngày"
               [(ngModel)]="timeDanhGiaTu"
             />
             <p-calendar
-              name="tgDanhGia"
+              name="tgDanhGiaDen"
               [showIcon]="true"
-              [showOnFocus]="false"
               class="!w-full"
               placeholder="Đến ngày"
               [(ngModel)]="timeDanhGiaDen"
@@ -79,9 +77,8 @@
         <div class="flex flex-col justify-center">
           <div class="mat-field-label">Thời hạn</div>
           <p-calendar
-            name="tgDanhGia"
+            name="thoiHan"
             [showIcon]="true"
-            [showOnFocus]="false"
             class="!w-full"
             placeholder="Thời hạn"
             [(ngModel)]="thoiHan"
@@ -94,37 +91,74 @@
       <div class="grid grid-cols-2 gap-4 px-4">
         <div class="">
           <div class="mat-field-label">Nhận xét</div>
-          <textarea rows="3" class="w-full border rounded-md"></textarea>
+          <textarea
+            rows="3"
+            class="w-full border rounded-md p-2 indent-1"
+            [(ngModel)]="danhGia.nhanXet"
+            [ngModelOptions]="{ standalone: true }"
+          ></textarea>
         </div>
 
         <div class="">
           <div class="mat-field-label">Cá nhân đánh giá</div>
-          <textarea rows="3" class="w-full border rounded-md"></textarea>
+          <textarea
+            rows="3"
+            class="w-full border rounded-md p-2 indent-1"
+            [(ngModel)]="danhGia.caNhanDanhGia"
+            [ngModelOptions]="{ standalone: true }"
+          ></textarea>
         </div>
 
         <div class="">
           <div class="mat-field-label">Cá nhân xếp loại</div>
-          <textarea rows="3" class="w-full border rounded-md"></textarea>
+          <textarea
+            rows="3"
+            class="w-full border rounded-md p-2 indent-1"
+            [(ngModel)]="danhGia.caNhanXepLoai"
+            [ngModelOptions]="{ standalone: true }"
+          ></textarea>
         </div>
 
         <div class="">
           <div class="mat-field-label">Điểm mạnh</div>
-          <textarea rows="3" class="w-full border rounded-md"></textarea>
+          <textarea
+            rows="3"
+            class="w-full border rounded-md p-2 indent-1"
+            [(ngModel)]="danhGia.diemManh"
+            [ngModelOptions]="{ standalone: true }"
+          ></textarea>
         </div>
 
         <div class="">
           <div class="mat-field-label">Hạn chế</div>
-          <textarea rows="3" class="w-full border rounded-md"></textarea>
+          <textarea
+            rows="3"
+            class="w-full border rounded-md p-2 indent-1"
+            [(ngModel)]="danhGia.hanChe"
+            [ngModelOptions]="{ standalone: true }"
+          ></textarea>
         </div>
 
         <div class="">
           <div class="mat-field-label">Cần cải thiện</div>
-          <textarea rows="3" class="w-full border rounded-md"></textarea>
+          <textarea
+            rows="3"
+            class="w-full border rounded-md p-2 indent-1"
+            [(ngModel)]="danhGia.canCaiThien"
+            [ngModelOptions]="{ standalone: true }"
+          ></textarea>
         </div>
 
         <div>
           <div class="mat-field-label">Điểm</div>
-          <input name="diem" type="number" class="border rounded-md py-1" />
+          <input
+            name="diem"
+            type="number"
+            class="border rounded-md p-2"
+            max="100"
+            [(ngModel)]="danhGia.diem"
+            [ngModelOptions]="{ standalone: true }"
+          />
         </div>
 
         <div></div>
@@ -134,6 +168,7 @@
           <p-dropdown
             panelStyleClass="max-w-full"
             [style]="{ width: '100%' }"
+            [options]="xepLoai"
             optionLabel="name"
             optionValue="id"
             name="xepLoai"
@@ -142,6 +177,7 @@
             filterBy="name"
             [required]="true"
             placeholder="&nbsp;"
+            [(ngModel)]="danhGia.xepLoai"
           >
           </p-dropdown>
         </div>
@@ -157,6 +193,7 @@
           <p-dropdown
             panelStyleClass="max-w-full"
             [style]="{ width: '100%' }"
+            [options]="capDoDanhGia"
             optionLabel="name"
             optionValue="id"
             name="kqTangLuong"
@@ -165,6 +202,7 @@
             filterBy="name"
             [required]="true"
             placeholder="&nbsp;"
+            [(ngModel)]="danhGia.ketQuaTangLuong"
           >
           </p-dropdown>
         </div>
@@ -173,6 +211,7 @@
           <p-dropdown
             panelStyleClass="max-w-full"
             [style]="{ width: '100%' }"
+            [options]="capDoDanhGia"
             optionLabel="name"
             optionValue="id"
             name="kqThuong"
@@ -181,6 +220,7 @@
             filterBy="name"
             [required]="true"
             placeholder="&nbsp;"
+            [(ngModel)]="danhGia.ketQuaThuong"
           >
           </p-dropdown>
         </div>

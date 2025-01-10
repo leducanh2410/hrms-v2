@@ -111,44 +111,6 @@ export class ListmenuComponent implements OnInit, OnDestroy {
           }
         },
       },
-
-      // {
-      //   id: 'ycnl',
-      //   label: 'Yêu cầu năng lực',
-      //   styleClass: 'border-b',
-      //   command: async () => {
-
-      //     let is_close: boolean;
-      //     if (this.menu === 'canhan') {
-      //       is_close = await this.checkUpdatePage();
-      //       if (is_close != null && is_close) {
-      //         this.shareData.sendMessage(NHAN_SU.PAGE, 'ycnl');
-      //         // this.menu = 'ycnl'
-      //       }
-      //     } else {
-      //       this.shareData.sendMessage(NHAN_SU.PAGE, 'ycnl');
-      //       // this.menu = 'ycnl'
-      //     }
-      //   }
-      // },
-      {
-        id: 'hscn',
-        label: 'Hồ sơ cá nhân',
-        styleClass: 'border-b',
-        command: async () => {
-          let is_close: boolean;
-          if (this.menu === 'canhan') {
-            is_close = await this.checkUpdatePage();
-            if (is_close != null && is_close) {
-              this.shareData.sendMessage(NHAN_SU.PAGE, 'hscn');
-              // this.menu = 'hscn'
-            }
-          } else {
-            this.shareData.sendMessage(NHAN_SU.PAGE, 'hscn');
-            // this.menu = 'hscn'
-          }
-        },
-      },
     ];
     this.subData
       .getMessage(NHAN_SU.IS_EDIT)

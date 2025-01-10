@@ -5,7 +5,6 @@ import { DanhMucURL } from '../../../../../../services/employe/danhmucURL';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { HSNhansuURL } from '../../../../../../services/employe/hosonhansuURL';
 import { MessageService } from '../../../../../../shared/message.services';
-import { HosonhansuBean } from '../../../model/hosonhansubean';
 import { FormphongbanComponent } from '../../../../../../../assets/lib/formphongban/src/public-api';
 import { User } from '../../../../../../../assets/lib/formnhansu-donvi/src/lib/ngxstore/user.types';
 import { Store } from '@ngrx/store';
@@ -58,7 +57,7 @@ export class KhoitaohosonsComponent implements OnInit {
   disableBtnCNKT: boolean;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: HosonhansuBean,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     public matDialogRef: MatDialogRef<KhoitaohosonsComponent>,
     private http: CommonApiService,
     private messageService: MessageService,

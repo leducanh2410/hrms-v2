@@ -22,7 +22,7 @@ import { DividerModule } from 'primeng/divider';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
-import { QtrinhlamviecBean } from '../../../model/qtrinhlamviecbean';
+import { QtrinhlamviecBean } from '../../../model/qtrinhlamviec';
 
 @Component({
   selector: 'app-lamviec',

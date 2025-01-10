@@ -11,12 +11,12 @@ export class DanhGia {
   caNhanDanhGia: string;
   caNhanXepLoai: string;
   diem: number;
-  xepLoai: string;
+  xepLoai: number;
   diemManh: string;
   hanChe: string;
   canCaiThien: string;
-  ketQuaTangLuong: string;
-  ketQuaThuong: string;
+  ketQuaTangLuong: number;
+  ketQuaThuong: number;
 
   constructor(
     id: number = null,
@@ -28,12 +28,12 @@ export class DanhGia {
     caNhanDanhGia: string = '',
     caNhanXepLoai: string = '',
     diem: number = 0,
-    xepLoai: string = '',
+    xepLoai: number = 0,
     diemManh: string = '',
     hanChe: string = '',
     canCaiThien: string = '',
-    ketQuaTangLuong: string = '',
-    ketQuaThuong: string = ''
+    ketQuaTangLuong: number = 0,
+    ketQuaThuong: number = 0
   ) {
     this.id = id;
     this.dotDanhGia = dotDanhGia;

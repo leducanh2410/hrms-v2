@@ -27,7 +27,6 @@ import { ParamNsHdldBean } from '../model/NsHdldParam';
 import { TaoHdldDialogComponent } from './taohdld-dialog/taohdld-dialog.component';
 import { MatSelectChange } from '@angular/material/select';
 import { DanhMucURL } from '../../../services/employe/danhmucURL';
-import { QtrinhLuongBean } from '../../employee/hosonhansu/model/qtrinhluongbean';
 import { HesophucapDialogComponent } from './hesophucap-dialog/hesophucap-dialog.component';
 import { Buttons } from '../../../fuse/components/message-box/common';
 import { MessageService } from '../../../shared/message.services';
@@ -165,7 +164,6 @@ export class DanhsachhdldComponent {
 
   isNew: Boolean; // false: sua danh sach: true: tao moi danh sach
   isUpdating: Boolean = false; // true: đang sửa (trong trường hợp isNew = false)
-  dataLuong: QtrinhLuongBean = {};
   isVisibleLapDS: Boolean = false;
   isXoaDanhsachDisable = true;
   isDropdownEnabled: Boolean = true; // true: nhập tên ds mới; false: Chỉ chọn từ ds

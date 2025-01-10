@@ -15,8 +15,6 @@ import { ThongtinthannhanComponent } from './thongtinthannhan/thongtinthannhan.c
 import { KhenthuongKyluatComponent } from './khenthuongkyluat/khenthuongkyluat.component';
 import { QtrinhlamviecComponent } from './thongtincanhan/qtrinhlamviec/qtrinhlamviec.component';
 import { QtrluongComponent } from './qtrluong/qtrluong.component';
-import { SxKinhdoanhComponent } from './ngangnghesxkd/sxkinhdoanh.component';
-import { HosocanhanComponent } from './hosocanhan/hosocanhan.component';
 import { QtrlamviecComponent } from './qtrlamviec/qtrlamviec.component';
 import { THONG_TIN_CHUNG } from '../model/thongtinchung';
 import { log } from 'node:util';
@@ -29,8 +27,6 @@ import { log } from 'node:util';
     ThongtinthannhanComponent,
     KhenthuongKyluatComponent,
     QtrluongComponent,
-    SxKinhdoanhComponent,
-    HosocanhanComponent,
     QtrlamviecComponent,
     CommonModule,
   ],

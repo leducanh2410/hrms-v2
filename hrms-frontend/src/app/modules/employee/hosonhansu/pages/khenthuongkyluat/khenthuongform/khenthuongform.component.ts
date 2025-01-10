@@ -68,13 +68,59 @@ import { THONG_TIN_CHUNG } from '../../../model/thongtinchung';
 export class KhenthuongformComponent implements OnInit {
   registerForm: FormGroup;
 
-  nsInfo : THONG_TIN_CHUNG = new THONG_TIN_CHUNG();
+  nsInfo: THONG_TIN_CHUNG = new THONG_TIN_CHUNG();
   danhGia: DanhGia = new DanhGia();
-  listDotDanhGia: DotDanhGia[] = [];4
+  listDotDanhGia: DotDanhGia[] = [];
 
   timeDanhGiaTu: Date = new Date();
   timeDanhGiaDen: Date = new Date();
-  thoiHan : Date = new Date();
+  thoiHan: Date = new Date();
+
+  xepLoai = [
+    {
+      name: 'A+',
+      id: 0,
+    },
+    {
+      name: 'A',
+      id: 1,
+    },
+    {
+      name: 'B',
+      id: 2,
+    },
+    {
+      name: 'B-',
+      id: 3,
+    },
+    {
+      name: 'C',
+      id: 2,
+    },
+    {
+      name: 'D',
+      id: 3,
+    },
+  ];
+
+  capDoDanhGia = [
+    {
+      name: 'Giỏi',
+      id: 0,
+    },
+    {
+      name: 'Khá',
+      id: 1,
+    },
+    {
+      name: 'Trung bình',
+      id: 2,
+    },
+    {
+      name: 'Yếu',
+      id: 3,
+    },
+  ];
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   protected _onDestroy = new Subject<void>();
@@ -87,16 +133,16 @@ export class KhenthuongformComponent implements OnInit {
     private http: CommonApiService,
     private formBuilder: FormBuilder,
     private mb: MessageBox
-  ) {
-    this.danhGia = data?.danhGia;
-    this.nsInfo = data?.nhansu;
-    this.timeDanhGiaTu = new Date(this.danhGia.thoiGianTuNgay)
-    this.timeDanhGiaDen = new Date(this.danhGia.thoiGianDenNgay)
-    this.thoiHan = new Date(this.danhGia.thoiHan)
-  }
+  ) {}
 
   ngOnInit(): void {
     this.loadAllDotDanhGia();
+    console.log(this.danhGia);
+    this.danhGia = this.data?.danhGia;
+    this.nsInfo = this.data?.nhansu;
+    this.timeDanhGiaTu = new Date(this.danhGia.thoiGianTuNgay);
+    this.timeDanhGiaDen = new Date(this.danhGia.thoiGianDenNgay);
+    this.thoiHan = new Date(this.danhGia.thoiHan);
   }
 
   loadAllDotDanhGia() {

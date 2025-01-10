@@ -9,12 +9,8 @@ import { NHAN_SU } from '../../../../../shared/appkeymessages';
 import { takeUntil } from 'rxjs';
 import { Subject } from 'rxjs/internal/Subject';
 import { MatDialog } from '@angular/material/dialog';
-import { ChucvuComponent } from './chucvu/chucvu.component';
 import { LamviecComponent } from './lamviec/lamviec.component';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
-import { DieudongComponent } from './dieudong/dieudong.component';
-import { DoantheComponent } from './doanthe/doanthe.component';
-import { KyhdldComponent } from './kyhdld/kyhdld.component';
 @Component({
   selector: 'app-qtrlamviec',
   templateUrl: './qtrlamviec.component.html',
@@ -23,10 +19,6 @@ import { KyhdldComponent } from './kyhdld/kyhdld.component';
     LamviecComponent,
     MatAccordion,
     MatExpansionModule,
-    ChucvuComponent,
-    DieudongComponent,
-    DoantheComponent,
-    KyhdldComponent
   ]
 })
 export class QtrlamviecComponent implements OnInit, OnChanges {

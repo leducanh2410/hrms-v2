@@ -102,7 +102,7 @@ export class KhenthuongKyluatComponent implements OnInit {
   listNgKy: any[] = [];
   listChucVu: any[] = [];
 
-  listDanhGia : DanhGia[] = []
+  listDanhGia: DanhGia[] = [];
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -118,9 +118,8 @@ export class KhenthuongKyluatComponent implements OnInit {
     // this.loadDataKyLuat();
 
     if (this.nhansu) {
-      this.listDanhGia = this.nhansu.danhGia
-      console.log(this.listDanhGia);
-      
+      this.listDanhGia = this.nhansu.danhGia;
+
       // this.http
       //   .get(llnsURL.getTdktSangkienByid(this.nhansu.id))
       //   .pipe(takeUntil(this._unsubscribeAll))
@@ -128,19 +127,6 @@ export class KhenthuongKyluatComponent implements OnInit {
       //     if (!res || !res.state) return;
       //     this.dsSangkien = res.data;
       //   });
-    }
-  }
-
-
-  loadDataKyLuat() {
-    if (this.nhansu) {
-      this.http
-        .get(llnsURL.getDsKyluat(this.nhansu.id))
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((res: any) => {
-          if (!res || !res.state) return;
-          this.dsKyluat = res.data;
-        });
     }
   }
 
@@ -163,8 +149,7 @@ export class KhenthuongKyluatComponent implements OnInit {
       },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-    });
+    dialogRef.afterClosed().subscribe((result) => {});
   }
 
   updateKhenThuong(danhGia): void {
@@ -173,14 +158,14 @@ export class KhenthuongKyluatComponent implements OnInit {
       disableClose: true,
       data: {
         nhansu: this.nhansu,
-        danhGia : danhGia
+        danhGia: danhGia,
       },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.http
-          .post(llnsURL.saveKhenthuong(), result)
+          .post(llnsURL.createDanhGiaByEmpId(1), result)
           .pipe(takeUntil(this._unsubscribeAll))
           .subscribe((res: any) => {
             if (!res || !res.state) {
@@ -207,7 +192,7 @@ export class KhenthuongKyluatComponent implements OnInit {
     dialog.dialogResult$.subscribe(async (result) => {
       if (result) {
         this.http
-          .delete(llnsURL.deleteKhenthuong(id))
+          .delete(llnsURL.createDanhGiaByEmpId(id))
           .pipe(takeUntil(this._unsubscribeAll))
           .subscribe((res: any) => {
             if (!res || !res.state) {

@@ -13,7 +13,7 @@ export class CommonApiService {
 
     }
 
-    get = (url: string, showError: boolean = true): Observable<any> => {
+    get<T>(url: string, showError: boolean = true): Observable<any> {
         return this.http.get(url).pipe(
             catchError((eror) => {
                 if (showError && eror.status !== 401) {

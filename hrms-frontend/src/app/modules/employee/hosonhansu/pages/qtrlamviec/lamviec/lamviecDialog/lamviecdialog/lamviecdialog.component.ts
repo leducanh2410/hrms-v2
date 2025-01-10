@@ -9,7 +9,7 @@ import { MessageBox } from '../../../../../../../../fuse/components/message-box/
 import { Store } from '@ngrx/store';
 import { API } from '../../../../../../../../core/config/app.config';
 import { User } from '../../../../../../../../../assets/lib/formnhansu-donvi/src/lib/ngxstore/user.types';
-import { QtrinhlamviecBean } from '../../../../../model/qtrinhlamviecbean';
+import { QtrinhlamviecBean } from '../../../../../model/qtrinhlamviec';
 import { APP_ACTION } from '../../../../../../../../ngxstore/actions/app.actions';
 import { AppState } from '../../../../../../../../ngxstore/state/app.state';
 import { CommonApiService } from '../../../../../../../../services/commonHttp';

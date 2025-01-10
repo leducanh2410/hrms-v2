@@ -5,7 +5,7 @@ import { HopDong } from './hopdong';
 import { LienHe } from './lienhe';
 import { Luong } from './luong';
 import { NhanThan } from './nhanthan';
-import { QtrinhlamviecBean } from './qtrinhlamviecbean';
+import { QtrinhlamviecBean } from './qtrinhlamviec';
 import { TrinhDoChuyenMon } from './trinhdochuyenmon';
 import { TrinhDoTinHoc } from './trinhdotinhoc';
 

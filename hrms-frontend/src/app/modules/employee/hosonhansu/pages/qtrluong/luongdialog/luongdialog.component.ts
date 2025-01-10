@@ -7,7 +7,6 @@ import {
 import { CommonApiService } from '../../../../../../services/commonHttp';
 import { EmployeURL } from '../../../../../../services/employe/employeURL';
 import { Subject, takeUntil } from 'rxjs';
-import { QtrinhLuongBean } from '../../../model/qtrinhluongbean';
 import { AppUltil } from '../../../../../../shared/AppUltil';
 import FileSaver from 'file-saver';
 import { Buttons } from '../../../../../../fuse/components/message-box/common';

@@ -41,7 +41,7 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { StoreModule } from '@ngrx/store';
 import { FormdonviTreeComponent } from '../../../../assets/lib/formdonvi-tree/src/public-api';
 import { THONG_TIN_CHUNG } from '../hosonhansu/model/thongtinchung';
-import { QtrinhlamviecBean } from '../hosonhansu/model/qtrinhlamviecbean';
+import { QtrinhlamviecBean } from '../hosonhansu/model/qtrinhlamviec';
 
 @Component({
   selector: 'app-dsnhansu',
