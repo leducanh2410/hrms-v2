@@ -26,7 +26,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ImageviewComponent } from '../../../components/imageview/imageview.component';
 import { HopDong } from '../model/hopdong';
-import { QtrinhlamviecBean } from '../model/qtrinhlamviecbean';
+import { QtrinhlamviecBean } from '../model/qtrinhlamviec';
 
 @Component({
   selector: 'app-thongtinchung',

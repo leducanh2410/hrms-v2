@@ -25,7 +25,8 @@
           <input
             pInputText
             class="w-full"
-            [value]="data.nhanthan.tenNguoiThan"
+            [ngModelOptions]="{ standalone: true }"
+            [(ngModel)]="nhanThan.tenNguoiThan"
           />
         </div>
 
@@ -35,7 +36,7 @@
             pInputText
             class="w-full"
             name="quanHe"
-            [value]="data.nhanthan.moiQuanHe"
+            [(ngModel)]="nhanThan.moiQuanHe"
           />
         </div>
 

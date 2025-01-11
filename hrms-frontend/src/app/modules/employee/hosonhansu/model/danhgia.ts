@@ -1,37 +1,42 @@
+import { DotDanhGia } from './dotdanhgia';
+
 // Class for DanhGia
 export class DanhGia {
   id: number;
-  thoiGianTuNgay: string;
-  thoiGianDenNgay: string;
-  thoiHan: string;
+  dotDanhGia: DotDanhGia;
+  thoiGianTuNgay: Date;
+  thoiGianDenNgay: Date;
+  thoiHan: Date;
   nhanXet: string;
   caNhanDanhGia: string;
   caNhanXepLoai: string;
   diem: number;
-  xepLoai: string;
+  xepLoai: number;
   diemManh: string;
   hanChe: string;
   canCaiThien: string;
-  ketQuaTangLuong: string;
-  ketQuaThuong: string;
+  ketQuaTangLuong: number;
+  ketQuaThuong: number;
 
   constructor(
     id: number = null,
-    thoiGianTuNgay: string = '',
-    thoiGianDenNgay: string = '',
-    thoiHan: string = '',
+    dotDanhGia: DotDanhGia = new DotDanhGia(),
+    thoiGianTuNgay: Date = new Date(),
+    thoiGianDenNgay: Date = new Date(),
+    thoiHan: Date = new Date(),
     nhanXet: string = '',
     caNhanDanhGia: string = '',
     caNhanXepLoai: string = '',
     diem: number = 0,
-    xepLoai: string = '',
+    xepLoai: number = 0,
     diemManh: string = '',
     hanChe: string = '',
     canCaiThien: string = '',
-    ketQuaTangLuong: string = '',
-    ketQuaThuong: string = ''
+    ketQuaTangLuong: number = 0,
+    ketQuaThuong: number = 0
   ) {
     this.id = id;
+    this.dotDanhGia = dotDanhGia;
     this.thoiGianTuNgay = thoiGianTuNgay;
     this.thoiGianDenNgay = thoiGianDenNgay;
     this.thoiHan = thoiHan;

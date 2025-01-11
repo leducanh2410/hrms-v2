@@ -8,7 +8,6 @@ import { Buttons } from '../../../../../fuse/components/message-box/common';
 import { MessageBox } from '../../../../../fuse/components/message-box/message-box.provider';
 import { llnsURL } from '../../../../../services/employe/llnsURL';
 import { GiadinhformComponent } from './giadinhform/giadinhform.component';
-import { NguoiphuthuocformComponent } from './nguoiphuthuocform/nguoiphuthuocform.component';
 import { assign } from 'lodash';
 import { DividerModule } from 'primeng/divider';
 import { TableModule } from 'primeng/table';
@@ -16,6 +15,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { THONG_TIN_CHUNG } from '../../model/thongtinchung';
+import { NhanThan } from '../../model/nhanthan';
 
 interface Person {
   fullName: string;
@@ -39,7 +39,7 @@ interface Person {
 })
 export class ThongtinthannhanComponent implements OnInit {
   @Input('nsInfo') nhansu: THONG_TIN_CHUNG;
-  thannhan: any;
+  listThanNhan: NhanThan[] = [];
   nguoiphuthuoc: any;
   //nhansu: any = {donviId: 115, nsId : 115000000000002};
 
@@ -53,26 +53,17 @@ export class ThongtinthannhanComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // this.loadData();
+    this.loadData();
   }
 
   loadData() {
     if (this.nhansu) {
       this.http
-        .get(llnsURL.getDsPTGiaDinh(this.nhansu.id))
+        .get(llnsURL.getAllNhanThanByEmpId(this.nhansu.id))
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((res: any) => {
           if (!res || !res.state) return;
-          this.thannhan = res.data;
-        });
-
-      this.http
-        .get(llnsURL.getDsNguoiPT(this.nhansu.id))
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((res: any) => {
-          if (!res || !res.state) return;
-          this.nguoiphuthuoc = res.data;
-          console.log(res.data);
+          this.listThanNhan = res.data;
         });
     }
   }
@@ -96,29 +87,29 @@ export class ThongtinthannhanComponent implements OnInit {
     const dialogRef = this._matDialog.open(GiadinhformComponent, {
       width: '900px',
       disableClose: true,
-      data: { nhanthan: data, addNew: false },
+      data: { nhanThanId: data.id, addNew: false, nsId: this.nhansu.id },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.http
-          .post(llnsURL.updatePTGiaDinh(), result)
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (!res || !res.state) {
-              this.messageService.showErrorMessage(
-                'Hệ thống',
-                'Cập nhật thông tin không thành công'
-              );
-              return;
-            }
-            this.messageService.showSuccessMessage(
-              'Hệ thống',
-              'Cập nhật thành công'
-            );
-          });
-        this.loadData();
-      }
+      // if (result) {
+      //   this.http
+      //     .post(llnsURL.updateNhanThanById(), result)
+      //     .pipe(takeUntil(this._unsubscribeAll))
+      //     .subscribe((res: any) => {
+      //       if (!res || !res.state) {
+      //         this.messageService.showErrorMessage(
+      //           'Hệ thống',
+      //           'Cập nhật thông tin không thành công'
+      //         );
+      //         return;
+      //       }
+      //       this.messageService.showSuccessMessage(
+      //         'Hệ thống',
+      //         'Cập nhật thành công'
+      //       );
+      //     });
+      //   this.loadData();
+      // }
       this.loadData();
     });
   }
@@ -131,86 +122,7 @@ export class ThongtinthannhanComponent implements OnInit {
     dialog.dialogResult$.subscribe(async (result) => {
       if (result) {
         this.http
-          .delete(llnsURL.deletePTGiaDinh(id))
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (!res || !res.state) {
-              this.messageService.showErrorMessage(
-                'Hệ thống',
-                'Xóa thông tin không thành công'
-              );
-              return;
-            }
-            this.messageService.showSuccessMessage(
-              'Hệ thống',
-              'Xóa thành công'
-            );
-            this.loadData();
-          });
-      }
-    });
-  }
-
-  //----------------------------- nguoi phu thuoc ---------------------------------
-  addNgPhuThuoc(): void {
-    const dialogRef = this._matDialog.open(NguoiphuthuocformComponent, {
-      width: '900px',
-      data: {
-        giadinh: { lQhenguoiphuthuoc: { id: 0 } },
-        nhansu: this.nhansu,
-        addNew: true,
-      },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      dialogRef.afterClosed();
-      this.loadData();
-    });
-  }
-
-  updateNgPhuThuoc(data): void {
-    const dialogRef = this._matDialog.open(NguoiphuthuocformComponent, {
-      width: '900px',
-      disableClose: true,
-      data: {
-        giadinh: data,
-        nhansu: this.nhansu,
-        addNew: false,
-      },
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.http
-          .post(llnsURL.updateNguoiPT(), result)
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (!res || !res.state) {
-              this.messageService.showErrorMessage(
-                'Hệ thống',
-                'Cập nhật thông tin không thành công'
-              );
-              return;
-            }
-            this.messageService.showSuccessMessage(
-              'Hệ thống',
-              'Cập nhật thành công'
-            );
-          });
-        this.loadData();
-      }
-      this.loadData();
-    });
-  }
-
-  deleteNgPhuThuoc(id) {
-    let dialog = this.mb.showDefault(
-      'Bạn có chắc chắn muốn muốn xóa thông tin không?',
-      Buttons.YesNo
-    );
-    dialog.dialogResult$.subscribe(async (result) => {
-      if (result) {
-        this.http
-          .delete(llnsURL.deleteNguoiPT(id))
+          .delete(llnsURL.deleteNhanThanById(id))
           .pipe(takeUntil(this._unsubscribeAll))
           .subscribe((res: any) => {
             if (!res || !res.state) {
@@ -232,11 +144,11 @@ export class ThongtinthannhanComponent implements OnInit {
 
   getFieldValue(rowData: any, field: string) {
     if (typeof rowData[field] == 'number') {
-      return rowData[field] === 1
+      return rowData[field] === 0
         ? 'Nam'
-        : rowData[field] === 2
-        ? 'LGBT'
-        : 'Nữ';
+        : rowData[field] === 1
+        ? 'Nữ'
+        : 'LGBT'
     }
 
     return rowData[field];

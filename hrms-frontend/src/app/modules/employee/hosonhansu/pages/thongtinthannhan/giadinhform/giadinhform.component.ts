@@ -42,7 +42,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     MatInputModule,
     InputTextModule,
     CalendarModule,
-    InputTextareaModule
+    InputTextareaModule,
   ],
 })
 export class GiadinhformComponent implements OnInit {
@@ -66,8 +66,10 @@ export class GiadinhformComponent implements OnInit {
   isLockform = false;
   lqhegdinh: number;
   isAddnew: boolean = false;
-  nhanThan: NhanThan;
+  nhanThan: NhanThan = new NhanThan();
   ngaySinh: Date;
+  nsId: number = null;
+  isEdit: boolean = false;
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
@@ -77,8 +79,9 @@ export class GiadinhformComponent implements OnInit {
     private http: CommonApiService,
     private formBuilder: FormBuilder
   ) {
-    this.nhanThan = data?.nhanthan;
-    this.ngaySinh = new Date(data?.nhanthan.ngaySinh);
+    this.ngaySinh = new Date(data?.nhanthan?.ngaySinh);
+    this.nsId = data?.nsId;
+    if (this.nsId) this.isEdit = true;
   }
 
   ngOnInit(): void {
@@ -87,15 +90,14 @@ export class GiadinhformComponent implements OnInit {
       hoten: new FormControl('', Validators.required),
       lqhegdinh: new FormControl('', Validators.required),
     });
-    console.log(this.nhanThan.ngaySinh);
 
-    // this.http
-    //   .get(DanhMucURL.getListQhegiadinh())
-    //   .pipe(takeUntil(this._unsubscribeAll))
-    //   .subscribe((res: any) => {
-    //     if (!res || !res.state) return;
-    //     this.listQhegd = res.data;
-    //   });
+    this.http
+      .get(llnsURL.getNhanThanById(this.data?.nhanThanId))
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((res: any) => {
+        if (!res || !res.state) return;
+        this.nhanThan = res?.data
+      });
   }
 
   myUploader(event, fileForm) {
@@ -112,16 +114,10 @@ export class GiadinhformComponent implements OnInit {
   }
 
   saveAndClose(): void {
-    if (this.registerForm.invalid) return;
-    if (this.data.addNew) {
-      if (this.data.giadinh) {
-        this.data.giadinh.donviId = this.data.nhansu.donviId;
-        this.data.giadinh.nsId = this.data.nhansu.nsID;
-        this.data.giadinh.namsinh = new Date(
-          this.data.giadinh.ngaysinh
-        ).getFullYear();
+    if (!this.isEdit) {
+      if (this.nhanThan) {
         this.http
-          .post(llnsURL.insertPTGiaDinh(), this.data.giadinh)
+          .post(llnsURL.createNhanThanByEmpId(this.nsId), this.nhanThan)
           .pipe(takeUntil(this._unsubscribeAll))
           .subscribe((res: any) => {
             if (!res || !res.state) {
@@ -129,7 +125,7 @@ export class GiadinhformComponent implements OnInit {
                 'Hệ thống',
                 'Cập nhật thông tin không thành công'
               );
-              return;
+              this.matDialogRef.close(this.nhanThan);
             }
             this.messageService.showSuccessMessage(
               'Hệ thống',
@@ -139,7 +135,27 @@ export class GiadinhformComponent implements OnInit {
           });
       }
     } else {
-      this.matDialogRef.close(this.data.giadinh);
+      if (this.nhanThan) {
+        console.log(this.nhanThan);
+
+        this.http
+          .put(llnsURL.updateNhanThanById(this.nhanThan.id), this.nhanThan)
+          .pipe(takeUntil(this._unsubscribeAll))
+          .subscribe((res: any) => {
+            if (!res || !res.state) {
+              this.messageService.showErrorMessage(
+                'Hệ thống',
+                'Cập nhật thông tin không thành công'
+              );
+              this.matDialogRef.close(this.nhanThan);
+            }
+            this.messageService.showSuccessMessage(
+              'Hệ thống',
+              'Cập nhật thành công'
+            );
+            this.isLockform = true;
+          });
+      }
     }
   }
 

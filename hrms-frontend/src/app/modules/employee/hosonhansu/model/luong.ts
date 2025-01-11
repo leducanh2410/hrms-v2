@@ -5,7 +5,7 @@ export class Luong {
   id: number;
   ngachLuong: NgachLuong;
   bacluong: BacLuong;
-  ngayHieuLuc: string; // string (ngày hiệu lực)
+  ngayHieuLuc: Date; // string (ngày hiệu lực)
   luongThuNhap: number; // number (lương thu nhập)
   mucTamUngChung: number; // number (mức tạm ứng chung)
   thamNien: number; // number (thâm niên)
@@ -23,7 +23,7 @@ export class Luong {
     id: number = null,
     ngachLuong: NgachLuong = new NgachLuong(),
     bacluong: BacLuong = new BacLuong(),
-    ngayHieuLuc: string = '',
+    ngayHieuLuc: Date = new Date(),
     luongThuNhap: number = 0,
     mucTamUngChung: number = 0,
     thamNien: number = 0,
@@ -52,5 +52,6 @@ export class Luong {
     this.datDo = datDo;
     this.phuCap = phuCap;
     this.trangThai = trangThai;
+    this.updatedAt = updatedAt
   }
 }

@@ -32,3 +32,15 @@ export class NhanThan {
     this.diaChi = diaChi;
   }
 }
+
+export interface NhanThanInterface {
+  id: number;
+  laNguoiPhuThuoc: boolean;
+  lamCungDonVi: boolean;
+  tenNguoiThan: string;
+  moiQuanHe: string;
+  gioiTinh: number;
+  ngaySinh: Date;
+  ngheNghiep: string;
+  diaChi: string;
+}
