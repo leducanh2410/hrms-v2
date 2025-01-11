@@ -17,10 +17,25 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 @Component({
   selector: 'app-layout',
-  imports: [HeaderComponent],
+  imports: [ CommonModule,
+    MatTooltipModule,
+    MatIconModule,
+    MatListModule,
+    MatToolbarModule,
+    RouterModule,
+    MatExpansionModule,
+    MatMenuModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatTableModule,
+    MatFormFieldModule,
+    MatInputModule,],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.css',
 })
 export class LayoutComponent {
-
+  constructor(private _router: Router) {}
+  signOut(): void {
+    this._router.navigate(['/sign-in']);
+  }
 }

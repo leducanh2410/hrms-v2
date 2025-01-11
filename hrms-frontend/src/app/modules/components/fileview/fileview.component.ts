@@ -44,7 +44,7 @@ export class FileviewComponent implements OnInit {
     private http: CommonApiService,
     private sanitizer: DomSanitizer
   ) {
-    pdfDefaultOptions.renderInteractiveForms = false;
+    // pdfDefaultOptions.renderInteractiveForms = false;
   }
   ngOnInit(): void {
     if (!this.data || !this.data.fileContent) {
