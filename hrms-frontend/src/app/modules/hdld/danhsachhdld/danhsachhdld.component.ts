@@ -18,7 +18,6 @@ import { Store } from '@ngrx/store';
 import { APP_ACTION } from '../../../ngxstore/actions/app.actions';
 import { AppState } from '../../../ngxstore/state/app.state';
 import { CommonApiService } from '../../../services/commonHttp';
-import { hdldURL } from '../../../services/employe/hdldURL';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/internal/operators/takeUntil';
 import { NsdenhanDialogComponent } from './nsdenhan-dialog/nsdenhan-dialog.component';
@@ -26,7 +25,6 @@ import { NsDanhsachHdld } from '../model/NsDanhsachHdld';
 import { ParamNsHdldBean } from '../model/NsHdldParam';
 import { TaoHdldDialogComponent } from './taohdld-dialog/taohdld-dialog.component';
 import { MatSelectChange } from '@angular/material/select';
-import { DanhMucURL } from '../../../services/employe/danhmucURL';
 import { HesophucapDialogComponent } from './hesophucap-dialog/hesophucap-dialog.component';
 import { Buttons } from '../../../fuse/components/message-box/common';
 import { MessageService } from '../../../shared/message.services';
@@ -326,33 +324,7 @@ export class DanhsachhdldComponent {
     }
   }
 
-  onChangeCopyHdldCu(event: any) {
-    // Lấy giá trị mới của checkbox
-    this.copyLoaiHdCu = event.checked;
 
-    if (this.copyLoaiHdCu) {
-      let dialog = this.mb.showDefault(
-        'Bạn muốn Copy Loại HĐLĐ cũ sang Loại HĐLĐ mới cho nhân sự hiển thị trên danh sách?',
-        Buttons.YesNo
-      );
-
-      dialog.dialogResult$.subscribe(async (result) => {
-        if (result) {
-          let param: ParamNsHdldBean = new ParamNsHdldBean();
-          param.nsDanhsachHdldList = this.nsHopdongList;
-          this.http
-            .post(hdldURL.copyLoaiHdldCu(), param)
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((res: any) => {
-              if (res.state) {
-                this.nsHopdongList = res.data;
-                console.log(this.nsHopdongList);
-              }
-            });
-        }
-      });
-    }
-  }
 
   onEnterCopyNgayHD() {
     for (let i = 0; i < this.nsHopdongList.length; i++) {
@@ -367,17 +339,7 @@ export class DanhsachhdldComponent {
   }
 
   onChonNam() {
-    this.http
-      .get(
-        hdldURL.getDanhSachNghiepVuByOrg(this.donviId, 11, this.selectedYear)
-      )
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res) => {
-        if (res.state) {
-          //console.log(res.data);
-          this.dsList = res.data;
-        }
-      });
+    
   }
 
   onChonDanhsach() {
@@ -391,23 +353,7 @@ export class DanhsachhdldComponent {
         Buttons.YesNo
       );
       dialog.dialogResult$.subscribe(async (result) => {
-        if (result) {
-          this.http
-            .get(hdldURL.getNsDsachHDLDByTkiemid(this.dsSelected.id))
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((res) => {
-              if (res.state) {
-                this.nsHopdongList = res.data;
-                this.lblCapnhatDs = 'Cập nhật danh sách';
-                this.isNew = false;
-                this.isUpdating = false;
-                this.isXoaDanhsachDisable = false;
-                this.isDropdownEnabled = true;
-              }
-            });
-        } else {
-          this.dsSelected = null;
-        }
+        
       });
     } else if (!this.isNew && this.isUpdating) {
       // nếu đang ở trạng thái mở form sửa danh sách và đang thực hiện sửa 1 danh sách
@@ -422,35 +368,10 @@ export class DanhsachhdldComponent {
           //this.isUpdating = false;
           //this.isXoaDanhsachDisable = false;
 
-          this.http
-            .get(hdldURL.getNsDsachHDLDByTkiemid(this.dsSelected.id))
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((res) => {
-              if (res.state) {
-                this.nsHopdongList = res.data;
-                this.lblCapnhatDs = 'Cập nhật danh sách';
-                this.isNew = false;
-                this.isUpdating = false;
-                this.isXoaDanhsachDisable = false;
-                this.isDropdownEnabled = true;
-              }
-            });
         }
       });
     } else {
-      this.http
-        .get(hdldURL.getNsDsachHDLDByTkiemid(this.dsSelected.id))
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((res) => {
-          if (res.state) {
-            this.nsHopdongList = res.data;
-            this.lblCapnhatDs = 'Cập nhật danh sách';
-            this.isNew = false;
-            this.isUpdating = false;
-            this.isXoaDanhsachDisable = false;
-            this.isDropdownEnabled = true;
-          }
-        });
+      
     }
   }
 
@@ -491,145 +412,6 @@ export class DanhsachhdldComponent {
           this.disabledInput = false;
         }
       });
-    }
-  }
-
-  onLuuDanhsach() {
-    // nếu đang ở trạng thái mở form để sửa và đang xem danh sách
-    if (!this.isNew && !this.isUpdating) {
-      this.lblCapnhatDs = 'Lưu danh sách';
-      this.isUpdating = true;
-      this.disabledInput = false;
-      return;
-    }
-
-    //console.log(this.dsSelected);
-    if (
-      this.isNew &&
-      (this.dsSelected == null || this.dsSelected.name == null)
-    ) {
-      this.messageService.showErrorMessage(
-        'Thông báo: ',
-        'Bạn chưa nhập tên danh sách!'
-      );
-      return;
-    }
-
-    // kiem tra ten danh sach co trung khong?
-    if (this.isNew && this.dsSelected.name != null) {
-      this.http
-        .get(
-          hdldURL.checkTenDanhsachHdld(
-            this.donviId,
-            this.selectedYear,
-            this.dsSelected.name
-          )
-        )
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((res: any) => {
-          if (res.state) {
-            let checkTenDs = res.data;
-            if (checkTenDs) {
-              this.messageService.showErrorMessage(
-                'Thông báo: ',
-                'Tên danh sách đã tồn tại!'
-              );
-              return;
-            }
-          }
-        });
-    }
-
-    if (this.validateInfoWhenLuuDs(this.nsHopdongList)) {
-      let param: ParamNsHdldBean = new ParamNsHdldBean();
-      param.nsDanhsachHdldList = this.nsHopdongList;
-
-      if (this.isNew) {
-        // nếu là thêm mới danh sách
-        param.tenDanhsach = this.dsSelected.name;
-        this.http
-          .post(hdldURL.insertDsNsHDLD(), param)
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (res.state) {
-              this.dsSelected = res.data;
-              if (this.dsSelected != null && this.dsSelected.id != null) {
-                this.http
-                  .get(hdldURL.getNsDsachHDLDByTkiemid(this.dsSelected.id))
-                  .pipe(takeUntil(this._unsubscribeAll))
-                  .subscribe((res) => {
-                    if (res.state) {
-                      this.nsHopdongList = res.data;
-                    }
-                  });
-              }
-
-              this.messageService.showInfoMessage(
-                'Thông báo: ',
-                `Cập nhật thành công`
-              );
-            }
-
-            this.resetAfterSave();
-          });
-      } else if (!this.isNew && this.isUpdating) {
-        // nếu là sửa danh sách và đã thay đổi dữ liệu trên lưới rồi
-        param.nsTimkiemDstk = this.dsSelected;
-        this.http
-          .post(hdldURL.updateDsNsHDLD(), param)
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (res.state) {
-              this.nsHopdongList = null;
-              this.messageService.showInfoMessage(
-                'Thông báo: ',
-                `Cập nhật thành công`
-              );
-            }
-
-            this.resetAfterSave();
-
-            // load lai danh sach
-            if (this.data.dkTimkiemId != null) {
-              this.disabledInput = true;
-              this.placeHolderTenDanhsach = '';
-              this.titleForm = 'Cập nhật danh sách hợp đồng lao động';
-
-              for (let i = 0; i < this.dsList.length; i++) {
-                let ds = this.dsList[i];
-                console.log(ds);
-                if (ds.id == this.dsSelected.id) {
-                  this.dsSelected = ds;
-                }
-              }
-
-              if (this.dsSelected != null && this.dsSelected.id != null) {
-                this.http
-                  .get(hdldURL.getNsDsachHDLDByTkiemid(this.dsSelected.id))
-                  .pipe(takeUntil(this._unsubscribeAll))
-                  .subscribe((res) => {
-                    if (res.state) {
-                      debugger;
-                      this.nsHopdongList = res.data;
-                      this.lblCapnhatDs = 'Cập nhật danh sách';
-                      this.isNew = false;
-                      this.isUpdating = false;
-                      this.isXoaDanhsachDisable = false;
-                      this.isDropdownEnabled = true;
-
-                      if (
-                        this.dsSelected.id == this.data.dkTimkiemId.dsTimkiemId
-                      ) {
-                        this.focusOnRowWithPropertyValue(
-                          this.data.dkTimkiemId.nsId
-                        );
-                      }
-                    }
-                  });
-              }
-            }
-          });
-      }
     }
   }
 
@@ -688,114 +470,6 @@ export class DanhsachhdldComponent {
     });
   }
 
-  onXoaDanhsach() {
-    let dachuyenKy: Boolean;
-
-    if (this.nsHopdongList && this.nsHopdongList.length > 0) {
-      for (let i = 0; i < this.nsHopdongList.length; i++) {
-        console.log(this.nsHopdongList[i].trangthaiky);
-        if (
-          this.nsHopdongList[i].trangthaiky == 'KETTHUC' ||
-          this.nsHopdongList[i].trangthaiky == 'CHODUYET' ||
-          this.nsHopdongList[i].trangthaiky == 'DABANHANHQD'
-        ) {
-          dachuyenKy = true;
-          break;
-        }
-      }
-    }
-
-    if (dachuyenKy) {
-      this.messageService.showWarningMessage(
-        'Hệ thống',
-        'HĐLĐ đã chuyển ký số trên SmartEVN. Bạn không được xóa danh sách HĐLĐ!'
-      );
-      return;
-    } else {
-      this.http
-        .get(hdldURL.xoaDsHdld(this.dsSelected.id))
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((res: any) => {
-          if (res.state) {
-            let isDelete = res.data;
-            if (isDelete) {
-              this.messageService.showSuccessMessage(
-                'Thông báo: ',
-                'Đã xóa danh sách HĐLĐ'
-              );
-
-              // set trang thai ve xem HDLD
-              this.isNew = false;
-              this.isUpdating = false;
-              this.nsHopdongList = [];
-              this.dsList = [];
-              this.dsSelected = {};
-
-              this.onChonNam();
-            }
-          }
-        });
-    }
-  }
-
-  viewFileDuthao(ns) {
-    this.http
-      .get(hdldURL.getFileDuthao(ns.id))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) {
-          return;
-        }
-
-        var fileDuthao = res.data;
-        if (fileDuthao) {
-          const dialogRef = this._matDialog.open(FileviewComponent, {
-            width: '1000px',
-            disableClose: true,
-            data: {
-              fileId: fileDuthao.fileId,
-              fileContent: fileDuthao.fileContent,
-              fileExten: fileDuthao.fileExten,
-              fileName: fileDuthao.fileName,
-            },
-          });
-          dialogRef.afterClosed().subscribe((result) => {
-            if (result) {
-            }
-          });
-        } else {
-          this.messageService.showWarningMessage(
-            'Hệ thống',
-            'Không có File đính kèm!'
-          );
-          return;
-        }
-      });
-    return;
-  }
-
-  downFileDuthao(ns) {
-    this.http
-      .get(hdldURL.getFileDuthao(ns.id))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) {
-          return;
-        }
-        var fileDuthao = res.data;
-        if (fileDuthao) {
-          const blob = AppUltil.base64ToBlob(fileDuthao.fileContent);
-          FileSaver.saveAs(blob, fileDuthao.fileName);
-        } else {
-          this.messageService.showWarningMessage(
-            'Hệ thống',
-            'Không có File đính kèm!'
-          );
-        }
-      });
-    return;
-  }
-
   resetAfterSave() {
     // sau khi lưu thành công, thiết lập trạng thái chờ
     this.isNew = null;
@@ -846,43 +520,6 @@ export class DanhsachhdldComponent {
     return true;
   }
 
-  onTaoduthao(ns) {
-    this.http
-      .post(hdldURL.taoDuthao(), ns)
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (res.state) {
-          this.http
-            .get(hdldURL.getNsDsachHDLDByTkiemid(this.dsSelected.id))
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((res) => {
-              if (res.state) {
-                this.nsHopdongList = res.data;
-              }
-            });
-        }
-      });
-  }
-
-  onChuyenky(ns) {
-    console.log('here');
-    this.http
-      .post(hdldURL.chuyenKyHdld(), ns)
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (res.state) {
-          this.http
-            .get(hdldURL.getNsDsachHDLDByTkiemid(this.dsSelected.id))
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((res) => {
-              if (res.state) {
-                this.nsHopdongList = res.data;
-              }
-            });
-        }
-      });
-  }
-
   onXoa(ns) {
     //HĐLĐ ở tình trạng (5,6):
     if (!ns || ns.trangthaiky != null) {
@@ -917,19 +554,6 @@ export class DanhsachhdldComponent {
           dsNsHdldDeleteList.push(ns);
           param.nsDanhsachHdldList = dsNsHdldDeleteList;
 
-          // xóa trong DB
-          this.http
-            .post(hdldURL.deleteDsNsHDLD(), param)
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((res: any) => {
-              if (res.state) {
-                // remove ns khỏi nsHopdongList trên lưới
-                const index = this.nsHopdongList.indexOf(ns);
-                if (index !== -1) {
-                  this.nsHopdongList.splice(index, 1);
-                }
-              }
-            });
         }
       });
 
@@ -947,19 +571,6 @@ export class DanhsachhdldComponent {
       dsNsHdldDeleteList.push(ns);
       param.nsDanhsachHdldList = dsNsHdldDeleteList;
 
-      // xóa trong DB
-      this.http
-        .post(hdldURL.deleteDsNsHDLD(), param)
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((res: any) => {
-          if (res.state) {
-            // remove ns khỏi nsHopdongList trên lưới
-            const index = this.nsHopdongList.indexOf(ns);
-            if (index !== -1) {
-              this.nsHopdongList.splice(index, 1);
-            }
-          }
-        });
     }
   }
 
@@ -1067,15 +678,6 @@ export class DanhsachhdldComponent {
         param.thongtinCanhbaoList = dataFromChild.param1;
       }
 
-      // Thực hiện các bước xử lý tiep theo
-      this.http
-        .post(hdldURL.getNsDsachHdldListFromCanhbaoDenhan(), param)
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((res: any) => {
-          if (res.state) {
-            this.nsHopdongList = res.data;
-          }
-        });
     });
   }
 
@@ -1100,15 +702,6 @@ export class DanhsachhdldComponent {
 
       console.log('Dữ liệu Param:', param);
 
-      // Thực hiện các bước xử lý tiep theo
-      this.http
-        .post(hdldURL.getNsDsachHdldListFromCanhbaoDenhan(), param)
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((res: any) => {
-          if (res.state) {
-            this.nsHopdongList = res.data;
-          }
-        });
     });
   }
 

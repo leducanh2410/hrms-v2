@@ -11,7 +11,6 @@ import { CommonApiService } from '../../../../../services/commonHttp';
 import { HSNhansuURL } from '../../../../../services/employe/hosonhansuURL';
 import { Subject, takeUntil } from 'rxjs';
 import { THONG_TIN_CHUNG } from '../../model/thongtinchung';
-import { DanhMucURL } from '../../../../../services/employe/danhmucURL';
 import { MessageService } from '../../../../../shared/message.services';
 import { ShareData } from '../../../../../shared/shareservice.service';
 import { NHAN_SU } from '../../../../../shared/appkeymessages';
@@ -288,29 +287,6 @@ export class ThongtincanhanComponent implements OnInit, OnChanges, OnDestroy {
       this.focusFirstInvalidControlPlus();
       return;
     }
-    this.http
-      .post(HSNhansuURL.updateNsLlns(), this.model)
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) {
-          this.messageService.showErrorMessage(
-            'Hệ thống',
-            'Cập nhật thông tin không thành công'
-          );
-          return;
-        }
-        this.messageService.showSuccessMessage(
-          'Hệ thống',
-          'Cập nhật thành công'
-        );
-        this.is_edit = false;
-        this.shareData.sendMessage(NHAN_SU.VIEW_TTIN, this.model);
-        this.shareData.sendMessage(NHAN_SU.IS_EDIT, this.is_edit);
-        this.shareData.sendMessage(
-          NHAN_SU.REFRESH_THONGTINCHUNG,
-          'REFRESH_THONGTINCHUNG'
-        );
-      });
   }
 
   edit() {
@@ -326,68 +302,24 @@ export class ThongtincanhanComponent implements OnInit, OnChanges, OnDestroy {
 
   resetData() {}
 
-  chonTuQtrinh() {
-    let listQtlamviec;
-    this.http
-      .get(HSNhansuURL.getQtlamviec(this.model.id))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        listQtlamviec = res.data;
-        const dialogRef = this._matDialog.open(QtrinhlamviecComponent, {
-          width: '900px',
-          disableClose: true,
-          data: listQtlamviec,
-        });
-      });
-  }
-
   changeBodoi() {}
 
   changeGDCS() {}
 
   getDsQhNoio(idtp) {
-    let tpnoio = idtp;
-    this.http
-      .get(DanhMucURL.getListQHuyen(tpnoio))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.qhNoio = res.data;
-      });
+    
   }
 
   getDsQhNoisinh(idtp) {
-    let tpnoisinh = idtp;
-    this.http
-      .get(DanhMucURL.getListQHuyen(tpnoisinh))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.qhNoisinh = res.data;
-      });
+    
   }
 
   getDsQhQuequan(idtp) {
-    let tpquequan = idtp;
-    this.http
-      .get(DanhMucURL.getListQHuyen(tpquequan))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.qhQuequan = res.data;
-      });
+    
   }
 
   getDsQhHokhau(idtp) {
-    let tpquequan = idtp;
-    this.http
-      .get(DanhMucURL.getListQHuyen(tpquequan))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.qhHokhau = res.data;
-      });
+   
   }
 
   focusFirstInvalidControlPlus(): void {

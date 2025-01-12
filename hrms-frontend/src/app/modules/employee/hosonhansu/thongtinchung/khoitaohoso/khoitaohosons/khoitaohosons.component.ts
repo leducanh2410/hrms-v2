@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CommonApiService } from '../../../../../../services/commonHttp';
-import { DanhMucURL } from '../../../../../../services/employe/danhmucURL';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { HSNhansuURL } from '../../../../../../services/employe/hosonhansuURL';
 import { MessageService } from '../../../../../../shared/message.services';
@@ -85,163 +84,16 @@ export class KhoitaohosonsComponent implements OnInit {
 
     if (this.data == null || this.data.nsID == null) {
       this.data.gioitinh = true;
-
-      this.http
-        .get(HSNhansuURL.genSohieuNS(this.donviThaotacId))
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((res: any) => {
-          if (!res || !res.state) return;
-          this.data.sohieu = res.data;
-        });
-
-      this.http
-        .get(HSNhansuURL.getTenDvikyHDLD(this.donviThaotacId))
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((res: any) => {
-          if (!res || !res.state) return;
-          this.data.donviKyhdld = res.data;
-        });
     }
 
 
-    this.http
-      .get(HSNhansuURL.getDsDonviTructhuoc(this.donviThaotacId))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listDonvi = res.data;
-      });
-
-    this.http
-      .get(DanhMucURL.getAllTTrangHopdong())
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listLoaiHdld = res.data;
-      });
-
-    this.http
-      .get(DanhMucURL.getListVtriCdanhByDonvi(this.donviThaotacId))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listChucdanh = res.data;
-      });
-
-    this.http
-      .get(DanhMucURL.getAllNganhngheKinhte())
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listNganhNgheKte = res.data;
-
-        this.http
-          .get(HSNhansuURL.getNganhSxID(this.donviThaotacId))
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (!res || !res.state) return;
-            this.data.nganhSxkdId = res.data;
-          });
-
-      });
-
-    this.http
-      .get(DanhMucURL.getListNgheNghiep())
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listNghenghiep = res.data;
-      });
-
-    this.http
-      .get(DanhMucURL.getDsAllPhongbanIsActAndNoAct(this.donviThaotacId))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        let donvis = res.data;
-        this.phongBan = donvis
-      });
-
-    this.http
-      .get(DanhMucURL.getListNgheCNKT())
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listNgheCNKT = res.data;
-      });
-
-    this.http
-      .get(DanhMucURL.getListNhomNgheCNKT())
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listNhomNgheCNKT = res.data;
-      });
   }
 
   onChangeChucdanh(): void {
-    if (this.data != null && this.data.vtriId != null) {
-      this.http
-        .get(DanhMucURL.checkCdanhCnkt(this.data.vtriId))
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((res: any) => {
-          if (!res || !res.state) return;
-          this.disableBtnCNKT = res.data;
-          if (this.disableBtnCNKT) {
-            this.data.nghecnkt = '';
-            this.data.nghecnktId = null;
-          }
-        });
-    }
+    
   }
 
   onChangeDonvi(donviId) {
-    this.http
-      .get(DanhMucURL.getDsAllPhongbanIsActAndNoAct(donviId))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        let donvis = res.data;
-        this.phongBan = donvis
-        this.data.phongban = '';
-        this.data.phongbanId = null;
-        this.data.donviId = donviId;
-      });
-
-    this.http
-      .get(DanhMucURL.getListVtriCdanhByDonvi(donviId))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listChucdanh = res.data;
-
-        this.data.vtriId = null;
-
-      });
-
-    this.http
-      .get(HSNhansuURL.genSohieuNS(donviId))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.data.sohieu = res.data;
-      });
-
-    this.http
-      .get(HSNhansuURL.getNganhSxID(donviId))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.data.nganhSxkdId = res.data;
-      });
-
-    this.http
-      .get(HSNhansuURL.getTenDvikyHDLD(donviId))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.data.donviKyhdld = res.data;
-      });
 
   }
 
@@ -285,60 +137,6 @@ export class KhoitaohosonsComponent implements OnInit {
   }
 
   onSave(): void {
-
-
-    this.http
-      .post(HSNhansuURL.validInfo(), this.data)
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) {
-
-          this.messageService.showErrorMessage(
-            'Hệ thống',
-            res.message
-          );
-          return;
-        }
-
-        if (this.data != null && this.data.nsID != null) {
-          this.http
-            .post(HSNhansuURL.updateNsLlns(), this.data)
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((res: any) => {
-              if (!res || !res.state) {
-                this.messageService.showErrorMessage(
-                  'Hệ thống',
-                  'Cập nhật thông tin không thành công'
-                );
-              }
-              this.messageService.showSuccessMessage(
-                'Hệ thống',
-                'Cập nhật thành công'
-              );
-              let result = res.data;
-              this.matDialogRef.close(result);
-            });
-        } else {
-                      this.http
-            .post(HSNhansuURL.insertNsLlns(), this.data)
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((res: any) => {
-              if (!res || !res.state) {
-                this.messageService.showErrorMessage(
-                  'Hệ thống',
-                  'Cập nhật thông tin không thành công'
-                );
-              }
-              this.messageService.showSuccessMessage(
-                'Hệ thống',
-                'Cập nhật thành công'
-              );
-              let result = res.data;
-              this.matDialogRef.close(result);
-            });
-        }
-
-      });
 
 
   }

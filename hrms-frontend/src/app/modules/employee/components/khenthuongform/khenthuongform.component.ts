@@ -7,8 +7,6 @@ import {
 import { Buttons } from '../../../../fuse/components/message-box/common';
 import { MessageBox } from '../../../../fuse/components/message-box/message-box.provider';
 import { CommonApiService } from '../../../../services/commonHttp';
-import { DanhMucURL } from '../../../../services/employe/danhmucURL';
-import { EmployeURL } from '../../../../services/employe/employeURL';
 import { MessageService } from 'primeng/api';
 import { FormnhansuComponent } from '../../../../../assets/lib/formnhansu/src/public-api';
 import { FileUpload, FileUploadModule } from 'primeng/fileupload';
@@ -67,28 +65,6 @@ export class KhenthuongformComponent implements OnInit {
       this.data = this.obj.product;
       this.stateForm = this.obj.state;
     }
-
-    this.http
-      .get(DanhMucURL.getListHthucKhenthg())
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listHthucKhenthg = res.data;
-      });
-    this.http
-      .get(DanhMucURL.getListChucVu())
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listChucvu = res.data;
-      });
-    this.http
-      .get(EmployeURL.getDsNguoiKy())
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listNguoiKy = res.data;
-      });
   }
 
   // File quyet dinh

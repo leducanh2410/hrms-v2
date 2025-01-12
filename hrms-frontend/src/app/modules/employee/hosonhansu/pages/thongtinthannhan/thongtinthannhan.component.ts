@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject, takeUntil } from 'rxjs';
 import { CommonApiService } from '../../../../../services/commonHttp';
-import { EmployeURL } from '../../../../../services/employe/employeURL';
 import { MessageService } from '../../../../../shared/message.services';
 import { Buttons } from '../../../../../fuse/components/message-box/common';
 import { MessageBox } from '../../../../../fuse/components/message-box/message-box.provider';

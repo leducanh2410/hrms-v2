@@ -5,7 +5,6 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { CommonApiService } from '../../../../../../services/commonHttp';
-import { EmployeURL } from '../../../../../../services/employe/employeURL';
 import { Subject, takeUntil } from 'rxjs';
 import { AppUltil } from '../../../../../../shared/AppUltil';
 import FileSaver from 'file-saver';
@@ -114,52 +113,7 @@ export class LuongdialogComponent implements OnInit, OnDestroy {
   }
 
   async onSave(): Promise<void> {
-    this.http
-      .post(QuatrinhLuongURL.validInfoLuong(), this.data)
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) {
-          this.messageService.showErrorMessage('Hệ thống', res.message);
-          return;
-        }
-        if (this.data != null && this.data.id != null) {
-          this.http
-            .post(QuatrinhLuongURL.updateNsLuong(), this.data)
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((res: any) => {
-              if (!res || !res.state) {
-                this.messageService.showErrorMessage(
-                  'Hệ thống',
-                  'Cập nhật thông tin không thành công'
-                );
-              }
-              this.messageService.showSuccessMessage(
-                'Hệ thống',
-                'Cập nhật thành công'
-              );
-              let result = res.data;
-              this.matDialogRef.close(result);
-            });
-        } else {
-          this.http
-            .post(QuatrinhLuongURL.insertNsLuong(), this.data)
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((res: any) => {
-              if (!res || !res.state) {
-                this.messageService.showErrorMessage(
-                  'Hệ thống',
-                  'Cập nhật thông tin không thành công'
-                );
-              }
-              this.messageService.showSuccessMessage(
-                'Hệ thống',
-                'Cập nhật thành công'
-              );
-              let result = res.data;
-              this.matDialogRef.close(result);
-            });
-        }
-      });
+    
   }
 
   blobToBase64(blob: Blob) {
@@ -170,35 +124,6 @@ export class LuongdialogComponent implements OnInit, OnDestroy {
     });
   }
 
-  taiFileQDdinhkem(data): void {
-    var fileBase64;
-    this.http
-      .get(EmployeURL.getFile(data.fileQdinh.id))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) {
-          return;
-        }
-        fileBase64 = res.data;
-        const blob = AppUltil.base64ToBlob(fileBase64);
-        FileSaver.saveAs(blob, data.fileQdinh.fileName);
-      });
-  }
-
-  taiFilePhuluc(data): void {
-    var fileBase64;
-    this.http
-      .get(EmployeURL.getFile(data.fileLuongDinhkem.id))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) {
-          return;
-        }
-        fileBase64 = res.data;
-        const blob = AppUltil.base64ToBlob(fileBase64);
-        FileSaver.saveAs(blob, data.fileLuongDinhkem.fileName);
-      });
-  }
 
   deleteFileQD(file) {
     let dialog = this.mb.showDefault(

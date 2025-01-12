@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { CommonApiService } from '../../../../services/commonHttp';
-import { hdldURL } from '../../../../services/employe/hdldURL';
 import { Subject, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';

@@ -12,7 +12,6 @@ import { Subject } from 'rxjs/internal/Subject';
 import { THONG_TIN_CHUNG } from '../../../model/thongtinchung';
 import { takeUntil } from 'rxjs';
 import { LamviecdialogComponent } from './lamviecDialog/lamviecdialog/lamviecdialog.component';
-import { QuatrinhLamviecURL } from '../../../../../../services/employe/quatrinhlamviecURL';
 import { MessageService } from '../../../../../../shared/message.services';
 import { Buttons } from '../../../../../../fuse/components/message-box/common';
 import { MessageBox } from '../../../../../../fuse/components/message-box/message-box.provider';
@@ -93,54 +92,41 @@ export class LamviecComponent implements OnInit, OnChanges {
   }
 
   delete(product) {
-    this.http
-      .post(QuatrinhLamviecURL.validXoaQtLamviec(), product)
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) {
-          this.messageService.showErrorMessage('Hệ thống', res.message);
-          return;
-        }
-        let dialog = this.mb.showDefault(
-          'Bạn có chắc chắn muốn muốn xóa quá trình làm việc này không?',
-          Buttons.YesNo
-        );
+    // this.http
+    //   .post(QuatrinhLamviecURL.validXoaQtLamviec(), product)
+    //   .pipe(takeUntil(this._unsubscribeAll))
+    //   .subscribe((res: any) => {
+    //     if (!res || !res.state) {
+    //       this.messageService.showErrorMessage('Hệ thống', res.message);
+    //       return;
+    //     }
+    //     let dialog = this.mb.showDefault(
+    //       'Bạn có chắc chắn muốn muốn xóa quá trình làm việc này không?',
+    //       Buttons.YesNo
+    //     );
 
-        dialog.dialogResult$.subscribe(async (result) => {
-          if (result) {
-            this.http
-              .delete(QuatrinhLamviecURL.deleteQtlamviec(product.qtlamviecId))
-              .pipe(takeUntil(this._unsubscribeAll))
-              .subscribe((res: any) => {
-                if (!res || !res.state) {
-                  this.messageService.showErrorMessage(
-                    'Hệ thống',
-                    'Xóa thông tin không thành công'
-                  );
-                  return;
-                }
-                this.messageService.showSuccessMessage(
-                  'Hệ thống',
-                  'Xóa thành công'
-                );
-                this.loadData();
-              });
-          }
-        });
-      });
+    //     dialog.dialogResult$.subscribe(async (result) => {
+    //       if (result) {
+    //         this.http
+    //           .delete(QuatrinhLamviecURL.deleteQtlamviec(product.qtlamviecId))
+    //           .pipe(takeUntil(this._unsubscribeAll))
+    //           .subscribe((res: any) => {
+    //             if (!res || !res.state) {
+    //               this.messageService.showErrorMessage(
+    //                 'Hệ thống',
+    //                 'Xóa thông tin không thành công'
+    //               );
+    //               return;
+    //             }
+    //             this.messageService.showSuccessMessage(
+    //               'Hệ thống',
+    //               'Xóa thành công'
+    //             );
+    //             this.loadData();
+    //           });
+    //       }
+    //     });
+    //   });
   }
 
-  xuatExcel(): void {
-    this.http
-      .get(QuatrinhLamviecURL.xuatExcel(this.nsInfo?.id))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) {
-          return;
-        }
-
-        const blob = AppUltil.base64ToBlob(res.data);
-        FileSaver.saveAs(blob, 'quatrinhlamviec.xls');
-      });
-  }
 }

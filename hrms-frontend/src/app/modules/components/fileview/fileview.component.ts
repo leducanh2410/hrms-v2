@@ -2,7 +2,6 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CommonApiService } from '../../../services/commonHttp';
-import { EmployeURL } from '../../../services/employe/employeURL';
 import { AppUltil } from '../../../shared/AppUltil';
 import FileSaver from 'file-saver';
 import { NgxExtendedPdfViewerModule, pdfDefaultOptions } from 'ngx-extended-pdf-viewer';

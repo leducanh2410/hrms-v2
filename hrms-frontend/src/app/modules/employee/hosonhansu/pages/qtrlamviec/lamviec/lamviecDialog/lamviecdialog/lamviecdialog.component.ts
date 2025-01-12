@@ -13,10 +13,6 @@ import { QtrinhlamviecBean } from '../../../../../model/qtrinhlamviec';
 import { APP_ACTION } from '../../../../../../../../ngxstore/actions/app.actions';
 import { AppState } from '../../../../../../../../ngxstore/state/app.state';
 import { CommonApiService } from '../../../../../../../../services/commonHttp';
-import { DanhMucURL } from '../../../../../../../../services/employe/danhmucURL';
-import { EmployeURL } from '../../../../../../../../services/employe/employeURL';
-
-import { QuatrinhLamviecURL } from '../../../../../../../../services/employe/quatrinhlamviecURL';
 import { AppUltil } from '../../../../../../../../shared/AppUltil';
 import { MessageService } from '../../../../../../../../shared/message.services';
 import FileSaver from 'file-saver';

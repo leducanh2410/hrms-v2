@@ -8,10 +8,8 @@ import { FileviewComponent } from '../../components/fileview/fileview.component'
 import { APP_ACTION } from '../../../ngxstore/actions/app.actions';
 import { AppState } from '../../../ngxstore/state/app.state';
 import { CommonApiService } from '../../../services/commonHttp';
-import { DanhMucURL } from '../../../services/employe/danhmucURL';
 import { HSNhansuURL } from '../../../services/employe/hosonhansuURL';
 import { llnsURL } from '../../../services/employe/llnsURL';
-import { TochucURL } from '../../../services/tochuc/tochucURL';
 import { AppUltil, MessageKey } from '../../../shared/AppUltil';
 import { MessageService } from '../../../shared/message.services';
 import { ShareData } from '../../../shared/shareservice.service';
@@ -118,14 +116,6 @@ export class DsnhansuComponent implements OnInit, OnDestroy {
           orgCode: this.user.madonvi,
         };
 
-        this.http
-          .get(TochucURL.getListDonviTructhuoc(this.user.iddonvi))
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (res.state) {
-              this.donvis = res.data;
-            }
-          });
       }
     });
   }
@@ -343,139 +333,6 @@ export class DsnhansuComponent implements OnInit, OnDestroy {
     );
     // Hiển thị kết quả
     let body = { columName, dataBody, titleReport, colWidthList };
-  }
-
-  downloadMauSYLL(type, nhansu) {
-    let fileBase64;
-    switch (type) {
-      case 1: {
-        this.http
-          .get(HSNhansuURL.xuatSyllMauEvn(nhansu.nsID, false))
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (!res || !res.state) {
-              return;
-            }
-            fileBase64 = res.data;
-            const blob = AppUltil.base64ToBlob(fileBase64);
-            FileSaver.saveAs(blob, 'SYLLEVN.docx');
-          });
-        return;
-      }
-      case 2: {
-        this.http
-          .get(HSNhansuURL.xuatSyllMau02c(nhansu.nsID, false))
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (!res || !res.state) {
-              return;
-            }
-            fileBase64 = res.data;
-            const blob = AppUltil.base64ToBlob(fileBase64);
-            FileSaver.saveAs(blob, 'SYLLMau02c.docx');
-          });
-        return;
-      }
-      case 3: {
-        this.http
-          .get(HSNhansuURL.xuatSyllMau02cTCTW(nhansu.nsID, false))
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (!res || !res.state) {
-              return;
-            }
-            fileBase64 = res.data;
-            const blob = AppUltil.base64ToBlob(fileBase64);
-            FileSaver.saveAs(blob, 'SYLLMau02cTCTW.docx');
-          });
-        return;
-      }
-    }
-  }
-
-  viewFileSYLL(type, nhansu) {
-    // Show File
-    let fileBase64;
-    switch (type) {
-      case 1: {
-        this.http
-          .get(HSNhansuURL.xuatSyllMauEvn(nhansu.nsID, true))
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (!res || !res.state) {
-              return;
-            }
-            fileBase64 = res.data;
-            const dialogRef = this._matDialog.open(FileviewComponent, {
-              width: '1000px',
-              disableClose: true,
-              data: {
-                fileId: 'SYLLEVN.pdf',
-                fileContent: fileBase64,
-                fileExten: 'PDF',
-                fileName: 'SYLLEVN.pdf',
-              },
-            });
-            dialogRef.afterClosed().subscribe((result) => {
-              if (result) {
-              }
-            });
-          });
-        return;
-      }
-      case 2: {
-        this.http
-          .get(HSNhansuURL.xuatSyllMau02c(nhansu.nsID, true))
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (!res || !res.state) {
-              return;
-            }
-            fileBase64 = res.data;
-            const dialogRef = this._matDialog.open(FileviewComponent, {
-              width: '1000px',
-              disableClose: true,
-              data: {
-                fileId: 'SYLLMau02c.pdf',
-                fileContent: fileBase64,
-                fileExten: 'PDF',
-                fileName: 'SYLLMau02c.pdf',
-              },
-            });
-            dialogRef.afterClosed().subscribe((result) => {
-              if (result) {
-              }
-            });
-          });
-        return;
-      }
-      case 3: {
-        this.http
-          .get(HSNhansuURL.xuatSyllMau02cTCTW(nhansu.nsID, true))
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (!res || !res.state) {
-              return;
-            }
-            fileBase64 = res.data;
-            const dialogRef = this._matDialog.open(FileviewComponent, {
-              width: '1000px',
-              disableClose: true,
-              data: {
-                fileId: 'SYLLMau02cTCTW.pdf',
-                fileContent: fileBase64,
-                fileExten: 'PDF',
-                fileName: 'SYLLMau02cTCTW.pdf',
-              },
-            });
-            dialogRef.afterClosed().subscribe((result) => {
-              if (result) {
-              }
-            });
-          });
-        return;
-      }
-    }
   }
 
   onNavigatorHsns(ns) {

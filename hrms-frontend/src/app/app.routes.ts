@@ -7,7 +7,7 @@ import { HosonhansuComponent } from './modules/employee/hosonhansu/hosonhansu.co
 import { MenuComponent } from './modules/employee/hosonhansu/menu/menu.component';
 import { HdldComponent } from './modules/hdld/hdld.component';
 import { DanhsachhdldComponent } from './modules/hdld/danhsachhdld/danhsachhdld.component';
-import { DepartmentComponent } from './modules/department/department/department.component';
+import { DepartmentComponent } from './modules/department/department.component';
 export const routes: Routes = [
   {
     path: '', // Đường dẫn gốc

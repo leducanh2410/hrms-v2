@@ -2,15 +2,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject, takeUntil } from 'rxjs';
 import { CommonApiService } from '../../../../../services/commonHttp';
-import { EmployeURL } from '../../../../../services/employe/employeURL';
 import { MessageService } from '../../../../../shared/message.services';
 import { Buttons } from '../../../../../fuse/components/message-box/common';
 import { MessageBox } from '../../../../../fuse/components/message-box/message-box.provider';
 import { llnsURL } from '../../../../../services/employe/llnsURL';
 import { KhenthuongformComponent } from './khenthuongform/khenthuongform.component';
-import FileSaver, { saveAs } from 'file-saver';
-import { DanhMucURL } from '../../../../../services/employe/danhmucURL';
-import { FileviewComponent } from '../../../../components/fileview/fileview.component';
 import { AppUltil } from '../../../../../shared/AppUltil';
 import { CommonModule, formatDate } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -211,61 +207,4 @@ export class KhenthuongKyluatComponent implements OnInit {
     });
   }
 
-  downloadFileQD(idQD): void {
-    this.http
-      .get(DanhMucURL.getFileQuyetDinh(idQD))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) {
-          return;
-        }
-        var fileQD = res.data;
-        if (fileQD) {
-          const blob = AppUltil.base64ToBlob(fileQD.fileContent);
-          FileSaver.saveAs(blob, fileQD.fileName);
-        } else {
-          this.messageService.showWarningMessage(
-            'Hệ thống',
-            'Quyết định không có File đính kèm!'
-          );
-        }
-      });
-    return;
-  }
-
-  viewFileQD(idQD): void {
-    this.http
-      .get(DanhMucURL.getFileQuyetDinh(idQD))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) {
-          return;
-        }
-
-        var fileQD = res.data;
-        if (fileQD) {
-          const dialogRef = this._matDialog.open(FileviewComponent, {
-            width: '1000px',
-            disableClose: true,
-            data: {
-              fileId: fileQD.fileId,
-              fileContent: fileQD.fileContent,
-              fileExten: fileQD.fileExten,
-              fileName: fileQD.fileName,
-            },
-          });
-          dialogRef.afterClosed().subscribe((result) => {
-            if (result) {
-            }
-          });
-        } else {
-          this.messageService.showWarningMessage(
-            'Hệ thống',
-            'Quyết định không có File đính kèm!'
-          );
-          return;
-        }
-      });
-    return;
-  }
 }

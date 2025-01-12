@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Subject, takeUntil } from 'rxjs';
-import { DanhMucURL } from '../../../../services/employe/danhmucURL';
 import { CommonApiService } from '../../../../services/commonHttp';
 import { MessageService } from '../../../../shared/message.services';
 import { FileUpload } from 'primeng/fileupload';
@@ -80,23 +79,6 @@ export class DtaonhformComponent implements OnInit {
       this.stateForm = this.obj.state;
     }
 
-    this.http
-      .get(DanhMucURL.getListNgoaingu())
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listNNgu = res.data;
-      });
-    
-    if (this.data.lNgoainguId){
-      this.http
-        .get(DanhMucURL.getListCCNNguByIdNN(this.data.lNgoainguId))
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((res: any) => {
-          if (!res || !res.state) return;
-          this.listCCNNgu = res.data;
-        });
-    }
   }
 
   async myUploader(event, fileForm) {
@@ -161,14 +143,7 @@ export class DtaonhformComponent implements OnInit {
   }
 
   onChangeNgoaiNgu(idNN) {
-    this.data.tenngoaingu = this.listNNgu.find(item => item.id == idNN).name
-    this.http
-    .get(DanhMucURL.getListCCNNguByIdNN(this.data.lNgoainguId))
-    .pipe(takeUntil(this._unsubscribeAll))
-    .subscribe((res: any) => {
-      if (!res || !res.state) return;
-      this.listCCNNgu = res.data;
-    });
+   
   }
 
   onChangeCCNN(value) {

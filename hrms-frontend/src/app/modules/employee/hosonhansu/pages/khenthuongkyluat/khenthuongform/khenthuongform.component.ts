@@ -11,13 +11,8 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { Buttons } from '../../../../../../fuse/components/message-box/common';
 import { MessageBox } from '../../../../../../fuse/components/message-box/message-box.provider';
-import { FileviewComponent } from '../../../../../components/fileview/fileview.component';
-import { ChonquyetdinhComponent } from '../../../../../components/chonquyetdinh/chonquyetdinh.component';
-import { ValidateQD } from '../../../../../components/qdnoidung/validateQD';
 import { CommonApiService } from '../../../../../../services/commonHttp';
-import { DanhMucURL } from '../../../../../../services/employe/danhmucURL';
 import { llnsURL } from '../../../../../../services/employe/llnsURL';
 import { AppUltil } from '../../../../../../shared/AppUltil';
 import { MessageService } from '../../../../../../shared/message.services';

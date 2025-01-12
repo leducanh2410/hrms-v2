@@ -15,7 +15,6 @@ import { MessageBox } from '../../../../fuse/components/message-box/message-box.
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../ngxstore/state/app.state';
 import { CommonApiService } from '../../../../services/commonHttp';
-import { hdldURL } from '../../../../services/employe/hdldURL';
 import { HSNhansuURL } from '../../../../services/employe/hosonhansuURL';
 import { MessageService } from '../../../../shared/message.services';
 import moment from 'moment';
@@ -164,14 +163,6 @@ export class TaoHdldDialogComponent {
       // Lấy tháng (đánh số từ 0 đến 11)
       const month = this.fDate.month() + 1;
 
-      this.http
-        .get(hdldURL.getDsNhansuThaydoiVtri(this.donviId, year, month))
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((res) => {
-          if (res.state) {
-            this.nsList = res.data;
-          }
-        });
     }
   }
 
