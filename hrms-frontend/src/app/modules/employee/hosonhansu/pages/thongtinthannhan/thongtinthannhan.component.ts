@@ -71,8 +71,7 @@ export class ThongtinthannhanComponent implements OnInit {
     const dialogRef = this._matDialog.open(GiadinhformComponent, {
       width: '900px',
       data: {
-        giadinh: {},
-        nhansu: this.nhansu,
+        nsId: this.nhansu.id,
         addNew: true,
       },
     });
@@ -147,7 +146,7 @@ export class ThongtinthannhanComponent implements OnInit {
         ? 'Nam'
         : rowData[field] === 1
         ? 'Nữ'
-        : 'LGBT'
+        : 'LGBT';
     }
 
     return rowData[field];
