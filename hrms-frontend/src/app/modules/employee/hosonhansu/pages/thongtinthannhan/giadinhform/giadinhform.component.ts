@@ -117,7 +117,7 @@ export class GiadinhformComponent implements OnInit {
   saveAndClose(): void {
     if (this.isEdit) {
       this.http
-        .put(llnsURL.updateNhanThanById(this.nsId), this.nhanThan)
+        .put(llnsURL.updateNhanThanById(this.nhanThan.id), this.nhanThan)
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((res: any) => {
           if (!res || !res.state) {

@@ -63,15 +63,13 @@ export class LamviecComponent implements OnInit, OnChanges {
     
   }
 
-  themchucdanh() {
+  themQTCT() {
     const dialogRef = this._matDialog.open(LamviecdialogComponent, {
       width: '900px',
       disableClose: true,
       data: {
         id: this.nsInfo?.id,
-        isNow: true,
-        tenbophan: this.nsInfo?.quaTrinhCongTac[0].department.departmentName,
-        phonbanId: this.nsInfo?.quaTrinhCongTac[0].department.id,
+        addNew: true,
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
@@ -79,12 +77,13 @@ export class LamviecComponent implements OnInit, OnChanges {
     });
   }
 
-  suachucdanh(product) {
-    const obj = JSON.parse(JSON.stringify(product));
+  suaQTCT(qtct) {
     const dialogRef = this._matDialog.open(LamviecdialogComponent, {
       width: '900px',
       disableClose: true,
-      data: obj,
+      data: {
+        qtct
+      },
     });
     dialogRef.afterClosed().subscribe((result) => {
       this.loadData();

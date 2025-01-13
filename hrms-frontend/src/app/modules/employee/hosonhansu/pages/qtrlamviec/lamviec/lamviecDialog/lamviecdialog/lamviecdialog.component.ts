@@ -44,6 +44,25 @@ import { NghiepVu } from '../../../../../model/nghiepvu';
 import { MasterDataURL } from '../../../../../../../../services/employe/masterDataURL';
 import { HSNhansuURL } from '../../../../../../../../services/employe/hosonhansuURL';
 import { LoaiQTCT } from '../../../../../model/loaiQtct';
+import { llnsURL } from '../../../../../../../../services/employe/llnsURL';
+
+interface QTCTRequest {
+  ngayHieuLuc: Date;
+  ngayQuyetDinh: Date;
+  phongBanId: number;
+  loaiQtctId: number;
+  chucDanhId: number;
+  thanhPhanId: number;
+  phapNhanId: number;
+  loaiLaoDongId: number;
+  dongXeId: number;
+  capDoNhanSuId: number;
+  nghiepVuId: number;
+  donViId: number;
+  vanPhongLamViecId: number;
+  trangthai: boolean;
+  ghiChu: string;
+}
 
 @Component({
   selector: 'app-lamviecdialog',
@@ -77,11 +96,13 @@ export class LamviecdialogComponent implements OnInit {
 
   user_info: User;
   ngayHieuLuc: Date = new Date();
+  isEdit: boolean = true;
+  qtct: QtrinhlamviecBean = new QtrinhlamviecBean();
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: QtrinhlamviecBean,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     public matDialogRef: MatDialogRef<LamviecdialogComponent>,
     private http: CommonApiService,
     private _matDialog: MatDialog,
@@ -98,9 +119,12 @@ export class LamviecdialogComponent implements OnInit {
       }
     });
 
-    if (data) {
-      this.ngayHieuLuc = new Date(data.ngayHieuLuc);
+    if (data?.qtct) {
+      this.qtct = data.qtct;
+      this.ngayHieuLuc = new Date(data.qtct.ngayHieuLuc);
     }
+
+    if (this.data.addNew) this.isEdit = false;
   }
 
   ngOnInit(): void {
@@ -213,7 +237,34 @@ export class LamviecdialogComponent implements OnInit {
 
   onChangeChucdanh(): void {}
 
-  onSave(): void {}
+  onSave(): void {
+    if (this.isEdit) {
+      const qtctRequest: QTCTRequest = {
+        ngayHieuLuc: this.ngayHieuLuc,
+        ngayQuyetDinh: this.ngayHieuLuc,
+        phongBanId: this.qtct.department.id,
+        loaiQtctId: this.qtct.loaiQtct.id,
+        chucDanhId: this.qtct.chucdanh.id,
+        thanhPhanId: this.qtct.thanhphannhansu.id,
+        phapNhanId: this.qtct.phapnhan.id,
+        loaiLaoDongId: this.qtct.loailaodong.id,
+        dongXeId: this.qtct.dongxe.id,
+        capDoNhanSuId: this.qtct.capdonhansu.id,
+        nghiepVuId: this.qtct.nghiepvu.id,
+        donViId: this.qtct.department.id,
+        vanPhongLamViecId: this.qtct.vanphonglamviec.id,
+        trangthai: this.qtct.trangthai,
+        ghiChu: this.qtct.ghiChu,
+      };
+
+      this.http
+        .post(llnsURL.updateQTCTById(this.qtct.id), qtctRequest)
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((res: any) => {
+          console.log(res);
+        });
+    }
+  }
 
   onKeyDown(event: any, maxLength: number) {
     const acceptKeys = [

@@ -15,7 +15,7 @@ export class llnsURL extends BaseURL {
   }
 
   static deleteNhanThanById(id) {
-    return `${this.getOrigin()}/family/createByEmployeeId`;
+    return `${this.getOrigin()}/family/deleteById/${id}`;
   }
 
   static getAllNhanThanByEmpId(id) {
@@ -29,5 +29,11 @@ export class llnsURL extends BaseURL {
   // danh gia
   static createDanhGiaByEmpId(id) {
     return `${this.getOrigin()}/family/createByEmployeeId`;
+  }
+
+
+  // qua trinh cong tac
+  static updateQTCTById(id) {
+    return `${this.getOrigin()}/job-journey/update/${id}`;
   }
 }

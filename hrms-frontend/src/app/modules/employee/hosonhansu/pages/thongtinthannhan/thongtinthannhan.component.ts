@@ -123,18 +123,20 @@ export class ThongtinthannhanComponent implements OnInit {
           .delete(llnsURL.deleteNhanThanById(id))
           .pipe(takeUntil(this._unsubscribeAll))
           .subscribe((res: any) => {
-            if (!res || !res.state) {
-              this.messageService.showErrorMessage(
+            console.log(res);
+
+            if (res.state == 200) {
+              this.messageService.showSuccessMessage(
                 'Hệ thống',
-                'Xóa thông tin không thành công'
+                'Xóa thành công'
               );
+              this.loadData();
               return;
             }
-            this.messageService.showSuccessMessage(
+            this.messageService.showErrorMessage(
               'Hệ thống',
-              'Xóa thành công'
+              'Xóa thông tin không thành công'
             );
-            this.loadData();
           });
       }
     });

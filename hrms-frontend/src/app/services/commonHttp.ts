@@ -82,9 +82,9 @@ export class CommonApiService {
                 });
             }),
             switchMap((response: any) => {
-                const rpstate = 'state' in response ? response.state : response.State;
-                const rpmessage = 'message' in response ? response.message : response.Message;
-                const rpdata = 'data' in response ? response.data : response.Data;
+                const rpstate = response?.code
+                const rpmessage = response?.message
+                const rpdata = response?.data
                 if (showError && !rpstate) {
                     this.messageService.showErrorMessage('Thông báo: ', rpmessage);
                 }
@@ -139,7 +139,7 @@ export class CommonApiService {
                 });
             }),
             switchMap((response: any) => {
-                const rpstate = 'state' in response ? response.state : response.State;
+                const rpstate = 'state' in response ? response.code : response.code;
                 const rpmessage = 'message' in response ? response.message : response.Message;
                 const rpdata = 'data' in response ? response.data : response.Data;
                 if (showError && !rpstate) {
