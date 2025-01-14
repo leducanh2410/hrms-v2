@@ -45,6 +45,7 @@ import { MasterDataURL } from '../../../../../../../../services/employe/masterDa
 import { HSNhansuURL } from '../../../../../../../../services/employe/hosonhansuURL';
 import { LoaiQTCT } from '../../../../../model/loaiQtct';
 import { llnsURL } from '../../../../../../../../services/employe/llnsURL';
+import { MessageBoxComponent } from '../../../../../../../../fuse/components/message-box/message-box.component';
 
 interface QTCTRequest {
   ngayHieuLuc: Date;
@@ -98,6 +99,7 @@ export class LamviecdialogComponent implements OnInit {
   ngayHieuLuc: Date = new Date();
   isEdit: boolean = true;
   qtct: QtrinhlamviecBean = new QtrinhlamviecBean();
+  nsId: number;
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -119,15 +121,20 @@ export class LamviecdialogComponent implements OnInit {
       }
     });
 
-    if (data?.qtct) {
-      this.qtct = data.qtct;
-      this.ngayHieuLuc = new Date(data.qtct.ngayHieuLuc);
+    if (this.data.addNew) {
+      this.isEdit = false;
+      this.nsId = data?.nsId
     }
-
-    if (this.data.addNew) this.isEdit = false;
   }
 
   ngOnInit(): void {
+    if (this.isEdit) {
+      this.qtct = this.data?.qtct;
+      this.ngayHieuLuc = new Date(this.data?.qtct.ngayHieuLuc);
+    } else {
+      this.qtct = new QtrinhlamviecBean();
+    }
+
     this.onLoadPhongBan();
     this.onLoadCapDoNS();
     this.onLoadChucDanh();
@@ -233,35 +240,61 @@ export class LamviecdialogComponent implements OnInit {
       });
   }
 
+  async loadData() {
+    if (this.isEdit) {
+      this.http
+        .get(llnsURL.getQTCTById(this.data?.qtctId))
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((res: any) => {
+          if (!res || !res.state) return;
+          this.qtct = res.data;
+          this.ngayHieuLuc = new Date(this.qtct.ngayHieuLuc);
+        });
+    }
+  }
+
   onChonphongban(): void {}
 
   onChangeChucdanh(): void {}
 
-  onSave(): void {
-    if (this.isEdit) {
-      const qtctRequest: QTCTRequest = {
-        ngayHieuLuc: this.ngayHieuLuc,
-        ngayQuyetDinh: this.ngayHieuLuc,
-        phongBanId: this.qtct.department.id,
-        loaiQtctId: this.qtct.loaiQtct.id,
-        chucDanhId: this.qtct.chucdanh.id,
-        thanhPhanId: this.qtct.thanhphannhansu.id,
-        phapNhanId: this.qtct.phapnhan.id,
-        loaiLaoDongId: this.qtct.loailaodong.id,
-        dongXeId: this.qtct.dongxe.id,
-        capDoNhanSuId: this.qtct.capdonhansu.id,
-        nghiepVuId: this.qtct.nghiepvu.id,
-        donViId: this.qtct.department.id,
-        vanPhongLamViecId: this.qtct.vanphonglamviec.id,
-        trangthai: this.qtct.trangthai,
-        ghiChu: this.qtct.ghiChu,
-      };
+  onSaveAndClose(): void {
 
+    debugger
+    const qtctRequest: QTCTRequest = {
+      ngayHieuLuc: this.ngayHieuLuc,
+      ngayQuyetDinh: this.ngayHieuLuc,
+      phongBanId: this.qtct.department.id,
+      loaiQtctId: this.qtct.loaiQtct.id,
+      chucDanhId: this.qtct.chucdanh.id,
+      thanhPhanId: this.qtct.thanhphannhansu.id,
+      phapNhanId: this.qtct.phapnhan.id,
+      loaiLaoDongId: this.qtct.loailaodong.id,
+      dongXeId: this.qtct.dongxe.id,
+      capDoNhanSuId: this.qtct.capdonhansu.id,
+      nghiepVuId: this.qtct.nghiepvu.id,
+      donViId: this.qtct.department.id,
+      vanPhongLamViecId: this.qtct.vanphonglamviec.id,
+      trangthai: this.qtct.trangthai,
+      ghiChu: this.qtct.ghiChu,
+    };
+
+    if (this.isEdit) {
+      // this.http
+      //   .put(llnsURL.updateQTCTById(this.qtct.id), qtctRequest)
+      //   .pipe(takeUntil(this._unsubscribeAll))
+      //   .subscribe((res: any) => {
+      //     if (res.state == 200) {
+      //       this.matDialogRef.close();
+      //     }
+      //   });
+    } else {
       this.http
-        .post(llnsURL.updateQTCTById(this.qtct.id), qtctRequest)
+        .post(llnsURL.createQTCTByEmpId(this.nsId), qtctRequest)
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((res: any) => {
-          console.log(res);
+          if (res.state == 200) {
+            this.matDialogRef.close();
+          }
         });
     }
   }

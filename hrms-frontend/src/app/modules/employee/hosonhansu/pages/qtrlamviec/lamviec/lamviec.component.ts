@@ -22,6 +22,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { QtrinhlamviecBean } from '../../../model/qtrinhlamviec';
+import { llnsURL } from '../../../../../../services/employe/llnsURL';
 
 @Component({
   selector: 'app-lamviec',
@@ -54,13 +55,18 @@ export class LamviecComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.listQuaTrinhLamViec = this.nsInfo?.quaTrinhCongTac;
     this.loadData();
-    
   }
 
   loadData(): void {
-    
+    this.http
+      .get(llnsURL.getQTCTByEmpId(this.nsInfo.id))
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((res: any) => {
+        if (res.state == 200) {
+          this.listQuaTrinhLamViec = res.data;
+        }
+      });
   }
 
   themQTCT() {
@@ -68,7 +74,7 @@ export class LamviecComponent implements OnInit, OnChanges {
       width: '900px',
       disableClose: true,
       data: {
-        id: this.nsInfo?.id,
+        nsId: this.nsInfo?.id,
         addNew: true,
       },
     });
@@ -82,7 +88,7 @@ export class LamviecComponent implements OnInit, OnChanges {
       width: '900px',
       disableClose: true,
       data: {
-        qtct
+        qtct,
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
@@ -90,42 +96,33 @@ export class LamviecComponent implements OnInit, OnChanges {
     });
   }
 
-  delete(product) {
-    // this.http
-    //   .post(QuatrinhLamviecURL.validXoaQtLamviec(), product)
-    //   .pipe(takeUntil(this._unsubscribeAll))
-    //   .subscribe((res: any) => {
-    //     if (!res || !res.state) {
-    //       this.messageService.showErrorMessage('Hệ thống', res.message);
-    //       return;
-    //     }
-    //     let dialog = this.mb.showDefault(
-    //       'Bạn có chắc chắn muốn muốn xóa quá trình làm việc này không?',
-    //       Buttons.YesNo
-    //     );
+  delete(id) {
+    let dialog = this.mb.showDefault(
+      'Bạn có chắc chắn muốn muốn xóa thông tin không?',
+      Buttons.YesNo
+    );
+    dialog.dialogResult$.subscribe(async (result) => {
+      if (result) {
+        this.http
+          .delete(llnsURL.deleteQTCT(id))
+          .pipe(takeUntil(this._unsubscribeAll))
+          .subscribe((res: any) => {
+            console.log(res);
 
-    //     dialog.dialogResult$.subscribe(async (result) => {
-    //       if (result) {
-    //         this.http
-    //           .delete(QuatrinhLamviecURL.deleteQtlamviec(product.qtlamviecId))
-    //           .pipe(takeUntil(this._unsubscribeAll))
-    //           .subscribe((res: any) => {
-    //             if (!res || !res.state) {
-    //               this.messageService.showErrorMessage(
-    //                 'Hệ thống',
-    //                 'Xóa thông tin không thành công'
-    //               );
-    //               return;
-    //             }
-    //             this.messageService.showSuccessMessage(
-    //               'Hệ thống',
-    //               'Xóa thành công'
-    //             );
-    //             this.loadData();
-    //           });
-    //       }
-    //     });
-    //   });
+            if (res.state == 200) {
+              this.messageService.showSuccessMessage(
+                'Hệ thống',
+                'Xóa thành công'
+              );
+              this.loadData();
+              return;
+            }
+            this.messageService.showErrorMessage(
+              'Hệ thống',
+              'Xóa thông tin không thành công'
+            );
+          });
+      }
+    });
   }
-
 }

@@ -79,7 +79,8 @@ export class QtrluongComponent implements OnInit, OnChanges {
       width: '1000px',
       disableClose: true,
       data: {
-        nsID: this.nsInfo?.nsID,
+        nsID: this.nsInfo?.id,
+        addNew: true
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
@@ -92,8 +93,7 @@ export class QtrluongComponent implements OnInit, OnChanges {
       width: '1000px',
       disableClose: true,
       data: {
-        nsLuong: nsLuong,
-        nsInfo: this.nsInfo,
+        nsLuongId: nsLuong?.id,
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
@@ -109,23 +109,23 @@ export class QtrluongComponent implements OnInit, OnChanges {
 
     dialog.dialogResult$.subscribe(async (result) => {
       if (result) {
-        // this.http
-        //   .delete(QuatrinhLuongURL.deleteNsLuong(id))
-        //   .pipe(takeUntil(this._unsubscribeAll))
-        //   .subscribe((res: any) => {
-        //     if (!res || !res.state) {
-        //       this.messageService.showErrorMessage(
-        //         'Hệ thống',
-        //         'Xóa thông tin không thành công'
-        //       );
-        //       return;
-        //     }
-        //     this.messageService.showSuccessMessage(
-        //       'Hệ thống',
-        //       'Xóa thành công'
-        //     );
-        //     this.loadDataLuong();
-        //   });
+        this.http
+          .delete(QuatrinhLuongURL.deleteNSLuong(id))
+          .pipe(takeUntil(this._unsubscribeAll))
+          .subscribe((res: any) => {
+            if (!res || !res.state) {
+              this.messageService.showErrorMessage(
+                'Hệ thống',
+                'Xóa thông tin không thành công'
+              );
+              return;
+            }
+            this.messageService.showSuccessMessage(
+              'Hệ thống',
+              'Xóa thành công'
+            );
+            this.loadDataLuong();
+          });
       }
     });
   }

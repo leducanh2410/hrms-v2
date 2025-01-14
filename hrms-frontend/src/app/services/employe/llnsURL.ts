@@ -31,9 +31,24 @@ export class llnsURL extends BaseURL {
     return `${this.getOrigin()}/family/createByEmployeeId`;
   }
 
-
   // qua trinh cong tac
+  static createQTCTByEmpId(empId) {
+    return `${this.getOrigin()}/job-journey/create/${empId}`;
+  }
+
   static updateQTCTById(id) {
     return `${this.getOrigin()}/job-journey/update/${id}`;
+  }
+
+  static deleteQTCT(id) {
+    return `${this.getOrigin()}/job-journey/delete/${id}`;
+  }
+
+  static getQTCTByEmpId(empId) {
+    return `${this.getOrigin()}/job-journey/getByEmpId/${empId}`;
+  }
+
+  static getQTCTById(id) {
+    return `${this.getOrigin()}/job-journey/getById/${id}`;
   }
 }
