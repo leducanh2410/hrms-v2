@@ -73,7 +73,6 @@ export class LuongdialogComponent implements OnInit, OnDestroy {
     console.log(data);
 
     this.nsId = data?.nsID;
-    this.ngayHieuLuc = new Date(this.luong?.ngayHieuLuc);
 
     if (data?.addNew) {
       this.isEdit = false;
@@ -107,6 +106,7 @@ export class LuongdialogComponent implements OnInit, OnDestroy {
         .subscribe((res: any) => {
           if (res.state == 200) {
             this.luong = res.data;
+            this.ngayHieuLuc = new Date(res.data?.ngayHieuLuc);
           }
         });
     }

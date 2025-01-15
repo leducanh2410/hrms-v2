@@ -65,7 +65,9 @@ export class KhenthuongformComponent implements OnInit {
 
   nsInfo: THONG_TIN_CHUNG = new THONG_TIN_CHUNG();
   danhGia: DanhGia = new DanhGia();
+  danhGiaId: number;
   listDotDanhGia: DotDanhGia[] = [];
+  isEdit: boolean = true;
 
   timeDanhGiaTu: Date = new Date();
   timeDanhGiaDen: Date = new Date();
@@ -128,16 +130,17 @@ export class KhenthuongformComponent implements OnInit {
     private http: CommonApiService,
     private formBuilder: FormBuilder,
     private mb: MessageBox
-  ) {}
+  ) {
+    this.danhGiaId = this.data?.danhGiaId;
+    this.nsInfo = data?.nhansu;
+    if (data?.addNew) this.isEdit = false;
+  }
 
   ngOnInit(): void {
+    if (this.isEdit) {
+      this.loadDanhGia();
+    }
     this.loadAllDotDanhGia();
-    console.log(this.danhGia);
-    this.danhGia = this.data?.danhGia;
-    this.nsInfo = this.data?.nhansu;
-    this.timeDanhGiaTu = new Date(this.danhGia.thoiGianTuNgay);
-    this.timeDanhGiaDen = new Date(this.danhGia.thoiGianDenNgay);
-    this.thoiHan = new Date(this.danhGia.thoiHan);
   }
 
   loadAllDotDanhGia() {
@@ -150,7 +153,58 @@ export class KhenthuongformComponent implements OnInit {
       });
   }
 
-  async saveAndClose(): Promise<void> {}
+  loadDanhGia() {
+    this.http
+      .get(DanhGiaURL.getDanhGiaById(this.danhGiaId))
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((res: any) => {
+        if (res.state == 200) {
+          this.danhGia = res.data;
+          this.timeDanhGiaTu = new Date(this.danhGia.thoiGianTuNgay);
+          this.timeDanhGiaDen = new Date(this.danhGia.thoiGianDenNgay);
+          this.thoiHan = new Date(this.danhGia.thoiHan);
+        }
+      });
+  }
+
+  async saveAndClose(): Promise<void> {
+    const danhGiaRequest = {
+      dotDanhGiaId: this.danhGia.dotDanhGia.id,
+      thoiGianTuNgay: this.timeDanhGiaTu,
+      thoiGianDenNgay: this.timeDanhGiaDen,
+      thoiHan: this.thoiHan,
+      nhanXet: this.danhGia.nhanXet,
+      caNhanDanhGia: this.danhGia.caNhanDanhGia,
+      caNhanXepLoai: this.danhGia.caNhanXepLoai,
+      diem: this.danhGia.diem,
+      xepLoai: this.danhGia.xepLoai,
+      diemManh: this.danhGia.diemManh,
+      hanChe: this.danhGia.hanChe,
+      canCaiThien: this.danhGia.canCaiThien,
+      ketQuaTangLuong: this.danhGia.ketQuaTangLuong,
+      ketQuaThuong: this.danhGia.ketQuaThuong,
+    };
+
+    if (this.isEdit) {
+      this.http
+        .put(DanhGiaURL.updateDanhGia(this.danhGiaId), danhGiaRequest)
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((res: any) => {
+          if (res.state == 200) {
+            this.close();
+          }
+        });
+    } else {
+      this.http
+        .post(DanhGiaURL.createDanhGiaByEmplId(this.nsInfo.id), danhGiaRequest)
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((res: any) => {
+          if (res.state == 200) {
+            this.close();
+          }
+        });
+    }
+  }
 
   nhapTiep(): void {
     this.data.khenthuong = {};

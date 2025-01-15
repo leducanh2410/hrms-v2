@@ -110,20 +110,18 @@ export class KhenthuongKyluatComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // this.loadDataKhenThuong();
-    // this.loadDataKyLuat();
-
     if (this.nhansu) {
-      this.listDanhGia = this.nhansu.danhGia;
-
-      // this.http
-      //   .get(llnsURL.getTdktSangkienByid(this.nhansu.id))
-      //   .pipe(takeUntil(this._unsubscribeAll))
-      //   .subscribe((res: any) => {
-      //     if (!res || !res.state) return;
-      //     this.dsSangkien = res.data;
-      //   });
+      this.loadDanhGia();
     }
+  }
+
+  loadDanhGia() {
+    this.http
+      .get(DanhGiaURL.getDanhGiaByEmpId(this.nhansu.id))
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((res: any) => {
+        if (res.state == 200) this.listDanhGia = res.data;
+      });
   }
 
   addKhenThuong(): void {
@@ -132,20 +130,12 @@ export class KhenthuongKyluatComponent implements OnInit {
       data: {
         addNew: true,
         nhansu: this.nhansu,
-        listNgKy: this.listNgKy,
-        listChucVu: this.listChucVu,
-        khenthuong: {
-          soQD: '',
-          nguoiKy: '',
-          chucvuKy: '',
-          ngayKy: null,
-          namQD: null,
-          lydo: '',
-        },
       },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {});
+    dialogRef.afterClosed().subscribe((result) => {
+      this.loadDanhGia();
+    });
   }
 
   updateKhenThuong(danhGia): void {
@@ -154,29 +144,12 @@ export class KhenthuongKyluatComponent implements OnInit {
       disableClose: true,
       data: {
         nhansu: this.nhansu,
-        danhGia: danhGia,
+        danhGiaId: danhGia.id,
       },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.http
-          .post(llnsURL.createDanhGiaByEmpId(1), result)
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (!res || !res.state) {
-              this.messageService.showErrorMessage(
-                'Hệ thống',
-                'Cập nhật thông tin không thành công'
-              );
-              return;
-            }
-            this.messageService.showSuccessMessage(
-              'Hệ thống',
-              'Cập nhật thành công'
-            );
-          });
-      }
+      this.loadDanhGia();
     });
   }
 
@@ -188,7 +161,7 @@ export class KhenthuongKyluatComponent implements OnInit {
     dialog.dialogResult$.subscribe(async (result) => {
       if (result) {
         this.http
-          .delete(llnsURL.createDanhGiaByEmpId(id))
+          .delete(DanhGiaURL.deleteDanhGia(id))
           .pipe(takeUntil(this._unsubscribeAll))
           .subscribe((res: any) => {
             if (!res || !res.state) {
@@ -202,9 +175,9 @@ export class KhenthuongKyluatComponent implements OnInit {
               'Hệ thống',
               'Xóa thành công'
             );
+            this.loadDanhGia();
           });
       }
     });
   }
-
 }

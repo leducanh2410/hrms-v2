@@ -100,6 +100,7 @@ export class LamviecdialogComponent implements OnInit {
   isEdit: boolean = true;
   qtct: QtrinhlamviecBean = new QtrinhlamviecBean();
   nsId: number;
+  qtctId: number;
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -123,18 +124,13 @@ export class LamviecdialogComponent implements OnInit {
 
     if (this.data.addNew) {
       this.isEdit = false;
-      this.nsId = data?.nsId
+      this.nsId = data?.nsId;
     }
+
+    this.qtctId = this.data?.qtctId
   }
 
   ngOnInit(): void {
-    if (this.isEdit) {
-      this.qtct = this.data?.qtct;
-      this.ngayHieuLuc = new Date(this.data?.qtct.ngayHieuLuc);
-    } else {
-      this.qtct = new QtrinhlamviecBean();
-    }
-
     this.onLoadPhongBan();
     this.onLoadCapDoNS();
     this.onLoadChucDanh();
@@ -145,6 +141,7 @@ export class LamviecdialogComponent implements OnInit {
     this.onLoadNghiepVu();
     this.onLoadPhapNhan();
     this.onLoadLoaiQTCT();
+    if (this.isEdit) this.loadData();
   }
 
   onLoadPhongBan(): void {
@@ -243,12 +240,15 @@ export class LamviecdialogComponent implements OnInit {
   async loadData() {
     if (this.isEdit) {
       this.http
-        .get(llnsURL.getQTCTById(this.data?.qtctId))
+        .get(llnsURL.getQTCTById(this.qtctId))
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((res: any) => {
           if (!res || !res.state) return;
           this.qtct = res.data;
           this.ngayHieuLuc = new Date(this.qtct.ngayHieuLuc);
+
+          console.log(this.qtct);
+          
         });
     }
   }
@@ -258,8 +258,6 @@ export class LamviecdialogComponent implements OnInit {
   onChangeChucdanh(): void {}
 
   onSaveAndClose(): void {
-
-    debugger
     const qtctRequest: QTCTRequest = {
       ngayHieuLuc: this.ngayHieuLuc,
       ngayQuyetDinh: this.ngayHieuLuc,
@@ -279,14 +277,14 @@ export class LamviecdialogComponent implements OnInit {
     };
 
     if (this.isEdit) {
-      // this.http
-      //   .put(llnsURL.updateQTCTById(this.qtct.id), qtctRequest)
-      //   .pipe(takeUntil(this._unsubscribeAll))
-      //   .subscribe((res: any) => {
-      //     if (res.state == 200) {
-      //       this.matDialogRef.close();
-      //     }
-      //   });
+      this.http
+        .put(llnsURL.updateQTCTById(this.qtct.id), qtctRequest)
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((res: any) => {
+          if (res.state == 200) {
+            this.matDialogRef.close();
+          }
+        });
     } else {
       this.http
         .post(llnsURL.createQTCTByEmpId(this.nsId), qtctRequest)

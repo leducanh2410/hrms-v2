@@ -78,7 +78,6 @@ export class GiadinhformComponent implements OnInit {
     private http: CommonApiService,
     private formBuilder: FormBuilder
   ) {
-    this.ngaySinh = new Date(data?.nhanthan?.ngaySinh);
     this.nsId = data?.nsId;
     this.isEdit = !data?.addNew;
   }
@@ -97,6 +96,7 @@ export class GiadinhformComponent implements OnInit {
         .subscribe((res: any) => {
           if (!res || !res.state) return;
           this.nhanThan = res?.data;
+          this.ngaySinh = new Date(this.nhanThan.ngaySinh);
         });
     }
   }
@@ -115,12 +115,14 @@ export class GiadinhformComponent implements OnInit {
   }
 
   saveAndClose(): void {
+    this.nhanThan.ngaySinh = this.ngaySinh
+
     if (this.isEdit) {
       this.http
         .put(llnsURL.updateNhanThanById(this.nhanThan.id), this.nhanThan)
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((res: any) => {
-          if (!res || !res.state) {
+          if (res.state == 200) {
             this.messageService.showErrorMessage(
               'Hệ thống',
               'Cập nhật thông tin không thành công'
@@ -138,7 +140,7 @@ export class GiadinhformComponent implements OnInit {
         .post(llnsURL.createNhanThanByEmpId(this.nsId), this.nhanThan)
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((res: any) => {
-          if (!res || !res.state) {
+          if (res.state == 200) {
             this.messageService.showErrorMessage(
               'Hệ thống',
               'Cập nhật thông tin không thành công'

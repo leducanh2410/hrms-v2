@@ -88,7 +88,7 @@ export class LamviecComponent implements OnInit, OnChanges {
       width: '900px',
       disableClose: true,
       data: {
-        qtct,
+        qtctId: qtct.id,
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
