@@ -5,6 +5,18 @@ export class llnsURL extends BaseURL {
     return `${this.getOrigin()}/employee/list`;
   }
 
+  static getDsById(id) {
+    return `${this.getOrigin()}/employee/findById/${id}`;
+  }
+
+  static updateNhanSu(id) {
+    return `${this.getOrigin()}/employee/update/${id}`;
+  }
+
+  static createNhanSu() {
+    return `${this.getOrigin()}/employee/create`;
+  }
+
   // nhan than
   static createNhanThanByEmpId(id) {
     return `${this.getOrigin()}/family/createByEmployeeId/${id}`;
@@ -50,5 +62,10 @@ export class llnsURL extends BaseURL {
 
   static getQTCTById(id) {
     return `${this.getOrigin()}/job-journey/getById/${id}`;
+  }
+
+  // dang doan
+  static updateDangDoan(id) {
+    return `${this.getOrigin()}/military/update/${id}`;
   }
 }

@@ -50,7 +50,6 @@ import { FormdanhmucchungModule } from '../../../../assets/lib/formdanhmucchung/
 import { FormquyetdinhModule } from '../../../../assets/lib/formquyetdinh/src/public-api';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { FormnnghecnktModule } from '../../../../assets/lib/formnnghecnkt/src/public-api';
-import { QtrinhlamviecComponent } from './pages/thongtincanhan/qtrinhlamviec/qtrinhlamviec.component';
 import { QtrlamviecComponent } from './pages/qtrlamviec/qtrlamviec.component';
 import { FileviewModule } from '../../components/fileview/fileview.module';
 import { LamviecComponent } from './pages/qtrlamviec/lamviec/lamviec.component';

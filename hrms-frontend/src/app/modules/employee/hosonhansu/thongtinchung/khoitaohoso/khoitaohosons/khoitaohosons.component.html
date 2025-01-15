@@ -19,311 +19,405 @@
     #mainns
     class="flex flex-col flex-auto h-modal max-h-130 overflow-y-auto"
   >
-    <div
-      class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-8 w-full min-w-0 p-6 overflow-y-auto"
-      style="scrollbar-gutter: stable both-edges"
-    >
-      <div class="flex flex-col justify-center">
-        <!-- <div class="mat-field-label">Tên khai sinh<span class="font-bold text-red-500 text-lg">*</span> :</div> -->
-        <div class="mat-field-label">
-          Tên khai sinh<span class="font-bold text-red-500 text-lg">*</span>
-        </div>
-        <mat-form-field class="fuse-mat-no-subscript w-full">
-          <input
-            [readonly]="this.data && this.data.nsID ? true: false"
-            matInput
-            type="text"
-            id="tenkhaisinh"
-            name="tenkhaisinh"
-            [(ngModel)]="data.tenkhaisinh"
-            maxlength="50"
-            required
-          />
-        </mat-form-field>
+    <div class="grid grid-cols-2 gap-y-5 gap-x-8 p-4">
+      <div class="flex flex-col">
+        <label for="employeeName">Họ và tên</label>
+        <input
+          pInputText
+          name="employeeName"
+          [ngModelOptions]="{ standalone: true }"
+          [(ngModel)]="formData.employeeName"
+        />
       </div>
-      <div class="flex flex-col justify-center">
-        <!-- <div class="mat-field-label">Số hiệu<span class="font-bold text-red-500 text-lg">*</span></div> -->
-        <div class="mat-field-label">Số hiệu</div>
-        <mat-form-field class="fuse-mat-no-subscript w-full">
-          <input
-            matInput
-            type="text"
-            id="sohieu"
-            name="sohieu"
-            [(ngModel)]="data.sohieu"
-            maxlength="30"
-          />
-        </mat-form-field>
+      <div class="flex flex-col">
+        <label for="birthday">Ngày sinh</label>
+        <p-calendar
+          name="ngaycap"
+          [showIcon]="true"
+          inputId="buttondisplay"
+          [showOnFocus]="false"
+          class="!w-1/3 !inline-block"
+          [ngModelOptions]="{ standalone: true }"
+          [(ngModel)]="formData.birthday"
+        />
       </div>
-      <div class="flex items-center">
-        <!-- <div class="mat-field-label">Bí danh</div> -->
-        <mat-form-field class="fuse-mat-no-subscript w-full">
-          <mat-label class="">Mã định danh cá nhân (CCCD)</mat-label>
-          <input
-            type="text"
-            matInput
-            id="dinhdanh"
-            name="dinhdanh"
-            (input)="onInputChange($event)"
-            [(ngModel)]="data.socmnd"
-            maxlength="20"
-            required
-          />
-        </mat-form-field>
-        <div class="flex flex-col justify-center ml-1">
-          <label class="">&nbsp;</label>
-          <div class="flex items-start">
-            <p-radioButton
-              name="gender"
-              [value]="true"
-              [(ngModel)]="data.gioitinh"
-              inputId="radioNam"
-            ></p-radioButton>
-            <label for="radioNam">Nam</label>
-            <p-radioButton
-              class="ml-2"
-              name="gender"
-              [value]="false"
-              [(ngModel)]="data.gioitinh"
-              inputId="radioNu"
-            ></p-radioButton>
-            <label for="radioNu">Nữ</label>
-          </div>
-        </div>
-      </div>
-      <div class="flex flex-col justify-center">
-        <div class="mat-field-label">
-          Ngày sinh<span class="font-bold text-red-500 text-lg">*</span>
-        </div>
-        <mat-form-field class="fuse-mat-no-subscript w-full">
-          <input
-            matInput
-            [matDatepicker]="ngaysinh"
-            name="ngaysinh"
-            [(ngModel)]="data.ngaysinh"
-            required
-            [readonly]="this.data && this.data.nsID ? true:false"
-          />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="ngaysinh"
-          ></mat-datepicker-toggle>
-          <mat-datepicker
-            #ngaysinh
-            [disabled]="this.data && this.data.nsID"
-          ></mat-datepicker>
-        </mat-form-field>
-      </div>
-
-      <div class="flex flex-col justify-center">
-        <div class="mat-field-label">
-          Đơn vị làm việc<span class="font-bold text-red-500 text-lg">*</span>
-        </div>
+      <div class="flex flex-col">
+        <label for="gender">Giới tính</label>
         <p-dropdown
-          panelStyleClass="max-w-full"
-          [style]="{ width: '100%' }"
-          [options]="listDonvi"
-          optionLabel="orgName"
-          optionValue="organizationId"
-          name="donvi"
-          appendTo="body"
-          [filter]="true"
-          filterBy="orgName"
-          [(ngModel)]="data.donviId"
-          [disabled]="this.data && this.data.nsID ? true:false"
-          (onChange)="onChangeDonvi($event.value)"
-          [required]="true"
-        >
-        </p-dropdown>
-      </div>
-
-      <div class="flex items-end">
-        <!-- <div class="mat-field-label">Phòng ban<span class="font-bold text-red-500 text-lg">*</span></div> -->
-        <mat-form-field class="fuse-mat-no-subscript w-full">
-          <mat-label class="">Phòng ban</mat-label>
-          <input
-            matInput
-            id="phongban"
-            name="phongban"
-            [(ngModel)]="data.phongban"
-            readonly="true"
-            required
-          />
-          <button
-            class="mx-1 -mr-2"
-            color="primary"
-            (click)="onChonphongban()"
-            mat-flat-button
-            [disabled]="this.data && this.data.nsID"
-          >
-            <span>Chọn</span>
-          </button>
-        </mat-form-field>
-      </div>
-
-      <div class="flex flex-col justify-center">
-        <div class="mat-field-label">
-          Ngày vào đơn vị<span class="font-bold text-red-500 text-lg">*</span>
-        </div>
-        <mat-form-field class="fuse-mat-no-subscript w-full">
-          <input
-            matInput
-            [matDatepicker]="ngayvaodvi"
-            name="ngayvaodvi"
-            [(ngModel)]="data.ngayvaodonvi"
-            required
-          />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="ngayvaodvi"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #ngayvaodvi></mat-datepicker>
-        </mat-form-field>
-      </div>
-      <div class="flex flex-col justify-center">
-        <div class="mat-field-label">
-          Ngày vào đơn vị ký HĐLĐ<span class="font-bold text-red-500 text-lg"
-            >*</span
-          >
-        </div>
-        <mat-form-field class="fuse-mat-no-subscript w-full">
-          <input
-            matInput
-            [matDatepicker]="ngayvaodvikyhdld"
-            name="ngayvaodvikyhdld"
-            [(ngModel)]="data.ngayvaodonviHdld"
-            required
-          />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="ngayvaodvikyhdld"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #ngayvaodvikyhdld></mat-datepicker>
-        </mat-form-field>
-      </div>
-      <div class="flex flex-col justify-center">
-        <label></label>
-      </div>
-      <div class="flex flex-col justify-center">
-        <div class="mat-field-label">
-          <span class="italic mt-3"
-            >Đơn vị ký HĐLĐ: {{ data.donviKyhdld }}</span
-          >
-        </div>
-      </div>
-      <div class="flex flex-col justify-center">
-        <div class="mat-field-label">
-          Chức danh<span class="font-bold text-red-500 text-lg">*</span>
-        </div>
-        <p-dropdown
-          panelStyleClass="max-w-full"
-          [style]="{ width: '100%' }"
-          [options]="listChucdanh"
+          id="gender"
+          [options]="listGioiTinh"
           optionLabel="name"
           optionValue="id"
-          name="chucdanh"
-          appendTo="body"
-          [filter]="true"
-          filterBy="name"
-          [(ngModel)]="data.vtriId"
-          placeholder="&nbsp;"
-          [disabled]="this.data && this.data.nsID?true:false"
-          (onChange)="onChangeChucdanh()"
-          [required]=""true
-        >
-        </p-dropdown>
+          [ngModelOptions]="{ standalone: true }"
+          [(ngModel)]="formData.gender"
+          placeholder="Chọn giới tính"
+        ></p-dropdown>
       </div>
-      <div class="flex items-end">
-        <mat-form-field appearance="fill" class="w-full">
-          <mat-label class="">Nghề CNKT</mat-label>
-          <input
-            matInput
-            class="form-control"
-            id="nghecnkt"
-            name="nghecnkt"
-            [(ngModel)]="data.nghecnkt"
-            readonly="true"
-          />
-          <button
-            class="mx-1 -mr-2"
-            color="primary"
-            (click)="onChonNgheCNKT()"
-            mat-flat-button
-            [disabled]="this.disableBtnCNKT"
-          >
-            <span>Chọn</span>
-          </button>
-        </mat-form-field>
+      <div class="flex flex-col">
+        <label for="cccdNumber">Số CCCD</label>
+        <input
+          id="cccdNumber"
+          type="text"
+          [ngModelOptions]="{ standalone: true }"
+          pInputText
+          [(ngModel)]="formData.cccdNumber"
+        />
       </div>
-      <div class="flex flex-col justify-center">
-        <div class="mat-field-label">
-          HĐLĐ<span class="font-bold text-red-500 text-lg">*</span>
-        </div>
-
+      <div class="flex flex-col">
+        <label for="cccdNgaycap">Ngày cấp CCCD</label>
+        <p-calendar
+          id="cccdNgaycap"
+          [ngModelOptions]="{ standalone: true }"
+          [(ngModel)]="formData.cccdNgaycap"
+          dateFormat="yy-mm-dd"
+        ></p-calendar>
+      </div>
+      <div class="flex flex-col">
+        <label for="cccdNoicap">Nơi cấp CCCD</label>
+        <input
+          id="cccdNoicap"
+          type="text"
+          pInputText
+          [ngModelOptions]="{ standalone: true }"
+          [(ngModel)]="formData.cccdNoicap"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="marriageStatus">Tình trạng hôn nhân</label>
         <p-dropdown
-          panelStyleClass="max-w-full"
-          [style]="{ width: '100%' }"
-          [options]="listLoaiHdld"
+          id="marriageStatus"
+          [options]="listTtranghonnhan"
           optionLabel="name"
           optionValue="id"
-          name="loaihdld"
-          appendTo="body"
-          [filter]="true"
-          filterBy="name"
-          [(ngModel)]="data.loaiHDID"
-          placeholder="&nbsp;"
-          [disabled]="this.data && this.data.nsID ? true : false"
-          [required]="true"
-        >
-        </p-dropdown>
+          [ngModelOptions]="{ standalone: true }"
+          [(ngModel)]="formData.marriageStatus"
+          placeholder="Chọn tình trạng"
+        ></p-dropdown>
       </div>
-
-      <!--
-            <div class="flex">
-                <div class="mat-field-label"><span class="italic mt-3">Đơn vị làm việc: {{data.donvi}}</span></div>
-            </div>
-            -->
-
-      <div class="flex flex-col justify-center">
-        <div class="mat-field-label">
-          Nghề nghiệp trước khi vào đơn vị<span
-            class="font-bold text-red-500 text-lg"
-            >*</span
-          >
-        </div>
-        <p-dropdown
-          panelStyleClass="max-w-full"
-          [style]="{ width: '100%' }"
-          [options]="listNghenghiep"
-          optionLabel="name"
-          optionValue="id"
-          name="nntruoctd"
-          appendTo="body"
-          [filter]="true"
-          filterBy="name"
-          [(ngModel)]="data.nntruoctdId"
-          placeholder="&nbsp;"
-          [required]="true"
-        >
-        </p-dropdown>
+      <div class="flex flex-col">
+        <label for="noiSinh">Nơi sinh</label>
+        <input
+          id="noiSinh"
+          type="text"
+          pInputText
+          [(ngModel)]="formData.noiSinh"
+          [ngModelOptions]="{ standalone: true }"
+        />
       </div>
-      <div class="flex flex-col justify-center">
-        <div class="mat-field-label">Phân loại nhóm ngành nghề kinh tế</div>
-        <p-dropdown
-          panelStyleClass="max-w-full"
-          [style]="{ width: '100%' }"
-          [options]="listNganhNgheKte"
-          optionLabel="name"
-          optionValue="id"
-          name="nganhnghekte"
-          appendTo="body"
-          [filter]="true"
-          filterBy="name"
-          [(ngModel)]="data.nganhSxkdId"
-          [disabled]="this.data && this.data.nsID ? true : false"
-          placeholder="&nbsp;"
+      <div class="flex flex-col">
+        <label for="queQuan">Quê quán</label>
+        <input
+          id="queQuan"
+          type="text"
+          [ngModelOptions]="{ standalone: true }"
+          pInputText
+          [(ngModel)]="formData.queQuan"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="nationality">Quốc tịch</label>
+        <input
+          id="nationality"
+          type="text"
+          pInputText
+          [(ngModel)]="formData.nationality"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="ethnic">Dân tộc</label>
+        <input
+          id="ethnic"
+          type="text"
+          pInputText
+          [(ngModel)]="formData.ethnic"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="maSoThue">Mã số thuế</label>
+        <input
+          id="maSoThue"
+          type="text"
+          pInputText
+          [(ngModel)]="formData.maSoThue"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="ngayVaoLam">Ngày vào làm</label>
+        <p-calendar
+          id="ngayVaoLam"
+          [(ngModel)]="formData.ngayVaoLam"
+          dateFormat="yy-mm-dd"
+          [ngModelOptions]="{ standalone: true }"
+        ></p-calendar>
+      </div>
+      <div class="flex flex-col">
+        <label for="tongiao">Tôn giáo</label>
+        <input
+          id="tongiao"
+          type="text"
+          pInputText
+          [(ngModel)]="formData.tongiao"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="companyEmail">Email công ty</label>
+        <input
+          id="companyEmail"
+          type="email"
+          pInputText
+          [(ngModel)]="formData.contact.companyEmail"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="phoneNumber">Số điện thoại</label>
+        <input
+          id="phoneNumber"
+          type="tel"
+          pInputText
+          [(ngModel)]="formData.contact.phoneNumber"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="address">Địa chỉ</label>
+        <input
+          id="address"
+          type="text"
+          pInputText
+          [(ngModel)]="formData.contact.address"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="hoKhauThuongTru">Hộ khẩu thường trú</label>
+        <input
+          id="hoKhauThuongTru"
+          type="text"
+          pInputText
+          [(ngModel)]="formData.contact.hoKhauThuongTru"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="emergencyContactName"
+          >Họ và tên người liên hệ khẩn cấp</label
         >
-        </p-dropdown>
+        <input
+          id="emergencyContactName"
+          type="text"
+          pInputText
+          [(ngModel)]="formData.contact.emergencyContactName"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="emergencyContactRelationship">Quan hệ</label>
+        <input
+          id="emergencyContactRelationship"
+          type="text"
+          pInputText
+          [(ngModel)]="formData.contact.emergencyContactRelationship"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="emergencyContactPhoneNumber"
+          >Số điện thoại người liên hệ</label
+        >
+        <input
+          id="emergencyContactPhoneNumber"
+          type="tel"
+          pInputText
+          [(ngModel)]="formData.contact.emergencyContactPhoneNumber"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="emergencyContactEmail">Email người liên hệ</label>
+        <input
+          id="emergencyContactEmail"
+          type="email"
+          pInputText
+          [(ngModel)]="formData.contact.emergencyContactEmail"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="emergencyContactAddress">Địa chỉ người liên hệ</label>
+        <input
+          id="emergencyContactAddress"
+          type="text"
+          pInputText
+          [(ngModel)]="formData.contact.emergencyContactAddress"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="soSoBhxh">Số sổ BHXH</label>
+        <input
+          id="soSoBhxh"
+          type="text"
+          pInputText
+          [(ngModel)]="formData.baoHiem.soSoBhxh"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="soSoBhxhCu">Số sổ BHXH cũ</label>
+        <input
+          id="soSoBhxhCu"
+          type="text"
+          pInputText
+          [(ngModel)]="formData.baoHiem.soSoBhxhCu"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="maSoBhxh">Mã số BHXH</label>
+        <input
+          id="maSoBhxh"
+          type="text"
+          pInputText
+          [(ngModel)]="formData.baoHiem.maSoBhxh"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="ngayCapBhxh">Ngày cấp BHXH</label>
+        <p-calendar
+          id="ngayCapBhxh"
+          [(ngModel)]="formData.baoHiem.ngayCapBhxh"
+          dateFormat="yy-mm-dd"
+          [ngModelOptions]="{ standalone: true }"
+        ></p-calendar>
+      </div>
+      <div class="flex flex-col">
+        <label for="noiCapBhxh">Nơi cấp BHXH</label>
+        <input
+          id="noiCapBhxh"
+          type="text"
+          pInputText
+          [(ngModel)]="formData.baoHiem.noiCapBhxh"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="nopSoBhxh">Nộp sổ BHXH</label>
+        <p-checkbox
+          id="nopSoBhxh"
+          [binary]="true"
+          [(ngModel)]="formData.baoHiem.nopSoBhxh"
+          [ngModelOptions]="{ standalone: true }"
+        ></p-checkbox>
+      </div>
+      <div class="flex flex-col">
+        <label for="ngayNopSoBhxh">Ngày nộp sổ BHXH</label>
+        <p-calendar
+          id="ngayNopSoBhxh"
+          [(ngModel)]="formData.baoHiem.ngayNopSoBhxh"
+          dateFormat="yy-mm-dd"
+          [ngModelOptions]="{ standalone: true }"
+        ></p-calendar>
+      </div>
+      <div class="flex flex-col">
+        <label for="noiDongBh">Nơi đóng BH</label>
+        <input
+          id="noiDongBh"
+          type="text"
+          pInputText
+          [(ngModel)]="formData.baoHiem.noiDongBh"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="daNhanSoBhxhBaoLuu">Đã nhận sổ BHXH bảo lưu</label>
+        <p-checkbox
+          id="daNhanSoBhxhBaoLuu"
+          [binary]="true"
+          [(ngModel)]="formData.baoHiem.daNhanSoBhxhBaoLuu"
+          [ngModelOptions]="{ standalone: true }"
+        ></p-checkbox>
+      </div>
+      <div class="flex flex-col">
+        <label for="soBhyt">Số BHYT</label>
+        <input
+          id="soBhyt"
+          type="text"
+          pInputText
+          [(ngModel)]="formData.baoHiem.soBhyt"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="noiDkKhamBenh">Nơi đăng ký khám bệnh</label>
+        <input
+          id="noiDkKhamBenh"
+          type="text"
+          pInputText
+          [(ngModel)]="formData.baoHiem.noiDkKhamBenh"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="ngayCapBhyt">Ngày cấp BHYT</label>
+        <p-calendar
+          id="ngayCapBhyt"
+          [(ngModel)]="formData.baoHiem.ngayCapBhyt"
+          dateFormat="yy-mm-dd"
+          [ngModelOptions]="{ standalone: true }"
+        ></p-calendar>
+      </div>
+      <div class="flex flex-col">
+        <label for="ngayHetHanBhyt">Ngày hết hạn BHYT</label>
+        <p-calendar
+          id="ngayHetHanBhyt"
+          [(ngModel)]="formData.baoHiem.ngayHetHanBhyt"
+          dateFormat="yy-mm-dd"
+          [ngModelOptions]="{ standalone: true }"
+        ></p-calendar>
+      </div>
+      <div class="flex flex-col">
+        <label for="ghiChuBhyt">Ghi chú BHYT</label>
+        <input
+          id="ghiChuBhyt"
+          type="text"
+          pInputText
+          [(ngModel)]="formData.baoHiem.ghiChuBhyt"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="laDoanVienCongDoan">Là đoàn viên công đoàn</label>
+        <p-checkbox
+          id="laDoanVienCongDoan"
+          [binary]="true"
+          [(ngModel)]="formData.baoHiem.laDoanVienCongDoan"
+          [ngModelOptions]="{ standalone: true }"
+        ></p-checkbox>
+      </div>
+      <div class="flex flex-col">
+        <label for="chucVuDoanVienCongDoan">Chức vụ đoàn viên công đoàn</label>
+        <input
+          id="chucVuDoanVienCongDoan"
+          type="text"
+          pInputText
+          [(ngModel)]="formData.baoHiem.chucVuDoanVienCongDoan"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="ngayKetNap">Ngày kết nạp</label>
+        <p-calendar
+          id="ngayKetNap"
+          [(ngModel)]="formData.baoHiem.ngayKetNap"
+          dateFormat="yy-mm-dd"
+          [ngModelOptions]="{ standalone: true }"
+        ></p-calendar>
       </div>
     </div>
   </div>

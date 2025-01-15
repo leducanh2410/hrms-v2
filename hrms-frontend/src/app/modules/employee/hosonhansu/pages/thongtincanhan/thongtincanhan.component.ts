@@ -14,7 +14,6 @@ import { THONG_TIN_CHUNG } from '../../model/thongtinchung';
 import { MessageService } from '../../../../../shared/message.services';
 import { ShareData } from '../../../../../shared/shareservice.service';
 import { NHAN_SU } from '../../../../../shared/appkeymessages';
-import { QtrinhlamviecComponent } from './qtrinhlamviec/qtrinhlamviec.component';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonModule, formatDate } from '@angular/common';
 import {
@@ -33,6 +32,8 @@ import { QuillEditorComponent, QuillModule } from 'ngx-quill';
 import { MatInputModule } from '@angular/material/input';
 import { InputTextModule } from 'primeng/inputtext';
 import { CalendarModule } from 'primeng/calendar';
+import { llnsURL } from '../../../../../services/employe/llnsURL';
+import { DangDoan } from '../../model/dangDoan';
 
 @Component({
   selector: 'app-thongtincanhan',
@@ -127,14 +128,10 @@ export class ThongtincanhanComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
-    // this.loadDanhmuc();
     this.model = new THONG_TIN_CHUNG();
-    console.log(this.nsInfo);
-    
+
     if (this.nsInfo) {
-      this.model = this.nsInfo;
-      this.cccd_ngayCap = new Date(this.nsInfo.cccdNgaycap);
-    } else {
+      this.loadDataNsInfo();
     }
 
     // Xử lý kiểm tra update page khi dùng nút chức năng
@@ -152,141 +149,71 @@ export class ThongtincanhanComponent implements OnInit, OnChanges, OnDestroy {
     //   });
   }
 
-  loadDanhmuc() {
-    // this.http
-    //   .get(DanhMucURL.getListDantoc())
-    //   .pipe(takeUntil(this._unsubscribeAll))
-    //   .subscribe((res: any) => {
-    //     if (!res || !res.state) return;
-    //     this.danToc = res.data;
-    //   });
-    // this.http
-    //   .get(DanhMucURL.getListThanhPho())
-    //   .pipe(takeUntil(this._unsubscribeAll))
-    //   .subscribe((res: any) => {
-    //     if (!res || !res.state) return;
-    //     this.thanhPho = res.data;
-    //   });
-    // this.http
-    //   .get(DanhMucURL.getListQuocgia())
-    //   .pipe(takeUntil(this._unsubscribeAll))
-    //   .subscribe((res: any) => {
-    //     if (!res || !res.state) return;
-    //     this.quocGia = res.data;
-    //   });
-    // this.http
-    //   .get(DanhMucURL.getListTongiao())
-    //   .pipe(takeUntil(this._unsubscribeAll))
-    //   .subscribe((res: any) => {
-    //     if (!res || !res.state) return;
-    //     this.tonGiao = res.data;
-    //   });
-    // this.http
-    //   .get(DanhMucURL.getListNganHang())
-    //   .pipe(takeUntil(this._unsubscribeAll))
-    //   .subscribe((res: any) => {
-    //     if (!res || !res.state) return;
-    //     this.nganHang = res.data;
-    //   });
-    // this.http
-    //   .get(DanhMucURL.getListTpGD())
-    //   .pipe(takeUntil(this._unsubscribeAll))
-    //   .subscribe((res: any) => {
-    //     if (!res || !res.state) return;
-    //     this.tpGiadinh = res.data;
-    //   });
-    // this.http
-    //   .get(DanhMucURL.getListTrinhdoLLCT())
-    //   .pipe(takeUntil(this._unsubscribeAll))
-    //   .subscribe((res: any) => {
-    //     if (!res || !res.state) return;
-    //     this.trinhDo = res.data;
-    //   });
-    // this.http
-    //   .get(DanhMucURL.getListNgheNghiep())
-    //   .pipe(takeUntil(this._unsubscribeAll))
-    //   .subscribe((res: any) => {
-    //     if (!res || !res.state) return;
-    //     this.ngheNghiep = res.data;
-    //   });
-    // this.http
-    //   .get(DanhMucURL.getListChucVu())
-    //   .pipe(takeUntil(this._unsubscribeAll))
-    //   .subscribe((res: any) => {
-    //     if (!res || !res.state) return;
-    //     this.listChucvu = res.data;
-    //   });
-    // this.http
-    //   .get(DanhMucURL.getDsTtranghonnhan())
-    //   .pipe(takeUntil(this._unsubscribeAll))
-    //   .subscribe((res: any) => {
-    //     if (!res || !res.state) return;
-    //     this.listTtranghonnhan = res.data;
-    //   });
-    // this.http
-    //   .get(DanhMucURL.getListHthucdtao())
-    //   .pipe(takeUntil(this._unsubscribeAll))
-    //   .subscribe((res: any) => {
-    //     if (!res || !res.state) return;
-    //     this.listHinhThucDaoTao = res.data;
-    //   });
-    // this.http
-    //   .get(DanhMucURL.getListHocham())
-    //   .pipe(takeUntil(this._unsubscribeAll))
-    //   .subscribe((res: any) => {
-    //     if (!res || !res.state) return;
-    //     this.listHocham = res.data;
-    //   });
-    // this.http
-    //   .get(DanhMucURL.getListTrinhdoQLKT())
-    //   .pipe(takeUntil(this._unsubscribeAll))
-    //   .subscribe((res: any) => {
-    //     if (!res || !res.state) return;
-    //     this.listTrinhdoqlkt = res.data;
-    //   });
+  loadDataNsInfo() {
+    this.http
+      .get(llnsURL.getDsById(this.nsInfo?.id))
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(async (res: any) => {
+        if (res?.state == 200) {
+          this.model = res?.data;
+          this.cccd_ngayCap = new Date(this.model.cccdNgaycap);
+
+          if(!res?.data.dangDoan){
+            this.model.dangDoan = new DangDoan()
+          }
+        }
+      });
   }
 
   ngOnChanges(): void {
     if (this.nsInfo) {
-      this.resetData();
       //
     }
   }
 
-  // subcribeChange() {
-  //   if (this.model != null) {
-  //     setTimeout(() => {
-  //       console.log("subcribe");
-  //       this.subcribe = this.form.valueChanges.pipe(debounceTime(500))
-  //         .subscribe((values) => {
-  //           let is_change = !(JSON.stringify(this.model) === JSON.stringify(this.nsInfo))
-  //           // let is_change = !(_.isEqual(values, this.nsInfo))
-  //           if (is_change) console.log("change");
+  changeMarriageStatus(newStatus: any) {
+    this.model.marriageStatus = newStatus;
+  }
 
-  //           this.shareData.sendMessage(NHAN_SU.IS_EDIT, is_change)
-  //           // if (is_change) this.subcribe.unsubscribe()
-  //         });
-  //     })
-  //   }
-  // }
+  save() {
+    const nsRequest = {
+      employeeName: this.model.employeeName,
+      birthday: this.model.birthday,
+      gender: this.model.gender,
+      cccdNumber: this.model.cccdNumber,
+      cccdNgaycap: this.cccd_ngayCap,
+      cccdNoicap: this.model.cccdNoicap,
+      marriageStatus: this.model.marriageStatus,
+      noiSinh: this.model.noiSinh,
+      queQuan: this.model.queQuan,
+      nationality: this.model.nationality,
+      ethnic: this.model.ethnic,
+      maSoThue: this.model.maSoThue,
+      ngayVaoLam: this.model.ngayVaoLam,
+      tongiao: this.model.tongiao,
+      contact: this.model.contact,
+      baoHiem: this.model.baoHiem,
+    };
 
-  save(isValid) {
-    if (!isValid) {
-      if (this.model?.cccdNumber == null) {
-        this.messageService.showErrorMessage(
-          'Hệ thống',
-          'Thông tin nhập thiếu CMND/ Căn cước.'
-        );
-        this.cccdInput.nativeElement.focus();
-        return;
-      }
-      this.messageService.showErrorMessage(
-        'Hệ thống',
-        'Thông tin nhập thiếu hoặc không đúng định dạng.'
-      );
-      this.focusFirstInvalidControlPlus();
-      return;
-    }
+    this.http
+      .put(llnsURL.updateNhanSu(this.nsInfo.id), nsRequest)
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((res: any) => {
+        if (res?.state == 200) {
+          this.loadDataNsInfo();
+        }
+      });
+
+    this.http
+      .put(llnsURL.updateDangDoan(this.model.dangDoan.id), this.model.dangDoan)
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((res: any) => {
+        if (res?.state == 200) {
+          this.loadDataNsInfo();
+        }
+      });
+
+    this.is_edit = false
   }
 
   edit() {
@@ -296,30 +223,7 @@ export class ThongtincanhanComponent implements OnInit, OnChanges, OnDestroy {
 
   back() {
     this.is_edit = false;
-    this.resetData();
     this.shareData.sendMessage(NHAN_SU.IS_EDIT, this.is_edit);
-  }
-
-  resetData() {}
-
-  changeBodoi() {}
-
-  changeGDCS() {}
-
-  getDsQhNoio(idtp) {
-    
-  }
-
-  getDsQhNoisinh(idtp) {
-    
-  }
-
-  getDsQhQuequan(idtp) {
-    
-  }
-
-  getDsQhHokhau(idtp) {
-   
   }
 
   focusFirstInvalidControlPlus(): void {
