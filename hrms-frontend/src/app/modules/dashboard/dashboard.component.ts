@@ -13,9 +13,9 @@ import { CommonModule } from '@angular/common';
 export class DashboardComponent {
   displayedColumns: string[] = ['column1', 'column2'];
   thongKe = [
-    { column1: '200', column2: 'Tổng số nhân viên', icon: 'group' },
-    { column1: '170', column2: 'Nhân viên đang làm việc', icon: 'group' },
-    { column1: '30', column2: 'Nhân viên xin nghỉ việc', icon: 'group' },
+    { column1: '2', column2: 'Tổng số nhân viên', icon: 'group' },
+    { column1: '2', column2: 'Nhân viên đang làm việc', icon: 'group' },
+    { column1: '0', column2: 'Nhân viên xin nghỉ việc', icon: 'group' },
   ];
   thongTinCaNhan = [
     { column1: 'Tên nhân viên', column2: 'Lê Đức Anh' },

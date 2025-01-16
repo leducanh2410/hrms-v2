@@ -75,6 +75,9 @@
           <a mat-list-item routerLink="/hosonhansu">
             <span>Hồ sơ nhân sự</span>
           </a>
+          <a mat-list-item routerLink="/hdld">
+            <span>Chi tiết nhân viên</span>
+          </a>
         </mat-nav-list>
       </mat-expansion-panel>
       <!-- <mat-expansion-panel [class.mat-elevation-z0]="true" class="!bg-gray-200">
@@ -90,11 +93,14 @@
           <a mat-list-item routerLink="#">Struts</a>
         </mat-nav-list>
       </mat-expansion-panel> -->
-      <mat-list-item class="" routerLink="/hdld">
-        <!-- <mat-icon>library_books</mat-icon> -->
+
+      <!-- <mat-list-item class="" routerLink="/hdld">
+         <mat-icon>library_books</mat-icon> 
         <span>Chi tiết nhân viên</span>
-      </mat-list-item>
+      </mat-list-item> -->
+
     </mat-nav-list>
+
   </mat-sidenav>
   <mat-sidenav-content>
     <router-outlet> </router-outlet>

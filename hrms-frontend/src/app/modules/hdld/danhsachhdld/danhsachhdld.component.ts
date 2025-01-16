@@ -289,13 +289,15 @@ export class DanhsachhdldComponent implements OnInit{
     .subscribe((res: any) => {
       if (!res || !res.state) return;
       this.nsHopdongList = res.data;
-      console.log(res);
+      console.log(res.data);
       
     });
   }
   handleSelectEmp(nsId : number){
     this.nsId = nsId;
     this.getContractByEmployee(nsId);
+    console.log(nsId);
+    
   }
 
   loadData() {

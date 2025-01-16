@@ -140,13 +140,13 @@
                 {{ hd.loaiHopDong.tenLoaiHopDong }}
               </td>
               <td class="border border-collapse w-[10%]">
-                {{ hd.contractSignDate | date : "dd/MM/yyyy" }}
+                {{ hd.ngayKyHopDong | date : "dd/MM/yyyy" }}
               </td>
               <td class="border border-collapse w-[10%]">
-                {{ hd.startDate | date : "dd/MM/yyyy" }}
+                {{ hd.ngayBatDau | date : "dd/MM/yyyy" }}
               </td>
               <td class="border border-collapse w-[10%]">
-                {{ hd.endDate | date : "dd/MM/yyyy" }}
+                {{ hd.ngayKetThuc | date : "dd/MM/yyyy" }}
               </td>
               <td class="border border-collapse w-[10%]">
                 {{
@@ -156,13 +156,13 @@
                 }}
               </td>
               <td class="border border-collapse w-[10%]">
-                {{ hd.contractNumber }}
+                {{ hd.SoHopDong }}
               </td>
               <td class="border border-collapse w-[10%]">
-                {{ hd.creationDate | date : "dd/MM/yyyy" }}
+                {{ hd.createdAt | date : "dd/MM/yyyy" }}
               </td>
               <td class="border border-collapse w-[10%]">
-                {{ hd.updateDate | date : "dd/MM/yyyy" }}
+                {{ hd.updatedAt | date : "dd/MM/yyyy" }}
               </td>
 
               <!-- <td class="text-center border border-collapse" style="width: 9%">
