@@ -1,6 +1,5 @@
 import moment from "moment";
 import { JuliusCalendar } from "./JuliusCalendar";
-
 export class Utils {
     /**
      * Constructor

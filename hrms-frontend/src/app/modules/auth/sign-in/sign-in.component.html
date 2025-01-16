@@ -34,35 +34,7 @@
                     </mat-error>
                 </mat-form-field>
 
-                <!-- Email field -->
-                <!-- <mat-form-field class="w-full" *ngIf="showOTPInput">
-                    <mat-label>Mã OTP</mat-label>
-                    <input id="otp" matInput [formControlName]="'otp'">
-                    <mat-error *ngIf="signInForm.get('otp').value.length == 0 && showOTPInput">
-                        Mã OTP không được để trống.
-                    </mat-error>
-                    <mat-error *ngIf="signInForm.get('otp').value.length != 8 && showOTPInput">
-                        Mã OTP chỉ chứa 8 ký tự.
-                    </mat-error>
-                </mat-form-field> -->
-
-                <!-- <div class="flex w-full justify-end items-center" *ngIf="showOTPInput">
-                    <span class="underline cursor-pointer" [style]="{color: '#2a3493'}" (click)="resendOTP()">Gửi lại mã OTP</span>
-                </div> -->
-
-                <!-- <div class="flex w-full py-4 flex-col space-y-2 items-center justify-center" *ngIf="showCaptcha">
-                    <ngx-captcha [config]="captchaConfig" class="w-full"></ngx-captcha>
-                    <mat-error *ngIf="captchaStatus == 0">
-                        Mã Captcha không hợp hợp lệ.
-                    </mat-error>
-                </div> -->
-
-                <!-- Actions -->
-                <!-- <div class="inline-flex items-end justify-between w-full mt-1.5">
-                    <mat-checkbox [color]="'primary'" [formControlName]="'rememberMe'">
-                        Nhớ tài khoản
-                    </mat-checkbox>
-                </div> -->
+                
 
                 <!-- Submit button -->
                 <button class="fuse-mat-button-large w-full mt-6" mat-flat-button [color]="'primary'"

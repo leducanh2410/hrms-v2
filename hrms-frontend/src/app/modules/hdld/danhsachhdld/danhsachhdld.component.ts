@@ -3,6 +3,7 @@ import {
   CUSTOM_ELEMENTS_SCHEMA,
   ElementRef,
   Inject,
+  OnInit,
   QueryList,
   ViewChild,
   ViewChildren,
@@ -61,7 +62,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { InputTextModule } from 'primeng/inputtext';
 import { CalendarModule } from 'primeng/calendar';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-
+import { NhanVien } from '../../employee/hosonhansu/model/nhanvien';
+import { ChiTietNhanvienURL } from '../../../services/chitietnhanvien/chitietnhanvienURL';
+import { ShareData } from '../../../shared/shareservice.service';
+import { NHAN_SU } from '../../../shared/appkeymessages';
+import { HopDongURL } from '../../../services/chitietnhanvien/hopdongURL';
+import { log } from 'node:console';
 @Component({
   selector: 'app-danhsachhdld',
   templateUrl: './danhsachhdld.component.html',
@@ -93,7 +99,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class DanhsachhdldComponent {
+export class DanhsachhdldComponent implements OnInit{
   @ViewChild('fileInput', { static: false })
   fileInput: ElementRef<HTMLInputElement>;
   fileInputs: { [key: string]: ElementRef<HTMLInputElement> } = {};
@@ -104,6 +110,8 @@ export class DanhsachhdldComponent {
   selectedTabIndex: number = 0; // Tab mặc định là 0 (Hợp đồng)
 
   insuranceForm: FormGroup;
+
+  nsId: number; // id nhan vien
 
   titleForm: String;
   placeHolderTenDanhsach: String;
@@ -120,41 +128,41 @@ export class DanhsachhdldComponent {
 
   loaiHdldList: any[] = [];
   loaiHdldSelected: any = {};
-
+  listNhanVien: NhanVien[] = [];
   nsHopdongList: any[] = [
-    {
-      index: 1,
-      contractType: 'Hợp đồng chính thức',
-      contractSignDate: new Date('2023-01-01'),
-      startDate: new Date('2023-01-01'),
-      endDate: new Date('2024-01-01'),
-      terminationDate: null,
-      contractNumber: 'HD001',
-      creationDate: new Date('2023-01-01'),
-      updateDate: new Date('2023-01-15'),
-    },
-    {
-      index: 2,
-      contractType: 'Hợp đồng thử việc',
-      contractSignDate: new Date('2023-02-01'),
-      startDate: new Date('2023-02-01'),
-      endDate: new Date('2023-04-01'),
-      terminationDate: null,
-      contractNumber: 'HD002',
-      creationDate: new Date('2023-02-01'),
-      updateDate: new Date('2023-02-10'),
-    },
-    {
-      index: 3,
-      contractType: 'Hợp đồng hợp tác',
-      contractSignDate: new Date('2023-03-01'),
-      startDate: new Date('2023-03-01'),
-      endDate: new Date('2024-03-01'),
-      terminationDate: new Date('2023-12-31'),
-      contractNumber: 'HD003',
-      creationDate: new Date('2023-03-01'),
-      updateDate: new Date('2023-03-05'),
-    },
+    // {
+    //   index: 1,
+    //   contractType: 'Hợp đồng chính thức',
+    //   contractSignDate: new Date('2023-01-01'),
+    //   startDate: new Date('2023-01-01'),
+    //   endDate: new Date('2024-01-01'),
+    //   terminationDate: null,
+    //   contractNumber: 'HD001',
+    //   creationDate: new Date('2023-01-01'),
+    //   updateDate: new Date('2023-01-15'),
+    // },
+    // {
+    //   index: 2,
+    //   contractType: 'Hợp đồng thử việc',
+    //   contractSignDate: new Date('2023-02-01'),
+    //   startDate: new Date('2023-02-01'),
+    //   endDate: new Date('2023-04-01'),
+    //   terminationDate: null,
+    //   contractNumber: 'HD002',
+    //   creationDate: new Date('2023-02-01'),
+    //   updateDate: new Date('2023-02-10'),
+    // },
+    // {
+    //   index: 3,
+    //   contractType: 'Hợp đồng hợp tác',
+    //   contractSignDate: new Date('2023-03-01'),
+    //   startDate: new Date('2023-03-01'),
+    //   endDate: new Date('2024-03-01'),
+    //   terminationDate: new Date('2023-12-31'),
+    //   contractNumber: 'HD003',
+    //   creationDate: new Date('2023-03-01'),
+    //   updateDate: new Date('2023-03-05'),
+    // },
   ];
   nsInfo: any;
   donviId: any;
@@ -185,7 +193,8 @@ export class DanhsachhdldComponent {
     private mb: MessageBox,
     private _matDialog: MatDialog,
     private store: Store<AppState>,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private shareData: ShareData,
   ) {
     const appUser = this.store.select((state) => state.appUser);
     appUser.subscribe((res: any) => {
@@ -206,6 +215,8 @@ export class DanhsachhdldComponent {
       isActive: [false],
       isInInsurance: [false],
     });
+
+    
   }
 
   handleButtonClick(action: string): void {
@@ -269,6 +280,37 @@ export class DanhsachhdldComponent {
       this.titleForm = 'Lập danh sách hợp đồng lao động';
       this.placeHolderTenDanhsach = 'Nhập tên danh sách';
       // this.onLapDanhsach();
+    }
+    this.loadData();
+  }
+
+  getContractByEmployee(employeeId: number) {
+    this.http
+    .get(HopDongURL.getContractByEmployeeId(this.nsId))
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe((res: any) => {
+      if (!res || !res.state) return;
+      this.nsHopdongList = res.data;
+      console.log(res);
+      
+    });
+  }
+  handleSelectEmp(nsId : number){
+    this.nsId = nsId;
+    this.getContractByEmployee(nsId);
+  }
+
+  loadData() {
+    if (true) {
+      this.http
+        .get(ChiTietNhanvienURL.getChiTietNhanVien())
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((res: any) => {
+          if (!res || !res.state) return;
+          this.listNhanVien = res.data;
+         console.log(res.data);
+         
+        });
     }
   }
 

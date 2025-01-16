@@ -3,6 +3,10 @@ import { TitleHead } from '../../core/navigation/navigation.types';
 import { MessageKey } from '../../shared/AppUltil';
 import { ShareData } from '../../shared/shareservice.service';
 import { RouterModule } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
+import { ChiTietNhanvienURL } from '../../services/chitietnhanvien/chitietnhanvienURL';
+import { CommonApiService } from '../../services/commonHttp';
+import { NhanVien } from '../employee/hosonhansu/model/nhanvien';
 
 @Component({
   selector: 'app-hdld',
@@ -11,7 +15,13 @@ import { RouterModule } from '@angular/router';
   imports: [RouterModule],
 })
 export class HdldComponent implements OnInit {
-  constructor(private shareData: ShareData) {
+  listNhanVien: NhanVien[] = [];
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
+
+  constructor(private shareData: ShareData,
+        private http: CommonApiService
+    
+  ) {
     const title: TitleHead = {
       title: 'HĐLĐ',
       subTitle: 'Danh sách',
@@ -19,7 +29,8 @@ export class HdldComponent implements OnInit {
     };
     this.shareData.sendMessage(MessageKey.FN_HEADER_NAME, title);
   }
+  
   ngOnInit(): void {
-    // throw new Error('Method not implemented.');
+      
   }
 }

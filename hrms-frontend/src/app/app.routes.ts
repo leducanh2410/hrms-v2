@@ -13,7 +13,9 @@ export const routes: Routes = [
     path: '', // Đường dẫn gốc
     component: LayoutComponent, // Sử dụng LayoutComponent làm bố cục
     children: [
-      { path: '', component: DashboardComponent }, // Trang chủ
+      { path: '', redirectTo: 'sign-in', pathMatch: 'full' }, // Chuyển hướng mặc định đến login
+
+      { path: 'home', component: DashboardComponent }, // Trang chủ
       { path: 'phongban', component: DepartmentComponent }, // Trang chủ
       {
         path: 'dsachnhansu',
@@ -45,8 +47,7 @@ export const routes: Routes = [
     path: 'sign-in', // Đường dẫn gốc
     component: SignInComponent, // Sử dụng LayoutComponent làm bố cục
     children: [
-      //   { path: '', component: HomeComponent }, // Trang chủ
-      //   { path: 'about', component: AboutComponent }, // Trang "Giới thiệu"
+     
     ],
   },
   {

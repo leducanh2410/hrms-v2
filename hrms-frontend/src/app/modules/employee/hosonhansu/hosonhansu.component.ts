@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { TitleHead } from '../../../core/navigation/navigation.types';
 import { MessageKey } from '../../../shared/AppUltil';
 import { ShareData } from '../../../shared/shareservice.service';

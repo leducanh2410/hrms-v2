@@ -10,7 +10,7 @@
       [(opened)]="drawerOpened"
       #drawer
     >
-      <app-list-employee></app-list-employee>
+      <app-list-employee (empSelected)="handleSelectEmp($event)" [listNhanVien]="listNhanVien"></app-list-employee>
     </mat-drawer>
     <!-- Drawer content -->
     <mat-drawer-content class="border border-collapse-l">
@@ -133,10 +133,11 @@
               #tableRow
               [class.selected]="hd.nsId === selectedNsId"
               [ngClass]="{ 'text-blue-600': hd.nsId === selectedNsId }"
+          
             >
-              <td class="border border-collapse w[5%]">{{ hd.index }}</td>
-              <td class="border border-collapse w-[10%]">
-                {{ hd.contractType }}
+              <td class="border border-collapse w[5%]" >{{ hd.index }}</td>
+              <td class="border border-collapse w-[10%]" >
+                {{ hd.loaiHopDong.tenLoaiHopDong }}
               </td>
               <td class="border border-collapse w-[10%]">
                 {{ hd.contractSignDate | date : "dd/MM/yyyy" }}
