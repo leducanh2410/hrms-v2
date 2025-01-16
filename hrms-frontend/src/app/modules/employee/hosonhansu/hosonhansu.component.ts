@@ -50,7 +50,6 @@ import { FormdanhmucchungModule } from '../../../../assets/lib/formdanhmucchung/
 import { FormquyetdinhModule } from '../../../../assets/lib/formquyetdinh/src/public-api';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { FormnnghecnktModule } from '../../../../assets/lib/formnnghecnkt/src/public-api';
-import { QtrinhlamviecComponent } from './pages/thongtincanhan/qtrinhlamviec/qtrinhlamviec.component';
 import { QtrlamviecComponent } from './pages/qtrlamviec/qtrlamviec.component';
 import { FileviewModule } from '../../components/fileview/fileview.module';
 import { LamviecComponent } from './pages/qtrlamviec/lamviec/lamviec.component';
@@ -75,11 +74,9 @@ import { DtaodhformModule } from '../components/dtaodhform/dtaodhform.module';
 import { DtaonhformModule } from '../components/dtaonhform/dtaonhform.module';
 import { GiadinhformModule } from '../components/giadinhform/giadinhform.module';
 import { KhenthuongformModule } from '../components/khenthuongform/khenthuongform.module';
-import { KyluatformModule } from '../components/kyluatform/kyluatform.module';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { ChonquyetdinhModule } from '../../components/chonquyetdinh/chonquyetdinh.module';
 import { CommonModule } from '@angular/common';
 import { THONG_TIN_CHUNG } from './model/thongtinchung';
 import { NHAN_SU } from '../../../shared/appkeymessages';
@@ -149,7 +146,6 @@ import { NHAN_SU } from '../../../shared/appkeymessages';
     InputTextareaModule,
     InputNumberModule,
     MultiSelectModule,
-    ChonquyetdinhModule,
   ],
 })
 export class HosonhansuComponent implements OnInit {

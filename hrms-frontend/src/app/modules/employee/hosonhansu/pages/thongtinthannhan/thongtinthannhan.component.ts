@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject, takeUntil } from 'rxjs';
 import { CommonApiService } from '../../../../../services/commonHttp';
-import { EmployeURL } from '../../../../../services/employe/employeURL';
 import { MessageService } from '../../../../../shared/message.services';
 import { Buttons } from '../../../../../fuse/components/message-box/common';
 import { MessageBox } from '../../../../../fuse/components/message-box/message-box.provider';
@@ -72,8 +71,7 @@ export class ThongtinthannhanComponent implements OnInit {
     const dialogRef = this._matDialog.open(GiadinhformComponent, {
       width: '900px',
       data: {
-        giadinh: {},
-        nhansu: this.nhansu,
+        nsId: this.nhansu.id,
         addNew: true,
       },
     });
@@ -125,18 +123,20 @@ export class ThongtinthannhanComponent implements OnInit {
           .delete(llnsURL.deleteNhanThanById(id))
           .pipe(takeUntil(this._unsubscribeAll))
           .subscribe((res: any) => {
-            if (!res || !res.state) {
-              this.messageService.showErrorMessage(
+            console.log(res);
+
+            if (res.state == 200) {
+              this.messageService.showSuccessMessage(
                 'Hệ thống',
-                'Xóa thông tin không thành công'
+                'Xóa thành công'
               );
+              this.loadData();
               return;
             }
-            this.messageService.showSuccessMessage(
+            this.messageService.showErrorMessage(
               'Hệ thống',
-              'Xóa thành công'
+              'Xóa thông tin không thành công'
             );
-            this.loadData();
           });
       }
     });
@@ -148,7 +148,7 @@ export class ThongtinthannhanComponent implements OnInit {
         ? 'Nam'
         : rowData[field] === 1
         ? 'Nữ'
-        : 'LGBT'
+        : 'LGBT';
     }
 
     return rowData[field];

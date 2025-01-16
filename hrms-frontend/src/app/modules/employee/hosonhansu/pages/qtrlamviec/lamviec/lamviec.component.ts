@@ -12,7 +12,6 @@ import { Subject } from 'rxjs/internal/Subject';
 import { THONG_TIN_CHUNG } from '../../../model/thongtinchung';
 import { takeUntil } from 'rxjs';
 import { LamviecdialogComponent } from './lamviecDialog/lamviecdialog/lamviecdialog.component';
-import { QuatrinhLamviecURL } from '../../../../../../services/employe/quatrinhlamviecURL';
 import { MessageService } from '../../../../../../shared/message.services';
 import { Buttons } from '../../../../../../fuse/components/message-box/common';
 import { MessageBox } from '../../../../../../fuse/components/message-box/message-box.provider';
@@ -23,6 +22,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { QtrinhlamviecBean } from '../../../model/qtrinhlamviec';
+import { llnsURL } from '../../../../../../services/employe/llnsURL';
 
 @Component({
   selector: 'app-lamviec',
@@ -55,24 +55,27 @@ export class LamviecComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.listQuaTrinhLamViec = this.nsInfo?.quaTrinhCongTac;
     this.loadData();
-    
   }
 
   loadData(): void {
-    
+    this.http
+      .get(llnsURL.getQTCTByEmpId(this.nsInfo.id))
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((res: any) => {
+        if (res.state == 200) {
+          this.listQuaTrinhLamViec = res.data;
+        }
+      });
   }
 
-  themchucdanh() {
+  themQTCT() {
     const dialogRef = this._matDialog.open(LamviecdialogComponent, {
       width: '900px',
       disableClose: true,
       data: {
-        id: this.nsInfo?.id,
-        isNow: true,
-        tenbophan: this.nsInfo?.quaTrinhCongTac[0].department.departmentName,
-        phonbanId: this.nsInfo?.quaTrinhCongTac[0].department.id,
+        nsId: this.nsInfo?.id,
+        addNew: true,
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
@@ -80,67 +83,46 @@ export class LamviecComponent implements OnInit, OnChanges {
     });
   }
 
-  suachucdanh(product) {
-    const obj = JSON.parse(JSON.stringify(product));
+  suaQTCT(qtct) {
     const dialogRef = this._matDialog.open(LamviecdialogComponent, {
       width: '900px',
       disableClose: true,
-      data: obj,
+      data: {
+        qtctId: qtct.id,
+      },
     });
     dialogRef.afterClosed().subscribe((result) => {
       this.loadData();
     });
   }
 
-  delete(product) {
-    this.http
-      .post(QuatrinhLamviecURL.validXoaQtLamviec(), product)
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) {
-          this.messageService.showErrorMessage('Hệ thống', res.message);
-          return;
-        }
-        let dialog = this.mb.showDefault(
-          'Bạn có chắc chắn muốn muốn xóa quá trình làm việc này không?',
-          Buttons.YesNo
-        );
+  delete(id) {
+    let dialog = this.mb.showDefault(
+      'Bạn có chắc chắn muốn muốn xóa thông tin không?',
+      Buttons.YesNo
+    );
+    dialog.dialogResult$.subscribe(async (result) => {
+      if (result) {
+        this.http
+          .delete(llnsURL.deleteQTCT(id))
+          .pipe(takeUntil(this._unsubscribeAll))
+          .subscribe((res: any) => {
+            console.log(res);
 
-        dialog.dialogResult$.subscribe(async (result) => {
-          if (result) {
-            this.http
-              .delete(QuatrinhLamviecURL.deleteQtlamviec(product.qtlamviecId))
-              .pipe(takeUntil(this._unsubscribeAll))
-              .subscribe((res: any) => {
-                if (!res || !res.state) {
-                  this.messageService.showErrorMessage(
-                    'Hệ thống',
-                    'Xóa thông tin không thành công'
-                  );
-                  return;
-                }
-                this.messageService.showSuccessMessage(
-                  'Hệ thống',
-                  'Xóa thành công'
-                );
-                this.loadData();
-              });
-          }
-        });
-      });
-  }
-
-  xuatExcel(): void {
-    this.http
-      .get(QuatrinhLamviecURL.xuatExcel(this.nsInfo?.id))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) {
-          return;
-        }
-
-        const blob = AppUltil.base64ToBlob(res.data);
-        FileSaver.saveAs(blob, 'quatrinhlamviec.xls');
-      });
+            if (res.state == 200) {
+              this.messageService.showSuccessMessage(
+                'Hệ thống',
+                'Xóa thành công'
+              );
+              this.loadData();
+              return;
+            }
+            this.messageService.showErrorMessage(
+              'Hệ thống',
+              'Xóa thông tin không thành công'
+            );
+          });
+      }
+    });
   }
 }

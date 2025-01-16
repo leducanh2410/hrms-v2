@@ -16,7 +16,7 @@ export class THONG_TIN_CHUNG {
   birthday: string; // string
   gender: number; // int
   cccdNumber: string; // varchar(255)
-  cccdNgaycap: string; // string
+  cccdNgaycap: Date; // string
   cccdNoicap: string; // varchar(255)
   phone: string; // varchar(255)
   marriageStatus: number; // int
@@ -47,7 +47,7 @@ export class THONG_TIN_CHUNG {
     birthday: string = '',
     gender: number = 0,
     cccdNumber: string = '',
-    cccdNgaycap: string = '',
+    cccdNgaycap: Date = new Date(),
     cccdNoicap: string = '',
     phone: string = '',
     marriageStatus: number = 0,

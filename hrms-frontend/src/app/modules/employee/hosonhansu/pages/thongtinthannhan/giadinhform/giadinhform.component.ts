@@ -9,7 +9,6 @@ import {
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CommonApiService } from '../../../../../../services/commonHttp';
-import { DanhMucURL } from '../../../../../../services/employe/danhmucURL';
 import { llnsURL } from '../../../../../../services/employe/llnsURL';
 import { Subject, takeUntil } from 'rxjs';
 import { MessageService } from '../../../../../../shared/message.services';
@@ -79,9 +78,8 @@ export class GiadinhformComponent implements OnInit {
     private http: CommonApiService,
     private formBuilder: FormBuilder
   ) {
-    this.ngaySinh = new Date(data?.nhanthan?.ngaySinh);
     this.nsId = data?.nsId;
-    if (this.nsId) this.isEdit = true;
+    this.isEdit = !data?.addNew;
   }
 
   ngOnInit(): void {
@@ -91,13 +89,16 @@ export class GiadinhformComponent implements OnInit {
       lqhegdinh: new FormControl('', Validators.required),
     });
 
-    this.http
-      .get(llnsURL.getNhanThanById(this.data?.nhanThanId))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.nhanThan = res?.data
-      });
+    if (this.data?.nhanThanId) {
+      this.http
+        .get(llnsURL.getNhanThanById(this.data?.nhanThanId))
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((res: any) => {
+          if (!res || !res.state) return;
+          this.nhanThan = res?.data;
+          this.ngaySinh = new Date(this.nhanThan.ngaySinh);
+        });
+    }
   }
 
   myUploader(event, fileForm) {
@@ -114,48 +115,44 @@ export class GiadinhformComponent implements OnInit {
   }
 
   saveAndClose(): void {
-    if (!this.isEdit) {
-      if (this.nhanThan) {
-        this.http
-          .post(llnsURL.createNhanThanByEmpId(this.nsId), this.nhanThan)
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (!res || !res.state) {
-              this.messageService.showErrorMessage(
-                'Hệ thống',
-                'Cập nhật thông tin không thành công'
-              );
-              this.matDialogRef.close(this.nhanThan);
-            }
-            this.messageService.showSuccessMessage(
-              'Hệ thống',
-              'Cập nhật thành công'
-            );
-            this.isLockform = true;
-          });
-      }
-    } else {
-      if (this.nhanThan) {
-        console.log(this.nhanThan);
+    this.nhanThan.ngaySinh = this.ngaySinh
 
-        this.http
-          .put(llnsURL.updateNhanThanById(this.nhanThan.id), this.nhanThan)
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (!res || !res.state) {
-              this.messageService.showErrorMessage(
-                'Hệ thống',
-                'Cập nhật thông tin không thành công'
-              );
-              this.matDialogRef.close(this.nhanThan);
-            }
-            this.messageService.showSuccessMessage(
+    if (this.isEdit) {
+      this.http
+        .put(llnsURL.updateNhanThanById(this.nhanThan.id), this.nhanThan)
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((res: any) => {
+          if (res.state == 200) {
+            this.messageService.showErrorMessage(
               'Hệ thống',
-              'Cập nhật thành công'
+              'Cập nhật thông tin không thành công'
             );
-            this.isLockform = true;
-          });
-      }
+            this.matDialogRef.close(this.nhanThan);
+          }
+          this.messageService.showSuccessMessage(
+            'Hệ thống',
+            'Cập nhật thành công'
+          );
+          this.isLockform = true;
+        });
+    } else {
+      this.http
+        .post(llnsURL.createNhanThanByEmpId(this.nsId), this.nhanThan)
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((res: any) => {
+          if (res.state == 200) {
+            this.messageService.showErrorMessage(
+              'Hệ thống',
+              'Cập nhật thông tin không thành công'
+            );
+            this.matDialogRef.close(this.nhanThan);
+          }
+          this.messageService.showSuccessMessage(
+            'Hệ thống',
+            'Cập nhật thành công'
+          );
+          this.isLockform = true;
+        });
     }
   }
 

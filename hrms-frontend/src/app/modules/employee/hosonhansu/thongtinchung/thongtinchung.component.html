@@ -31,50 +31,6 @@
       <i class="fa-light fa-trash-can"></i>
       <span class="ml-2 hidden sm:inline-block">Xóa hồ sơ</span>
     </button>
-    <button
-      class="min-w-0 sm:min-w-20 sm:mx-2"
-      mat-button
-      [matMenuTriggerFor]="menu"
-      [disabled]="!nsInfo || !nsInfo.id"
-    >
-      <i class="fa-light fa-file-word"></i>
-      <span class="ml-2 hidden sm:inline-block">Xem, Tải sơ yếu lý lịch</span>
-    </button>
-    <mat-menu #menu="matMenu">
-      <div mat-menu-item>
-        <p class="w-36">SYLL mẫu EVN</p>
-        <div>
-          <button mat-icon-button (click)="viewFile(1)">
-            <i class="fa-light fa-eye icon-size-5"></i>
-          </button>
-          <button class="ml-2" mat-icon-button (click)="download(1)">
-            <i class="fa-light fa-download icon-size-5"></i>
-          </button>
-        </div>
-      </div>
-      <div mat-menu-item>
-        <p class="w-36">SYLL mẫu 2cBNV</p>
-        <div>
-          <button mat-icon-button (click)="viewFile(2)">
-            <i class="fa-light fa-eye icon-size-5"></i>
-          </button>
-          <button class="ml-2" mat-icon-button (click)="download(2)">
-            <i class="fa-light fa-download icon-size-5"></i>
-          </button>
-        </div>
-      </div>
-      <div mat-menu-item>
-        <p class="w-36">SYLL mẫu 2cTCTW</p>
-        <div>
-          <button class="" mat-icon-button (click)="viewFile(3)">
-            <i class="fa-light fa-eye icon-size-5"></i>
-          </button>
-          <button class="ml-2" mat-icon-button (click)="download(3)">
-            <i class="fa-light fa-download icon-size-5"></i>
-          </button>
-        </div>
-      </div>
-    </mat-menu>
   </div>
   <div class="flex items-center min-w-max justify-end">
     <button class="mx-2" mat-flat-button (click)="onChonNhansu()">

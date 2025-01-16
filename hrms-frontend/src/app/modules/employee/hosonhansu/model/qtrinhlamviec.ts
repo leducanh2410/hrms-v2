@@ -46,5 +46,23 @@ export class QtrinhlamviecBean {
     nghiepvu: NghiepVu = new NghiepVu(),
     phapnhan: PhapNhan = new PhapNhan(),
     vanphonglamviec: VanPhongLamViec = new VanPhongLamViec()
-  ) {}
+  ) {
+    this.id = id;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+    this.ngayHieuLuc = ngayHieuLuc;
+    this.ngayQuyetDinh = ngayQuyetDinh;
+    this.trangthai = trangthai;
+    this.ghiChu = ghiChu;
+    this.loaiQtct = loaiQtct;
+    this.department = department;
+    this.chucdanh = chucdanh;
+    this.thanhphannhansu = thanhphannhansu;
+    this.capdonhansu = capdonhansu;
+    this.dongxe = dongxe;
+    this.loailaodong = loailaodong;
+    this.nghiepvu = nghiepvu;
+    this.phapnhan = phapnhan;
+    this.vanphonglamviec = vanphonglamviec;
+  }
 }

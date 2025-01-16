@@ -2,15 +2,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject, takeUntil } from 'rxjs';
 import { CommonApiService } from '../../../../../services/commonHttp';
-import { EmployeURL } from '../../../../../services/employe/employeURL';
 import { MessageService } from '../../../../../shared/message.services';
 import { Buttons } from '../../../../../fuse/components/message-box/common';
 import { MessageBox } from '../../../../../fuse/components/message-box/message-box.provider';
 import { llnsURL } from '../../../../../services/employe/llnsURL';
 import { KhenthuongformComponent } from './khenthuongform/khenthuongform.component';
-import FileSaver, { saveAs } from 'file-saver';
-import { DanhMucURL } from '../../../../../services/employe/danhmucURL';
-import { FileviewComponent } from '../../../../components/fileview/fileview.component';
 import { AppUltil } from '../../../../../shared/AppUltil';
 import { CommonModule, formatDate } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -114,20 +110,18 @@ export class KhenthuongKyluatComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // this.loadDataKhenThuong();
-    // this.loadDataKyLuat();
-
     if (this.nhansu) {
-      this.listDanhGia = this.nhansu.danhGia;
-
-      // this.http
-      //   .get(llnsURL.getTdktSangkienByid(this.nhansu.id))
-      //   .pipe(takeUntil(this._unsubscribeAll))
-      //   .subscribe((res: any) => {
-      //     if (!res || !res.state) return;
-      //     this.dsSangkien = res.data;
-      //   });
+      this.loadDanhGia();
     }
+  }
+
+  loadDanhGia() {
+    this.http
+      .get(DanhGiaURL.getDanhGiaByEmpId(this.nhansu.id))
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((res: any) => {
+        if (res.state == 200) this.listDanhGia = res.data;
+      });
   }
 
   addKhenThuong(): void {
@@ -136,20 +130,12 @@ export class KhenthuongKyluatComponent implements OnInit {
       data: {
         addNew: true,
         nhansu: this.nhansu,
-        listNgKy: this.listNgKy,
-        listChucVu: this.listChucVu,
-        khenthuong: {
-          soQD: '',
-          nguoiKy: '',
-          chucvuKy: '',
-          ngayKy: null,
-          namQD: null,
-          lydo: '',
-        },
       },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {});
+    dialogRef.afterClosed().subscribe((result) => {
+      this.loadDanhGia();
+    });
   }
 
   updateKhenThuong(danhGia): void {
@@ -158,29 +144,12 @@ export class KhenthuongKyluatComponent implements OnInit {
       disableClose: true,
       data: {
         nhansu: this.nhansu,
-        danhGia: danhGia,
+        danhGiaId: danhGia.id,
       },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.http
-          .post(llnsURL.createDanhGiaByEmpId(1), result)
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (!res || !res.state) {
-              this.messageService.showErrorMessage(
-                'Hệ thống',
-                'Cập nhật thông tin không thành công'
-              );
-              return;
-            }
-            this.messageService.showSuccessMessage(
-              'Hệ thống',
-              'Cập nhật thành công'
-            );
-          });
-      }
+      this.loadDanhGia();
     });
   }
 
@@ -192,7 +161,7 @@ export class KhenthuongKyluatComponent implements OnInit {
     dialog.dialogResult$.subscribe(async (result) => {
       if (result) {
         this.http
-          .delete(llnsURL.createDanhGiaByEmpId(id))
+          .delete(DanhGiaURL.deleteDanhGia(id))
           .pipe(takeUntil(this._unsubscribeAll))
           .subscribe((res: any) => {
             if (!res || !res.state) {
@@ -206,66 +175,9 @@ export class KhenthuongKyluatComponent implements OnInit {
               'Hệ thống',
               'Xóa thành công'
             );
+            this.loadDanhGia();
           });
       }
     });
-  }
-
-  downloadFileQD(idQD): void {
-    this.http
-      .get(DanhMucURL.getFileQuyetDinh(idQD))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) {
-          return;
-        }
-        var fileQD = res.data;
-        if (fileQD) {
-          const blob = AppUltil.base64ToBlob(fileQD.fileContent);
-          FileSaver.saveAs(blob, fileQD.fileName);
-        } else {
-          this.messageService.showWarningMessage(
-            'Hệ thống',
-            'Quyết định không có File đính kèm!'
-          );
-        }
-      });
-    return;
-  }
-
-  viewFileQD(idQD): void {
-    this.http
-      .get(DanhMucURL.getFileQuyetDinh(idQD))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) {
-          return;
-        }
-
-        var fileQD = res.data;
-        if (fileQD) {
-          const dialogRef = this._matDialog.open(FileviewComponent, {
-            width: '1000px',
-            disableClose: true,
-            data: {
-              fileId: fileQD.fileId,
-              fileContent: fileQD.fileContent,
-              fileExten: fileQD.fileExten,
-              fileName: fileQD.fileName,
-            },
-          });
-          dialogRef.afterClosed().subscribe((result) => {
-            if (result) {
-            }
-          });
-        } else {
-          this.messageService.showWarningMessage(
-            'Hệ thống',
-            'Quyết định không có File đính kèm!'
-          );
-          return;
-        }
-      });
-    return;
   }
 }

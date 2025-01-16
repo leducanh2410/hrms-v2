@@ -13,7 +13,6 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { MatSelectModule } from '@angular/material/select';
 import { ThongtinthannhanComponent } from './thongtinthannhan/thongtinthannhan.component';
 import { KhenthuongKyluatComponent } from './khenthuongkyluat/khenthuongkyluat.component';
-import { QtrinhlamviecComponent } from './thongtincanhan/qtrinhlamviec/qtrinhlamviec.component';
 import { QtrluongComponent } from './qtrluong/qtrluong.component';
 import { QtrlamviecComponent } from './qtrlamviec/qtrlamviec.component';
 import { THONG_TIN_CHUNG } from '../model/thongtinchung';

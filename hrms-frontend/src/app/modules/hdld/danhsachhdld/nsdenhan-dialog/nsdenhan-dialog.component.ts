@@ -8,7 +8,6 @@ import { MessageBox } from '../../../../fuse/components/message-box/message-box.
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../ngxstore/state/app.state';
 import { CommonApiService } from '../../../../services/commonHttp';
-import { hdldURL } from '../../../../services/employe/hdldURL';
 import { MessageService } from '../../../../shared/message.services';
 import { Subject, takeUntil } from 'rxjs';
 import { ThongtincanhbaoUI } from '../../model/ThongtincanhbaoUI';
@@ -126,60 +125,6 @@ export class NsdenhanDialogComponent {
   }
 
   loadThongtinHopdongList() {
-    if (this.selectedValue == 1) {
-      this.nsList1 = [];
-      this.isLoading = true;
-      this.http
-        .get(hdldURL.getNsDsachHdldListByDonvi(this.donviId, false))
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe(
-          (res: any) => {
-            if (res.state) {
-              this.nsList1 = res.data;
-            }
-          },
-          () => {
-            // Hủy đồng hồ cát khi kết thúc yêu cầu API
-            this.isLoading = false;
-          }
-        );
-    } else if (this.selectedValue == 2) {
-      this.nsList1 = [];
-      this.http
-        .get(hdldURL.getNsDsachHdldListByDonvi(this.donviId, true))
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((res: any) => {
-          if (res.state) {
-            this.nsList1 = res.data;
-          }
-        });
-    } else if (this.selectedValue == 3) {
-      this.nsList2 = [];
-      if (this.fDate === null || this.fDate === undefined) {
-        this.fDate = new Date();
-        this.fDate.setDate(1);
-      }
-
-      if (this.tDate === null || this.tDate === undefined) {
-        this.tDate = new Date();
-        this.tDate.setMonth(this.tDate.getMonth() + 1);
-        this.tDate.setDate(0);
-      }
-
-      this.http
-        .post(hdldURL.getThongtinHopdongList(), {
-          fDate: this.fDate,
-          tDate: this.tDate,
-          donviId: this.donviId,
-          gomTT: false,
-        })
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((res: any) => {
-          if (res.state) {
-            this.nsList2 = res.data;
-          }
-        });
-    }
   }
 
   onRowSelect(event: any) {

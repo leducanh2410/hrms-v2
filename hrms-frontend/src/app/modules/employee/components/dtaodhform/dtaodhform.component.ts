@@ -5,7 +5,6 @@ import { Subject, takeUntil } from 'rxjs';
 import { MessageBox } from '../../../../fuse/components/message-box/message-box.provider';
 import { Buttons } from '../../../../fuse/components/message-box/common';
 import { FileUpload } from 'primeng/fileupload';
-import { DanhMucURL } from '../../../../services/employe/danhmucURL';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { MomentDateModule } from '@angular/material-moment-adapter';
@@ -84,74 +83,6 @@ export class DtaodhformComponent implements OnInit {
       this.data = this.obj.product;
       this.stateForm = this.obj.state;
     }
-
-    this.http
-      .get(DanhMucURL.getListTrinhdo())
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listTrinhDo = res.data;
-      });
-
-    this.http
-      .get(DanhMucURL.getListHocvi())
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listHocVi = res.data;
-      });
-
-    this.http
-      .get(DanhMucURL.getListXeploai())
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listBangCap = res.data;
-      });
-
-    this.http
-      .get(DanhMucURL.getListHthucdtao())
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listHinhThucDaoTao = res.data;
-      });
-
-    this.http
-      .get(DanhMucURL.getListTruongdt())
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listTruongDaoTao = res.data;
-        if (this.data && this.data.truongdtId)
-          this.truongDt = this.listTruongDaoTao.find(
-            (element) => element.id === this.data.truongdtId
-          );
-        if (this.truongDt == null) {
-          this.truongDt = {
-            id: null,
-            name: this.data.noidaotao,
-          };
-        }
-      });
-
-    this.http
-      .get(DanhMucURL.getListNganhnghe())
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listNganhdt = res.data;
-        if (this.data && this.data.nganhngheId)
-          this.nganhDt = this.listNganhdt.find(
-            (element) => element.id === this.data.nganhngheId
-          );
-        if (this.nganhDt == null) {
-          this.nganhDt = {
-            id: null,
-            name: this.data.tenNnghe,
-          };
-        }
-      });
   }
 
   async myUploader(event, fileForm) {

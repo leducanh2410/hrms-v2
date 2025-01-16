@@ -5,7 +5,6 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { CommonApiService } from '../../../../../../services/commonHttp';
-import { EmployeURL } from '../../../../../../services/employe/employeURL';
 import { Subject, takeUntil } from 'rxjs';
 import { AppUltil } from '../../../../../../shared/AppUltil';
 import FileSaver from 'file-saver';
@@ -56,11 +55,12 @@ export class LuongdialogComponent implements OnInit, OnDestroy {
   private _unsubscribeAll: Subject<any> = new Subject<any>();
 
   isNghiviec: boolean;
-  nsInfo: THONG_TIN_CHUNG = new THONG_TIN_CHUNG();
+  nsId: number;
   luong: Luong = new Luong();
   ngayHieuLuc: Date = new Date();
   listNgachLuong: NgachLuong[] = [];
   listBacLuong: BacLuong[] = [];
+  isEdit: boolean = true;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -70,22 +70,23 @@ export class LuongdialogComponent implements OnInit, OnDestroy {
     private _matDialog: MatDialog,
     private messageService: MessageService
   ) {
-    this.luong = data?.nsLuong;
-    this.nsInfo = data?.nsInfo;
-    this.ngayHieuLuc = new Date(this.luong.ngayHieuLuc);
+    console.log(data);
+
+    this.nsId = data?.nsID;
+
+    if (data?.addNew) {
+      this.isEdit = false;
+    }
   }
 
   ngOnInit(): void {
-    console.log(this.luong);
+    console.log(this.nsId);
 
-    // if (this.data.nsLuongId == null) {
-    //   this.data.isDanghuong = true;
-    // }
     this.http
       .get(QuatrinhLuongURL.getAllNgachLuong())
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((res: any) => {
-        if (res.state) {
+        if (res.state == 200) {
           this.listNgachLuong = res.data;
         }
       });
@@ -93,137 +94,62 @@ export class LuongdialogComponent implements OnInit, OnDestroy {
       .get(QuatrinhLuongURL.getAllBacLuong())
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((res: any) => {
-        if (res.state) {
+        if (res.state == 200) {
           this.listBacLuong = res.data;
         }
       });
-    // this.http
-    //   .get(DanhMucURL.getChucvuForQdnoidung())
-    //   .pipe(takeUntil(this._unsubscribeAll))
-    //   .subscribe((res: any) => {
-    //     if (!res || !res.state) return;
-    //     this.listChucvuQd = res.data;
-    //     this.chucvuQdBean = this.listChucvuQd.find(element => element.name === this.data.chucvuky)
-    //     if (this.chucvuQdBean == null) {
-    //       this.chucvuQdBean = {
-    //         id: null,
-    //         chucvuky: this.data.chucvuky
-    //       }
-    //     }
-    //   });
+
+    if (this.isEdit) {
+      this.http
+        .get(QuatrinhLuongURL.getNsLuongById(this.data?.nsLuongId))
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((res: any) => {
+          if (res.state == 200) {
+            this.luong = res.data;
+            this.ngayHieuLuc = new Date(res.data?.ngayHieuLuc);
+          }
+        });
+    }
   }
 
   async onSave(): Promise<void> {
-    this.http
-      .post(QuatrinhLuongURL.validInfoLuong(), this.data)
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) {
-          this.messageService.showErrorMessage('Hệ thống', res.message);
-          return;
-        }
-        if (this.data != null && this.data.id != null) {
-          this.http
-            .post(QuatrinhLuongURL.updateNsLuong(), this.data)
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((res: any) => {
-              if (!res || !res.state) {
-                this.messageService.showErrorMessage(
-                  'Hệ thống',
-                  'Cập nhật thông tin không thành công'
-                );
-              }
-              this.messageService.showSuccessMessage(
-                'Hệ thống',
-                'Cập nhật thành công'
-              );
-              let result = res.data;
-              this.matDialogRef.close(result);
-            });
-        } else {
-          this.http
-            .post(QuatrinhLuongURL.insertNsLuong(), this.data)
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((res: any) => {
-              if (!res || !res.state) {
-                this.messageService.showErrorMessage(
-                  'Hệ thống',
-                  'Cập nhật thông tin không thành công'
-                );
-              }
-              this.messageService.showSuccessMessage(
-                'Hệ thống',
-                'Cập nhật thành công'
-              );
-              let result = res.data;
-              this.matDialogRef.close(result);
-            });
-        }
-      });
-  }
+    const luongRequest = {
+      ngachLuongId: this.luong.ngachLuong.id,
+      bacLuongId: this.luong.bacluong.id,
+      ngayHieuLuc: this.ngayHieuLuc,
+      ngayQuyetDinh: this.ngayHieuLuc,
+      luongThuNhap: this.luong.luongThuNhap,
+      mucTamUngChung: this.luong.mucTamUngChung,
+      thamNien: this.luong.thamNien,
+      kiemNhiem: this.luong.kiemNhiem,
+      thuHut: this.luong.thuHut,
+      bietPhai: this.luong.bietPhai,
+      trachNhiem: this.luong.trachNhiem,
+      vungMien: this.luong.vungMien,
+      datDo: this.luong.datDo,
+      phuCap: this.luong.phuCap,
+      trangThai: this.luong.trangThai,
+    };
 
-  blobToBase64(blob: Blob) {
-    return new Promise((resolve, _) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result);
-      reader.readAsDataURL(blob);
-    });
-  }
-
-  taiFileQDdinhkem(data): void {
-    var fileBase64;
-    this.http
-      .get(EmployeURL.getFile(data.fileQdinh.id))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) {
-          return;
-        }
-        fileBase64 = res.data;
-        const blob = AppUltil.base64ToBlob(fileBase64);
-        FileSaver.saveAs(blob, data.fileQdinh.fileName);
-      });
-  }
-
-  taiFilePhuluc(data): void {
-    var fileBase64;
-    this.http
-      .get(EmployeURL.getFile(data.fileLuongDinhkem.id))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) {
-          return;
-        }
-        fileBase64 = res.data;
-        const blob = AppUltil.base64ToBlob(fileBase64);
-        FileSaver.saveAs(blob, data.fileLuongDinhkem.fileName);
-      });
-  }
-
-  deleteFileQD(file) {
-    let dialog = this.mb.showDefault(
-      'Bạn có muốn xóa file đính kèm không?',
-      Buttons.YesNo
-    );
-    dialog.dialogResult$.subscribe(async (result) => {
-      if (result) {
-        file.deleted = true;
-        // this.data.webLlbsKyluatFileqd = null
-      }
-    });
-  }
-
-  deleteFilePhuluc(file) {
-    let dialog = this.mb.showDefault(
-      'Bạn có muốn xóa file phụ lục này không?',
-      Buttons.YesNo
-    );
-    dialog.dialogResult$.subscribe(async (result) => {
-      if (result) {
-        file.deleted = true;
-        // this.data.webLlbsKyluatFileqd = null
-      }
-    });
+    if (this.isEdit) {
+      this.http
+        .put(QuatrinhLuongURL.updateNSLuong(this.luong?.id), luongRequest)
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((res: any) => {
+          if (res.state == 200) {
+            this.onClose();
+          }
+        });
+    } else {
+      this.http
+        .post(QuatrinhLuongURL.createNSLuongByEmpId(this.nsId), luongRequest)
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((res: any) => {
+          if (res.state == 200) {
+            this.onClose();
+          }
+        });
+    }
   }
 
   onClose(): void {

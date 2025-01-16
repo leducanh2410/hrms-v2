@@ -1,7 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { CommonApiService } from '../../../../../../services/commonHttp';
-import { DanhMucURL } from '../../../../../../services/employe/danhmucURL';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { HSNhansuURL } from '../../../../../../services/employe/hosonhansuURL';
 import { MessageService } from '../../../../../../shared/message.services';
@@ -20,7 +23,11 @@ import { MatRadioModule } from '@angular/material/radio';
 import { DropdownModule } from 'primeng/dropdown';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { MatInputModule } from '@angular/material/input';
-
+import { CalendarModule } from 'primeng/calendar';
+import { InputTextModule } from 'primeng/inputtext';
+import { llnsURL } from '../../../../../../services/employe/llnsURL';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-khoitaohosons',
@@ -34,8 +41,11 @@ import { MatInputModule } from '@angular/material/input';
     FormsModule,
     MatDatepickerModule,
     DropdownModule,
-    MatInputModule
-  ]
+    MatInputModule,
+    CalendarModule,
+    InputTextModule,
+    CheckboxModule,
+  ],
 })
 export class KhoitaohosonsComponent implements OnInit {
   listLoaiHdld: any[] = [];
@@ -49,12 +59,113 @@ export class KhoitaohosonsComponent implements OnInit {
   phongBan: any[];
   model: any;
 
-
   user_info: User;
   user$ = new BehaviorSubject<User>({});
   donviThaotacId: number;
 
   disableBtnCNKT: boolean;
+
+  formData = {
+    employeeName: '',
+    birthday: null,
+    gender: null,
+    cccdNumber: '',
+    cccdNgaycap: null,
+    cccdNoicap: '',
+    marriageStatus: null,
+    noiSinh: '',
+    queQuan: '',
+    nationality: '',
+    ethnic: '',
+    maSoThue: '',
+    ngayVaoLam: null,
+    tongiao: '',
+    contact: {
+      companyEmail: '',
+      phoneNumber: '',
+      address: '',
+      hoKhauThuongTru: '',
+      emergencyContactAddress: '',
+      emergencyContactName: '',
+      emergencyContactPhoneNumber: '',
+      emergencyContactRelationship: '',
+      emergencyContactEmail: '',
+    },
+    baoHiem: {
+      soSoBhxh: '',
+      soSoBhxhCu: '',
+      maSoBhxh: '',
+      ngayCapBhxh: new Date(),
+      ngayThamGiaBhxh: new Date(),
+      noiCapBhxh: '',
+      nopSoBhxh: false,
+      ngayNopSoBhxh: new Date(),
+      noiDongBh: '',
+      daNhanSoBhxhBaoLuu: false,
+      ngayNhanSoBhxhBaoLuu: new Date(),
+      ngayBaoLuuSo: new Date(),
+      ngayTraSoBaoHiem: new Date(),
+      ngayHenNhanSo: new Date(),
+      ghiChuBhxh: '',
+      soBhyt: '',
+      noiDkKhamBenh: '',
+      ngayCapBhyt: new Date(),
+      ngayHetHanBhyt: new Date(),
+      khamSucKhoeDinhKy: false,
+      maTinhBenhVienKcb: '',
+      maBenhVienDangKyKham: '',
+      ngayThamGiaBhtn: new Date(),
+      tgDongBhtnTruocKhiVaoCongTy: 0,
+      ghiChuBhyt: '',
+      laDoanVienCongDoan: false,
+      chucVuDoanVienCongDoan: '',
+      ngayKetNap: new Date(),
+      ngayKetThuc: new Date(),
+    },
+  };
+
+  quocGia = [
+    {
+      name: 'Việt nam',
+      id: 0,
+    },
+  ];
+
+  danToc = [
+    {
+      name: 'Kinh',
+      id: 0,
+    },
+  ];
+
+  tonGiao = [
+    {
+      name: 'Không',
+      id: 0,
+    },
+  ];
+
+  listTtranghonnhan = [
+    { name: 'Độc thân', id: 0 },
+    { name: 'Đã kết hôn', id: 1 },
+    { name: 'Ly hôn', id: 2 },
+    { name: 'Góa', id: 4 },
+  ];
+
+  listGioiTinh: any[] = [
+    {
+      name: 'Nam',
+      id: 0,
+    },
+    {
+      name: 'Nữ',
+      id: 1,
+    },
+    {
+      name: 'LGBT',
+      id: 2,
+    },
+  ];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -63,6 +174,8 @@ export class KhoitaohosonsComponent implements OnInit {
     private messageService: MessageService,
     private _matDialog: MatDialog,
     private store: Store<AppState>,
+    private _router: Router,
+    private _activatedroute: ActivatedRoute
   ) {
     const appUser = this.store.select((state) => state.appUser);
     appUser.subscribe((res: any) => {
@@ -77,7 +190,6 @@ export class KhoitaohosonsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.donviThaotacId = this.user_info?.iddonvi;
     if (this.data) this.model = this.data;
 
@@ -85,183 +197,35 @@ export class KhoitaohosonsComponent implements OnInit {
 
     if (this.data == null || this.data.nsID == null) {
       this.data.gioitinh = true;
-
-      this.http
-        .get(HSNhansuURL.genSohieuNS(this.donviThaotacId))
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((res: any) => {
-          if (!res || !res.state) return;
-          this.data.sohieu = res.data;
-        });
-
-      this.http
-        .get(HSNhansuURL.getTenDvikyHDLD(this.donviThaotacId))
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((res: any) => {
-          if (!res || !res.state) return;
-          this.data.donviKyhdld = res.data;
-        });
-    }
-
-
-    this.http
-      .get(HSNhansuURL.getDsDonviTructhuoc(this.donviThaotacId))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listDonvi = res.data;
-      });
-
-    this.http
-      .get(DanhMucURL.getAllTTrangHopdong())
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listLoaiHdld = res.data;
-      });
-
-    this.http
-      .get(DanhMucURL.getListVtriCdanhByDonvi(this.donviThaotacId))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listChucdanh = res.data;
-      });
-
-    this.http
-      .get(DanhMucURL.getAllNganhngheKinhte())
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listNganhNgheKte = res.data;
-
-        this.http
-          .get(HSNhansuURL.getNganhSxID(this.donviThaotacId))
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (!res || !res.state) return;
-            this.data.nganhSxkdId = res.data;
-          });
-
-      });
-
-    this.http
-      .get(DanhMucURL.getListNgheNghiep())
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listNghenghiep = res.data;
-      });
-
-    this.http
-      .get(DanhMucURL.getDsAllPhongbanIsActAndNoAct(this.donviThaotacId))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        let donvis = res.data;
-        this.phongBan = donvis
-      });
-
-    this.http
-      .get(DanhMucURL.getListNgheCNKT())
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listNgheCNKT = res.data;
-      });
-
-    this.http
-      .get(DanhMucURL.getListNhomNgheCNKT())
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listNhomNgheCNKT = res.data;
-      });
-  }
-
-  onChangeChucdanh(): void {
-    if (this.data != null && this.data.vtriId != null) {
-      this.http
-        .get(DanhMucURL.checkCdanhCnkt(this.data.vtriId))
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((res: any) => {
-          if (!res || !res.state) return;
-          this.disableBtnCNKT = res.data;
-          if (this.disableBtnCNKT) {
-            this.data.nghecnkt = '';
-            this.data.nghecnktId = null;
-          }
-        });
     }
   }
 
-  onChangeDonvi(donviId) {
-    this.http
-      .get(DanhMucURL.getDsAllPhongbanIsActAndNoAct(donviId))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        let donvis = res.data;
-        this.phongBan = donvis
-        this.data.phongban = '';
-        this.data.phongbanId = null;
-        this.data.donviId = donviId;
-      });
-
-    this.http
-      .get(DanhMucURL.getListVtriCdanhByDonvi(donviId))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.listChucdanh = res.data;
-
-        this.data.vtriId = null;
-
-      });
-
-    this.http
-      .get(HSNhansuURL.genSohieuNS(donviId))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.data.sohieu = res.data;
-      });
-
-    this.http
-      .get(HSNhansuURL.getNganhSxID(donviId))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.data.nganhSxkdId = res.data;
-      });
-
-    this.http
-      .get(HSNhansuURL.getTenDvikyHDLD(donviId))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) return;
-        this.data.donviKyhdld = res.data;
-      });
-
+  onNavigatorHsns(ns) {
+    this._router.navigate(['../dsachnhansu'], {
+      relativeTo: this._activatedroute,
+      state: ns,
+    });
   }
+
+  onChangeChucdanh(): void {}
+
+  onChangeDonvi(donviId) {}
 
   onChonphongban(): void {
     const dialogRef = this._matDialog.open(FormphongbanComponent, {
       disableClose: true,
       data: {
         phongBan: this.phongBan,
-        boChon: true
-      }
+        boChon: true,
+      },
     });
 
-    dialogRef.afterClosed()
-      .subscribe((result) => {
-        if (result && result.data.id) {
-          this.data.phongban = result.data.name;
-          this.data.phongbanId = result.data.id;
-        }
-
-      });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result && result.data.id) {
+        this.data.phongban = result.data.name;
+        this.data.phongbanId = result.data.id;
+      }
+    });
   }
 
   onChonNgheCNKT(): void {
@@ -270,77 +234,26 @@ export class KhoitaohosonsComponent implements OnInit {
       data: {
         lnhomnghe: this.listNhomNgheCNKT,
         lnghe: this.listNgheCNKT,
-        boChon: true
-      }
+        boChon: true,
+      },
     });
 
-    dialogRef.afterClosed()
-      .subscribe((result) => {
-        if (result) {
-          this.data.nghecnkt = result.data.name;
-          this.data.nghecnktId = result.data.id;
-        }
-
-      });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.data.nghecnkt = result.data.name;
+        this.data.nghecnktId = result.data.id;
+      }
+    });
   }
 
   onSave(): void {
-
-
     this.http
-      .post(HSNhansuURL.validInfo(), this.data)
+      .post(llnsURL.createNhanSu(), this.formData)
       .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) {
-
-          this.messageService.showErrorMessage(
-            'Hệ thống',
-            res.message
-          );
-          return;
-        }
-
-        if (this.data != null && this.data.nsID != null) {
-          this.http
-            .post(HSNhansuURL.updateNsLlns(), this.data)
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((res: any) => {
-              if (!res || !res.state) {
-                this.messageService.showErrorMessage(
-                  'Hệ thống',
-                  'Cập nhật thông tin không thành công'
-                );
-              }
-              this.messageService.showSuccessMessage(
-                'Hệ thống',
-                'Cập nhật thành công'
-              );
-              let result = res.data;
-              this.matDialogRef.close(result);
-            });
-        } else {
-                      this.http
-            .post(HSNhansuURL.insertNsLlns(), this.data)
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((res: any) => {
-              if (!res || !res.state) {
-                this.messageService.showErrorMessage(
-                  'Hệ thống',
-                  'Cập nhật thông tin không thành công'
-                );
-              }
-              this.messageService.showSuccessMessage(
-                'Hệ thống',
-                'Cập nhật thành công'
-              );
-              let result = res.data;
-              this.matDialogRef.close(result);
-            });
-        }
-
+      .subscribe((res) => {
+        this.onNavigatorHsns(res?.data)
+        this.onClose();
       });
-
-
   }
   onInputChange(event: any) {
     const input = event.target as HTMLInputElement;
@@ -353,5 +266,4 @@ export class KhoitaohosonsComponent implements OnInit {
   onClose(): void {
     this.matDialogRef.close();
   }
-
 }

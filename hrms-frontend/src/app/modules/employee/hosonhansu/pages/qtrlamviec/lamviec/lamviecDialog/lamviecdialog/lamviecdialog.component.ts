@@ -13,10 +13,6 @@ import { QtrinhlamviecBean } from '../../../../../model/qtrinhlamviec';
 import { APP_ACTION } from '../../../../../../../../ngxstore/actions/app.actions';
 import { AppState } from '../../../../../../../../ngxstore/state/app.state';
 import { CommonApiService } from '../../../../../../../../services/commonHttp';
-import { DanhMucURL } from '../../../../../../../../services/employe/danhmucURL';
-import { EmployeURL } from '../../../../../../../../services/employe/employeURL';
-
-import { QuatrinhLamviecURL } from '../../../../../../../../services/employe/quatrinhlamviecURL';
 import { AppUltil } from '../../../../../../../../shared/AppUltil';
 import { MessageService } from '../../../../../../../../shared/message.services';
 import FileSaver from 'file-saver';
@@ -48,6 +44,26 @@ import { NghiepVu } from '../../../../../model/nghiepvu';
 import { MasterDataURL } from '../../../../../../../../services/employe/masterDataURL';
 import { HSNhansuURL } from '../../../../../../../../services/employe/hosonhansuURL';
 import { LoaiQTCT } from '../../../../../model/loaiQtct';
+import { llnsURL } from '../../../../../../../../services/employe/llnsURL';
+import { MessageBoxComponent } from '../../../../../../../../fuse/components/message-box/message-box.component';
+
+interface QTCTRequest {
+  ngayHieuLuc: Date;
+  ngayQuyetDinh: Date;
+  phongBanId: number;
+  loaiQtctId: number;
+  chucDanhId: number;
+  thanhPhanId: number;
+  phapNhanId: number;
+  loaiLaoDongId: number;
+  dongXeId: number;
+  capDoNhanSuId: number;
+  nghiepVuId: number;
+  donViId: number;
+  vanPhongLamViecId: number;
+  trangthai: boolean;
+  ghiChu: string;
+}
 
 @Component({
   selector: 'app-lamviecdialog',
@@ -81,11 +97,15 @@ export class LamviecdialogComponent implements OnInit {
 
   user_info: User;
   ngayHieuLuc: Date = new Date();
+  isEdit: boolean = true;
+  qtct: QtrinhlamviecBean = new QtrinhlamviecBean();
+  nsId: number;
+  qtctId: number;
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: QtrinhlamviecBean,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     public matDialogRef: MatDialogRef<LamviecdialogComponent>,
     private http: CommonApiService,
     private _matDialog: MatDialog,
@@ -102,9 +122,12 @@ export class LamviecdialogComponent implements OnInit {
       }
     });
 
-    if (data) {
-      this.ngayHieuLuc = new Date(data.ngayHieuLuc);
+    if (this.data.addNew) {
+      this.isEdit = false;
+      this.nsId = data?.nsId;
     }
+
+    this.qtctId = this.data?.qtctId
   }
 
   ngOnInit(): void {
@@ -118,6 +141,7 @@ export class LamviecdialogComponent implements OnInit {
     this.onLoadNghiepVu();
     this.onLoadPhapNhan();
     this.onLoadLoaiQTCT();
+    if (this.isEdit) this.loadData();
   }
 
   onLoadPhongBan(): void {
@@ -213,11 +237,65 @@ export class LamviecdialogComponent implements OnInit {
       });
   }
 
+  async loadData() {
+    if (this.isEdit) {
+      this.http
+        .get(llnsURL.getQTCTById(this.qtctId))
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((res: any) => {
+          if (!res || !res.state) return;
+          this.qtct = res.data;
+          this.ngayHieuLuc = new Date(this.qtct.ngayHieuLuc);
+
+          console.log(this.qtct);
+          
+        });
+    }
+  }
+
   onChonphongban(): void {}
 
   onChangeChucdanh(): void {}
 
-  onSave(): void {}
+  onSaveAndClose(): void {
+    const qtctRequest: QTCTRequest = {
+      ngayHieuLuc: this.ngayHieuLuc,
+      ngayQuyetDinh: this.ngayHieuLuc,
+      phongBanId: this.qtct.department.id,
+      loaiQtctId: this.qtct.loaiQtct.id,
+      chucDanhId: this.qtct.chucdanh.id,
+      thanhPhanId: this.qtct.thanhphannhansu.id,
+      phapNhanId: this.qtct.phapnhan.id,
+      loaiLaoDongId: this.qtct.loailaodong.id,
+      dongXeId: this.qtct.dongxe.id,
+      capDoNhanSuId: this.qtct.capdonhansu.id,
+      nghiepVuId: this.qtct.nghiepvu.id,
+      donViId: this.qtct.department.id,
+      vanPhongLamViecId: this.qtct.vanphonglamviec.id,
+      trangthai: this.qtct.trangthai,
+      ghiChu: this.qtct.ghiChu,
+    };
+
+    if (this.isEdit) {
+      this.http
+        .put(llnsURL.updateQTCTById(this.qtct.id), qtctRequest)
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((res: any) => {
+          if (res.state == 200) {
+            this.matDialogRef.close();
+          }
+        });
+    } else {
+      this.http
+        .post(llnsURL.createQTCTByEmpId(this.nsId), qtctRequest)
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((res: any) => {
+          if (res.state == 200) {
+            this.matDialogRef.close();
+          }
+        });
+    }
+  }
 
   onKeyDown(event: any, maxLength: number) {
     const acceptKeys = [

@@ -119,19 +119,6 @@ export class ThongtinchungComponent implements OnInit, OnDestroy {
       .subscribe(async (is_change: any) => {
         this.is_change = is_change;
       });
-    this.subData
-      .getMessage(NHAN_SU.REFRESH_THONGTINCHUNG)
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe(async (is_refresh: any) => {
-        this.http
-          .get(HSNhansuURL.getHsNs(this.nsInfo.id))
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (!res || !res.state) return;
-            this.nsInfo = res.data;
-            this.shareData.sendMessage(NHAN_SU.VIEW_TTIN, this.nsInfo);
-          });
-      });
   }
 
   async onChonNhansu() {
@@ -214,16 +201,7 @@ export class ThongtinchungComponent implements OnInit, OnDestroy {
       });
       dialogRef.afterClosed().subscribe((result) => {
         if (result && result.id) {
-          this.http
-            .get(HSNhansuURL.getHsNs(result.id))
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((res: any) => {
-              if (!res || !res.state) return;
-              this.nsInfo = res.data;
-              this.shareData.sendMessage(NHAN_SU.VIEW_TTIN, this.nsInfo);
-              this.is_change = true;
-              this.shareData.sendMessage(NHAN_SU.IS_EDIT, this.is_change);
-            });
+         
         }
       });
     }
@@ -239,15 +217,7 @@ export class ThongtinchungComponent implements OnInit, OnDestroy {
       });
       dialogRef.afterClosed().subscribe((result) => {
         if (result && result.id) {
-          this.http
-            .get(HSNhansuURL.getHsNs(result.id))
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((res: any) => {
-              if (!res || !res.state) return;
-              this.nsInfo = res.data;
-              this.shareData.sendMessage(NHAN_SU.VIEW_TTIN, this.nsInfo);
-            });
-          this.shareData.sendMessage(NHAN_SU.PAGE, 'canhan');
+          
         }
       });
     }
@@ -261,163 +231,11 @@ export class ThongtinchungComponent implements OnInit, OnDestroy {
         Buttons.YesNo
       );
       dialog.dialogResult$.subscribe((result) => {
-        if (result) {
-          this.http
-            .delete(HSNhansuURL.deleteHsNs(this.nsInfo.id))
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((res: any) => {
-              if (!res || !res.state) {
-                this.messageService.showErrorMessage(
-                  'Hệ thống',
-                  'Xóa thông tin không thành công'
-                );
-                return;
-              }
-              this.messageService.showSuccessMessage(
-                'Hệ thống',
-                'Xóa thành công'
-              );
-              this.nsInfo = new THONG_TIN_CHUNG();
-              this.shareData.sendMessage(NHAN_SU.VIEW_TTIN, this.nsInfo);
-            });
-        } else {
-        }
+       
       });
     }
   }
 
-  viewFile(type) {
-    // Show File
-    let fileBase64;
-    switch (type) {
-      case 1: {
-        this.http
-          .get(HSNhansuURL.xuatSyllMauEvn(this.nsInfo.id, true))
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (!res || !res.state) {
-              return;
-            }
-            fileBase64 = res.data;
-            const dialogRef = this._matDialog.open(FileviewComponent, {
-              width: '1000px',
-              disableClose: true,
-              data: {
-                fileId: 'SYLLEVN.docx',
-                fileContent: fileBase64,
-                fileExten: 'PDF',
-                fileName: 'SYLLEVN.docx',
-              },
-            });
-            dialogRef.afterClosed().subscribe((result) => {
-              if (result) {
-              }
-            });
-          });
-        return;
-      }
-      case 2: {
-        this.http
-          .get(HSNhansuURL.xuatSyllMau02c(this.nsInfo.id, true))
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (!res || !res.state) {
-              return;
-            }
-            fileBase64 = res.data;
-            const dialogRef = this._matDialog.open(FileviewComponent, {
-              width: '1000px',
-              disableClose: true,
-              data: {
-                fileId: 'SYLLMau02c.docx',
-                fileContent: fileBase64,
-                fileExten: 'PDF',
-                fileName: 'SYLLMau02c.docx',
-              },
-            });
-            dialogRef.afterClosed().subscribe((result) => {
-              if (result) {
-              }
-            });
-          });
-        return;
-      }
-      case 3: {
-        this.http
-          .get(HSNhansuURL.xuatSyllMau02cTCTW(this.nsInfo.id, true))
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (!res || !res.state) {
-              return;
-            }
-            fileBase64 = res.data;
-            const dialogRef = this._matDialog.open(FileviewComponent, {
-              width: '1000px',
-              disableClose: true,
-              data: {
-                fileId: 'SYLLMau02cTCTW.docx',
-                fileContent: fileBase64,
-                fileExten: 'PDF',
-                fileName: 'SYLLMau02cTCTW.docx',
-              },
-            });
-            dialogRef.afterClosed().subscribe((result) => {
-              if (result) {
-              }
-            });
-          });
-        return;
-      }
-    }
-  }
-
-  download(type) {
-    let fileBase64;
-    switch (type) {
-      case 1: {
-        this.http
-          .get(HSNhansuURL.xuatSyllMauEvn(this.nsInfo.id, false))
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (!res || !res.state) {
-              return;
-            }
-            fileBase64 = res.data;
-            const blob = AppUltil.base64ToBlob(fileBase64);
-            FileSaver.saveAs(blob, 'SYLLEVN.docx');
-          });
-        return;
-      }
-      case 2: {
-        this.http
-          .get(HSNhansuURL.xuatSyllMau02c(this.nsInfo.id, false))
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (!res || !res.state) {
-              return;
-            }
-            fileBase64 = res.data;
-            const blob = AppUltil.base64ToBlob(fileBase64);
-            FileSaver.saveAs(blob, 'SYLLMau02c.docx');
-          });
-        return;
-      }
-      case 3: {
-        this.http
-          .get(HSNhansuURL.xuatSyllMau02cTCTW(this.nsInfo.id, false))
-          .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((res: any) => {
-            if (!res || !res.state) {
-              return;
-            }
-            fileBase64 = res.data;
-            const blob = AppUltil.base64ToBlob(fileBase64);
-            FileSaver.saveAs(blob, 'SYLLMau02cTCTW.docx');
-          });
-        return;
-      }
-    }
-  }
 
   myUploader(event, fileForm) {
     this.uploadedFiles.push(event);

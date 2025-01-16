@@ -16,7 +16,6 @@ import { MessageBox } from '../../../../../fuse/components/message-box/message-b
 import { Buttons } from '../../../../../fuse/components/message-box/common';
 import { QuatrinhLuongURL } from '../../../../../services/employe/quatrinhluongURL';
 import { MessageService } from '../../../../../shared/message.services';
-import { DanhMucURL } from '../../../../../services/employe/danhmucURL';
 import { AppUltil } from '../../../../../shared/AppUltil';
 import FileSaver from 'file-saver';
 import { FileviewComponent } from '../../../../components/fileview/fileview.component';
@@ -75,39 +74,13 @@ export class QtrluongComponent implements OnInit, OnChanges {
       });
   }
 
-  viewFileQD(idQD): void {
-    this.http
-      .get(DanhMucURL.getFileQuyetDinh(idQD))
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((res: any) => {
-        if (!res || !res.state) {
-          return;
-        }
-        var fileQD = res.data;
-        const dialogRef = this._matDialog.open(FileviewComponent, {
-          width: '1000px',
-          disableClose: true,
-          data: {
-            fileId: fileQD.fileId,
-            fileContent: fileQD.fileContent,
-            fileExten: fileQD.fileExten,
-            fileName: fileQD.fileName,
-          },
-        });
-        dialogRef.afterClosed().subscribe((result) => {
-          if (result) {
-          }
-        });
-      });
-    return;
-  }
-
   themluong() {
     const dialogRef = this._matDialog.open(LuongdialogComponent, {
       width: '1000px',
       disableClose: true,
       data: {
-        nsID: this.nsInfo?.nsID,
+        nsID: this.nsInfo?.id,
+        addNew: true
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
@@ -120,8 +93,7 @@ export class QtrluongComponent implements OnInit, OnChanges {
       width: '1000px',
       disableClose: true,
       data: {
-        nsLuong: nsLuong,
-        nsInfo: this.nsInfo,
+        nsLuongId: nsLuong?.id,
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
@@ -138,7 +110,7 @@ export class QtrluongComponent implements OnInit, OnChanges {
     dialog.dialogResult$.subscribe(async (result) => {
       if (result) {
         this.http
-          .delete(QuatrinhLuongURL.deleteNsLuong(id))
+          .delete(QuatrinhLuongURL.deleteNSLuong(id))
           .pipe(takeUntil(this._unsubscribeAll))
           .subscribe((res: any) => {
             if (!res || !res.state) {

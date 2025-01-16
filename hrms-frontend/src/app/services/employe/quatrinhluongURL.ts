@@ -4,6 +4,9 @@ export class QuatrinhLuongURL extends BaseURL {
     static getNsLuong(nsId) {
         return `${this.getOrigin()}/salary/getByEmployeeId/${nsId}`;
     }
+    static getNsLuongById(nsId) {
+        return `${this.getOrigin()}/salary/getById/${nsId}`;
+    }
 
     static getAllNgachLuong() {
         return `${this.getOrigin()}/master/getAllNgachLuong`;
@@ -13,19 +16,15 @@ export class QuatrinhLuongURL extends BaseURL {
         return `${this.getOrigin()}/master/getAllBacLuong`;
     }
 
-    static insertNsLuong() {
-        return `${this.getOrigin()}/hrms/employe/v1/quaTrinhNhansu/insertNsLuong`;
+    static deleteNSLuong(id){
+        return `${this.getOrigin()}/salary/delete/${id}`; 
     }
 
-    static updateNsLuong() {
-        return `${this.getOrigin()}/hrms/employe/v1/quaTrinhNhansu/updateNsLuong`;
+    static updateNSLuong(id){
+        return `${this.getOrigin()}/salary/update/${id}`; 
     }
 
-    static validInfoLuong() {
-        return `${this.getOrigin()}/hrms/employe/v1/quaTrinhNhansu/validInfoLuong`;
-    }
-
-    static deleteNsLuong(id) {
-        return `${this.getOrigin()}/hrms/employe/v1/quaTrinhNhansu/deleteNsLuong/${id}`;
+    static createNSLuongByEmpId(empId){
+        return `${this.getOrigin()}/salary/createByEmployeeId/${empId}`; 
     }
 }
