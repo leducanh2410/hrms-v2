@@ -40,6 +40,7 @@ import { StoreModule } from '@ngrx/store';
 import { FormdonviTreeComponent } from '../../../../assets/lib/formdonvi-tree/src/public-api';
 import { THONG_TIN_CHUNG } from '../hosonhansu/model/thongtinchung';
 import { QtrinhlamviecBean } from '../hosonhansu/model/qtrinhlamviec';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-dsnhansu',
@@ -62,12 +63,14 @@ import { QtrinhlamviecBean } from '../hosonhansu/model/qtrinhlamviec';
     MatMenuModule,
     NgxExtendedPdfViewerModule,
     StoreModule,
+    MatIconModule,
   ],
   providers: [],
 })
 export class DsnhansuComponent implements OnInit, OnDestroy {
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   private user!: User;
+  keySearch: string = '';
 
   //
   public donvis: any[] = [];
@@ -115,7 +118,6 @@ export class DsnhansuComponent implements OnInit, OnDestroy {
           orgName: this.user.tendonvi,
           orgCode: this.user.madonvi,
         };
-
       }
     });
   }
@@ -125,7 +127,6 @@ export class DsnhansuComponent implements OnInit, OnDestroy {
     this.columns = COLUMN_INIT_DS_NHANSU;
     this.fetchListNhansu();
     console.log(this.listNhansu);
-    
 
     // this.onSelectColumns();
   }
@@ -144,12 +145,12 @@ export class DsnhansuComponent implements OnInit, OnDestroy {
     //   });
   }
 
-  getCurrentQTCT(data: QtrinhlamviecBean[]){
-    return data?.find(qtct => qtct.trangthai)
+  getCurrentQTCT(data: QtrinhlamviecBean[]) {
+    return data?.find((qtct) => qtct.trangthai);
   }
 
   getFieldValue(rowData: any, field: string) {
-    const currentQTCT = this.getCurrentQTCT(rowData?.quaTrinhCongTac)
+    const currentQTCT = this.getCurrentQTCT(rowData?.quaTrinhCongTac);
 
     if (field.includes('.')) {
       return field.split('.').reduce((o, key) => {
@@ -181,6 +182,23 @@ export class DsnhansuComponent implements OnInit, OnDestroy {
           this.messageService.showErrorMessage('Thông báo', res.message);
         }
       });
+  }
+
+  timKiemNhanVien() {
+    if (this.keySearch) {
+      this.http
+        .get(llnsURL.searchNhanSu(this.keySearch))
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((res: any) => {
+          if (res.state) {
+            this.listNhansu = res.data;
+          } else {
+            this.messageService.showErrorMessage('Thông báo', res.message);
+          }
+        });
+    } else {
+      this.fetchListNhansu();
+    }
   }
 
   onChangeFilterState() {

@@ -28,6 +28,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { llnsURL } from '../../../../../../services/employe/llnsURL';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-khoitaohosons',
@@ -45,6 +46,7 @@ import { ActivatedRoute, Router } from '@angular/router';
     CalendarModule,
     InputTextModule,
     CheckboxModule,
+    MatTabsModule,
   ],
 })
 export class KhoitaohosonsComponent implements OnInit {
@@ -83,8 +85,8 @@ export class KhoitaohosonsComponent implements OnInit {
     contact: {
       companyEmail: '',
       phoneNumber: '',
-      address: '',
-      hoKhauThuongTru: '',
+      noiOHienTai: {},
+      hoKhauThuongTru: {},
       emergencyContactAddress: '',
       emergencyContactName: '',
       emergencyContactPhoneNumber: '',
@@ -167,6 +169,28 @@ export class KhoitaohosonsComponent implements OnInit {
     },
   ];
 
+  // ho khau thuong tru
+  hoKhauTinh: String = '';
+  hoKhauHuyen: String = '';
+  hoKhauXa: String = '';
+  hoKhauThanhPho: any[] = [];
+  hoKhauQuanHuyen: any[] = [];
+  hoKhauPhuongXa: any[] = [];
+  filteredHKQuanHuyen: any[] = [];
+  filteredHKPhuongXa: any[] = [];
+  hoKhauChiTiet: string = '';
+
+  // Noi o hien tai
+  noiOTinh: String = '';
+  noiOHuyen: String = '';
+  noiOXa: String = '';
+  noiOThanhPho: any[] = [];
+  noiOQuanHuyen: any[] = [];
+  noiOPhuongXa: any[] = [];
+  filteredNOQuanHuyen: any[] = [];
+  filteredNOPhuongXa: any[] = [];
+  noiOChiTiet: string = '';
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public matDialogRef: MatDialogRef<KhoitaohosonsComponent>,
@@ -198,6 +222,8 @@ export class KhoitaohosonsComponent implements OnInit {
     if (this.data == null || this.data.nsID == null) {
       this.data.gioitinh = true;
     }
+
+    this.loadDataMaster();
   }
 
   onNavigatorHsns(ns) {
@@ -207,54 +233,85 @@ export class KhoitaohosonsComponent implements OnInit {
     });
   }
 
-  onChangeChucdanh(): void {}
+  getMessage(errors: any): string {
+    if (errors.required) {
+      return 'Trường này là bắt buộc.';
+    }
+    if (errors.minlength) {
+      return `Trường này phải có ít nhất ${errors.minlength.requiredLength} ký tự.`;
+    }
 
-  onChangeDonvi(donviId) {}
-
-  onChonphongban(): void {
-    const dialogRef = this._matDialog.open(FormphongbanComponent, {
-      disableClose: true,
-      data: {
-        phongBan: this.phongBan,
-        boChon: true,
-      },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result && result.data.id) {
-        this.data.phongban = result.data.name;
-        this.data.phongbanId = result.data.id;
-      }
-    });
+    if (errors.pattern) {
+      return 'Nhập sai định dạng';
+    }
+    return 'Có lỗi xảy ra.';
   }
 
-  onChonNgheCNKT(): void {
-    const dialogRef = this._matDialog.open(FormnnghecnktComponent, {
-      disableClose: true,
-      data: {
-        lnhomnghe: this.listNhomNgheCNKT,
-        lnghe: this.listNgheCNKT,
-        boChon: true,
-      },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.data.nghecnkt = result.data.name;
-        this.data.nghecnktId = result.data.id;
-      }
-    });
+  async loadDataMaster() {
+    this.http
+      .get(llnsURL.getDSThanhPho())
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(async (res: any) => {
+        if (res?.state == 200) {
+          this.hoKhauThanhPho = [...res?.data];
+          this.noiOThanhPho = [...res?.data];
+        }
+      });
+    this.http
+      .get(llnsURL.getDSQuanHuyen())
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(async (res: any) => {
+        if (res?.state == 200) {
+          this.hoKhauQuanHuyen = [...res?.data];
+          this.noiOQuanHuyen = [...res?.data];
+          this.filteredHKQuanHuyen = [...res?.data];
+          this.filteredNOQuanHuyen = [...res?.data];
+        }
+      });
+    this.http
+      .get(llnsURL.getDSPhuongXa())
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(async (res: any) => {
+        if (res?.state == 200) {
+          this.hoKhauPhuongXa = [...res?.data];
+          this.noiOPhuongXa = [...res?.data];
+          this.filteredHKPhuongXa = [...res?.data];
+          this.filteredNOPhuongXa = [...res?.data];
+        }
+      });
   }
 
   onSave(): void {
+    this.formData.contact.hoKhauThuongTru = {
+      tinh: this.hoKhauTinh,
+      huyen: this.hoKhauHuyen,
+      xa: this.hoKhauXa,
+      chiTiet: this.hoKhauChiTiet,
+    };
+
+    this.formData.contact.noiOHienTai = {
+      tinh: this.noiOTinh,
+      huyen: this.noiOHuyen,
+      xa: this.noiOXa,
+      chiTiet: this.noiOChiTiet,
+    };
+
     this.http
       .post(llnsURL.createNhanSu(), this.formData)
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((res) => {
-        this.onNavigatorHsns(res?.data)
+        this.onNavigatorHsns(res?.data);
         this.onClose();
       });
   }
+  
+  filterRegion(data: any[], filterList: any[], regionId, type: string) {
+    var filtered = data?.filter((region) => region[type] == regionId);
+    filterList.length = 0;
+    filterList.push(...filtered);
+    console.log(this.filteredNOQuanHuyen, filtered, regionId);
+  }
+
   onInputChange(event: any) {
     const input = event.target as HTMLInputElement;
     const inputValue = input.value;

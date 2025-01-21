@@ -33,11 +33,18 @@
             [showOnFocus]="false"
             class="!w-full"
             [(ngModel)]="ngayHieuLuc"
+            [required]="true"
+            #ngayHL="ngModel"
           />
+          <div *ngIf="ngayHL.errors && ngayHL.touched" class="text-red-500">
+            {{ getMessage(ngayHL.errors) }}
+          </div>
         </div>
 
         <div class="">
-          <div class="mat-field-label">Ngạch lương</div>
+          <div class="mat-field-label">
+            Ngạch lương<span class="font-bold text-red-500 text-lg">*</span>
+          </div>
           <p-dropdown
             panelStyleClass="max-w-full"
             [style]="{ width: '100%' }"
@@ -51,12 +58,21 @@
             [required]="true"
             placeholder="&nbsp;"
             [(ngModel)]="luong.ngachLuong.id"
+            #ngachLuong="ngModel"
           >
           </p-dropdown>
+          <div
+            *ngIf="ngachLuong.errors && ngachLuong.touched"
+            class="text-red-500"
+          >
+            {{ getMessage(ngachLuong.errors) }}
+          </div>
         </div>
 
         <div class="">
-          <div class="mat-field-label">Bậc lương</div>
+          <div class="mat-field-label">
+            Bậc lương<span class="font-bold text-red-500 text-lg">*</span>
+          </div>
           <p-dropdown
             panelStyleClass="max-w-full"
             [style]="{ width: '100%' }"
@@ -70,8 +86,12 @@
             [required]="true"
             placeholder="&nbsp;"
             [(ngModel)]="luong.bacluong.id"
+            #bacLuong="ngModel"
           >
           </p-dropdown>
+          <div *ngIf="bacLuong.errors && bacLuong.touched" class="text-red-500">
+            {{ getMessage(bacLuong.errors) }}
+          </div>
         </div>
       </div>
     </div>
@@ -92,7 +112,12 @@
             class="w-full"
             [ngModelOptions]="{ standalone: true }"
             [(ngModel)]="luong.luongThuNhap"
+            required
+            #luongTN="ngModel"
           />
+          <div *ngIf="luongTN.errors && luongTN.touched" class="text-red-500">
+            {{ getMessage(luongTN.errors) }}
+          </div>
         </div>
         <div class="flex flex-col justify-center">
           <div class="mat-field-label">Thâm niên (VNĐ)</div>

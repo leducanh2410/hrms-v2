@@ -257,6 +257,20 @@ export class LamviecdialogComponent implements OnInit {
 
   onChangeChucdanh(): void {}
 
+  getMessage(errors: any): string {
+    if (errors.required) {
+      return 'Trường này là bắt buộc.';
+    }
+    if (errors.minlength) {
+      return `Trường này phải có ít nhất ${errors.minlength.requiredLength} ký tự.`;
+    }
+
+    if (errors.pattern) {
+      return 'Nhập sai định dạng';
+    }
+    return 'Có lỗi xảy ra.';
+  }
+
   onSaveAndClose(): void {
     const qtctRequest: QTCTRequest = {
       ngayHieuLuc: this.ngayHieuLuc,

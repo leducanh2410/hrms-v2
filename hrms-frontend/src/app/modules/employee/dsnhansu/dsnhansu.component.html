@@ -32,7 +32,28 @@
         "
         (onChange)="fetchListNhansu()"
       ></p-inputSwitch>
+
+      <div class="relative ml-4 flex items-center">
+        <mat-form-field class="search-bar !mt-6 !w-100">
+          <mat-label>Search</mat-label>
+          <input
+            matInput
+            type="text"
+            [(ngModel)]="keySearch"
+            placeholder="Search..."
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            (click)="timKiemNhanVien()"
+            matTooltip="Search"
+          >
+            <mat-icon>search</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
     </div>
+
     <!-- Actions -->
     <div class="flex gap-2 items-center">
       <button
@@ -44,25 +65,10 @@
         <!-- <span class="">Cập nhập</span> -->
       </button>
       <button class="btn btn-success px-8" pTooltip="Xuất Excel">
-        <i class="fa-light fa-file-excel"></i>
+        <a href="/hosonhansu">
+          <i class="fa-solid fa-circle-plus"></i>
+        </a>
         <!-- <span class="">Xuất Excel</span> -->
-      </button>
-      <button
-        (click)="onSelectColumns()"
-        class="btn btn-secondary px-8"
-        pTooltip="Cấu hình cột"
-        tooltipPosition="left"
-      >
-        <i class="fas fa-cog"></i>
-        <!-- <span class="">Cấu hình cột cột</span> -->
-      </button>
-      <button
-        (click)="onSelectColumns()"
-        class="btn btn-primary px-8"
-        pTooltip="Cấu hình hiển thị danh sách"
-      >
-        <i class="fa-light fa-list"></i>
-        <!-- <span class="">Hiển thị</span> -->
       </button>
     </div>
   </div>

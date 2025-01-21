@@ -1,8 +1,8 @@
 <!-- <div class="flex-auto sm:p-2 shadow overflow-y-auto h-full w-full" cdkScrollable> -->
 <form
-  class="h-full absolute inset-0 flex flex-col min-w-0 overflow-hidden bg-gray-100 w-full"
+  class="h-[80%] absolute inset-0 flex flex-col min-w-0 bg-gray-100 w-full"
   #form1="ngForm"
-  (ngSubmit)="save()"
+  (ngSubmit)="save(form1)"
 >
   <div
     class="p-2 shadow overflow-x-hidden overflow-y-auto bg-gray-100 w-full"
@@ -11,45 +11,71 @@
     <!-- Thông tin cá nhân -->
     <div class="w-full p-4 flex border-1 border-gray-300 rounded bg-white">
       <div
-        class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-8 w-full min-w-0 overflow-hidden"
+        class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-8 w-full min-w-0"
       >
         <div class="flex flex-col justify-center">
-          <div class="mat-field-label">Quốc tịch</div>
+          <div class="mat-field-label">
+            Quốc tịch<span class="font-bold text-red-500 text-lg">*</span>
+          </div>
           <input
             pInputText
             name="quocTich"
             [readonly]="!is_edit"
             class="w-full"
             [(ngModel)]="model.nationality"
+            required
+            #quocTich="ngModel"
           />
+
+          <div *ngIf="quocTich.errors && quocTich.touched" class="text-red-500">
+            {{ getMessage(quocTich.errors) }}
+          </div>
         </div>
 
         <div class="flex flex-col justify-center">
-          <div class="mat-field-label">Dân tộc</div>
+          <div class="mat-field-label">
+            Dân tộc<span class="font-bold text-red-500 text-lg">*</span>
+          </div>
           <input
             pInputText
             name="danToc"
             [readonly]="!is_edit"
             class="w-full"
             [(ngModel)]="model.ethnic"
+            required
+            #danToc="ngModel"
           />
+          <div *ngIf="danToc.errors && danToc.touched" class="text-red-500">
+            {{ getMessage(danToc.errors) }}
+          </div>
         </div>
 
         <div class="flex items-center">
           <div class="flex flex-col w-full">
-            <div class="mat-field-label">Tôn giáo</div>
+            <div class="mat-field-label">
+              Tôn giáo<span class="font-bold text-red-500 text-lg">*</span>
+            </div>
             <input
               pInputText
               name="tonGiao"
               [readonly]="!is_edit"
               class="w-full"
               [(ngModel)]="model.tongiao"
+              required
+              #tonGiao="ngModel"
             />
+            <div *ngIf="tonGiao.errors && tonGiao.touched" class="text-red-500">
+              {{ getMessage(tonGiao.errors) }}
+            </div>
           </div>
         </div>
 
         <div class="flex flex-col justify-center">
-          <div class="mat-field-label">Tình trạng hôn nhân</div>
+          <div class="mat-field-label">
+            Tình trạng hôn nhân<span class="font-bold text-red-500 text-lg"
+              >*</span
+            >
+          </div>
           <p-dropdown
             [style]="{ width: '100%' }"
             [options]="listTtranghonnhan"
@@ -62,8 +88,13 @@
             [readonly]="!is_edit"
             [ngModel]="model.marriageStatus"
             (onChange)="changeMarriageStatus($event.value)"
+            [required]="true"
+            #tthn="ngModel"
           >
           </p-dropdown>
+          <div *ngIf="tthn.errors && tthn.touched" class="text-red-500">
+            {{ getMessage(tthn.errors) }}
+          </div>
         </div>
 
         <div class="">
@@ -73,12 +104,20 @@
             placeholder=""
             name="cccd"
             maxlength="12"
-            pattern="[0-9.]+"
+            pattern="[0-9.]{12}$"
             required
             class="w-full"
             [(ngModel)]="model.cccdNumber"
             [disabled]="!is_edit"
+            [maxlength]="12"
+            #cccdNumber="ngModel"
           />
+          <div
+            *ngIf="cccdNumber.errors && cccdNumber.touched"
+            class="text-red-500"
+          >
+            {{ getMessage(cccdNumber.errors) }}
+          </div>
         </div>
 
         <div class="">
@@ -145,7 +184,15 @@
               [readonly]="!is_edit"
               class="w-full"
               [(ngModel)]="model.maSoThue"
+              required
+              #maSoThue="ngModel"
             />
+            <div
+              *ngIf="maSoThue.errors && maSoThue.touched"
+              class="text-red-500"
+            >
+              {{ getMessage(maSoThue.errors) }}
+            </div>
           </div>
           <div>
             <div class="">Số thẻ BHYT</div>
@@ -178,8 +225,13 @@
             [(ngModel)]="model.phone"
             [readonly]="!is_edit"
             class="w-full"
+            pattern="^(0|84)(2(0[3-9]|1[0-689]|2[0-25-9]|3[2-9]|4[0-9]|5[124-9]|6[0369]|7[0-7]|8[0-9]|9[012346789])|3[2-9]|5[25689]|7[06-9]|8[0-9]|9[012346789])([0-9]{7})$"
+            #phone="ngModel"
             [(ngModel)]="model.contact.phoneNumber"
           />
+          <div *ngIf="phone.errors && phone.touched" class="text-red-500">
+            {{ getMessage(phone.errors) }}
+          </div>
         </div>
 
         <div class="flex flex-col justify-start">
@@ -202,137 +254,244 @@
     >
       <p-divider align="left">
         <div class="inline-flex align-items-center">
-          <b class="text-blue-600">Địa chỉ</b>
+          <b class="text-blue-600">Địa chỉ<span class="font-bold text-red-500 text-lg">*</span></b>
         </div>
       </p-divider>
 
       <div
-        class="grid grid-cols-1 sm:grid-cols-3 gap-y-3 gap-x-8 w-full min-w-0 overflow-hidden"
+        class="grid grid-cols-4 sm:grid-cols-3 gap-y-3 gap-x-8 w-full min-w-0 mb-8"
       >
-        <!-- Noi sinh -->
-        <div class="flex flex-col justify-center">
-          <div class="mat-field-label">Nơi sinh Tỉnh/ TP</div>
-          <p-dropdown
-            [style]="{ width: '100%' }"
-            [options]="thanhPho"
-            optionLabel="label"
-            optionValue="value"
-            [filter]="true"
-            filterBy="label"
-            appendTo="body"
-            name="nsTP"
-            [disabled]="!is_edit"
-            placeholder="&nbsp;"
-            [showClear]="true"
-          >
-          </p-dropdown>
-        </div>
-
-        <div class="flex flex-col justify-center">
-          <div class="mat-field-label">Quận huyện</div>
-          <p-dropdown
-            [style]="{ width: '100%' }"
-            [options]="qhNoisinh"
-            optionLabel="name"
-            optionValue="id"
-            appendTo="body"
-            name="nsQH"
-            [disabled]="!is_edit"
-            placeholder="&nbsp;"
-            [filter]="true"
-            filterBy="label"
-            [showClear]="true"
-          >
-          </p-dropdown>
-        </div>
-
-        <div class="flex flex-col justify-start">
-          <div class="">Phường xã</div>
-          <input pInputText name="nsPX" type="text" class="w-full" />
-        </div>
-
         <!-- Que quan -->
         <div class="flex flex-col justify-center">
-          <div class="mat-field-label">Quê quán Tỉnh/ TP</div>
+          <div class="mat-field-label">Địa chỉ thường trú Tỉnh/ TP</div>
           <p-dropdown
             [style]="{ width: '100%' }"
-            [options]="thanhPho"
-            optionLabel="label"
-            optionValue="value"
+            [options]="hoKhauThanhPho"
+            optionLabel="tenTinhThanhPho"
+            optionValue="id"
             [filter]="true"
-            filterBy="label"
+            filterBy="tenTinhThanhPho"
             appendTo="body"
-            name="qqTP"
+            name="hoKhauTinh"
             [disabled]="!is_edit"
             placeholder="&nbsp;"
             [showClear]="true"
+            [required]="true"
+            [(ngModel)]="hoKhauTinh"
+            #thuongTruTinh="ngModel"
+            (onChange)="
+              filterRegion(
+                hoKhauQuanHuyen,
+                filteredHKQuanHuyen,
+                hoKhauTinh,
+                'tinhThanhPhoId'
+              )
+            "
           >
           </p-dropdown>
+          <div
+            *ngIf="thuongTruTinh.errors && thuongTruTinh.touched"
+            class="text-red-500"
+          >
+            {{ getMessage(thuongTruTinh.errors) }}
+          </div>
         </div>
 
         <div class="flex flex-col justify-center">
           <div class="mat-field-label">Quận huyện</div>
           <p-dropdown
             [style]="{ width: '100%' }"
-            [options]="qhQuequan"
-            optionLabel="name"
+            [options]="filteredHKQuanHuyen"
+            optionLabel="tenQuanHuyen"
             optionValue="id"
             appendTo="body"
-            name="qqQH"
+            name="hoKhauHuyen"
             [disabled]="!is_edit"
             placeholder="&nbsp;"
             [filter]="true"
-            filterBy="label"
+            filterBy="tenQuanHuyen"
             [showClear]="true"
+            [required]="true"
+            [(ngModel)]="hoKhauHuyen"
+            #thuongTruHuyen="ngModel"
+            (onChange)="
+              filterRegion(
+                hoKhauPhuongXa,
+                filteredHKPhuongXa,
+                hoKhauHuyen,
+                'quanHuyenId'
+              )
+            "
           >
           </p-dropdown>
+          <div
+            *ngIf="thuongTruHuyen.errors && thuongTruHuyen.touched"
+            class="text-red-500"
+          >
+            {{ getMessage(thuongTruHuyen.errors) }}
+          </div>
         </div>
 
         <div class="flex flex-col justify-start">
           <div class="">Phường xã</div>
-          <input pInputText name="qqPX" type="text" class="w-full" />
+          <p-dropdown
+            [style]="{ width: '100%' }"
+            [options]="filteredHKPhuongXa"
+            optionLabel="tenXaPhuong"
+            optionValue="id"
+            appendTo="body"
+            name="hoKhauXa"
+            [disabled]="!is_edit"
+            placeholder="&nbsp;"
+            [filter]="true"
+            filterBy="tenXaPhuong"
+            [showClear]="true"
+            [required]="true"
+            [(ngModel)]="hoKhauXa"
+            #thuongTruXa="ngModel"
+          >
+          </p-dropdown>
+          <div
+            *ngIf="thuongTruXa.errors && thuongTruXa.touched"
+            class="text-red-500"
+          >
+            {{ getMessage(thuongTruXa.errors) }}
+          </div>
         </div>
 
+        <div class="flex flex-col justify-start">
+          <div class="">Chi tiết</div>
+          <textarea
+            pInputText
+            [style]="{ width: '100%' }"
+            name="hoKhauChiTiet"
+            [disabled]="!is_edit"
+            required
+            [(ngModel)]="hoKhauChiTiet"
+            placeholder="Địa chỉ cụ thể"
+            #hoKhauDetail="ngModel"
+          >
+          </textarea>
+          <div
+            *ngIf="hoKhauDetail.errors && hoKhauDetail.touched"
+            class="text-red-500"
+          >
+            {{ getMessage(hoKhauDetail.errors) }}
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="grid grid-cols-4 sm:grid-cols-3 gap-y-3 gap-x-8 w-full min-w-0"
+      >
         <!-- Cho o -->
         <div class="flex flex-col justify-center">
-          <div class="mat-field-label">Chỗ ở Tỉnh/ TP</div>
+          <div class="mat-field-label">Nơi ở hiện tại Tỉnh/ TP</div>
           <p-dropdown
             [style]="{ width: '100%' }"
-            [options]="thanhPho"
-            optionLabel="label"
-            optionValue="value"
+            [options]="noiOThanhPho"
+            optionLabel="tenTinhThanhPho"
+            optionValue="id"
             [filter]="true"
-            filterBy="label"
+            filterBy="tenTinhThanhPho"
             appendTo="body"
-            name="chnTP"
+            name="noiOTinh"
             [disabled]="!is_edit"
             placeholder="&nbsp;"
             [showClear]="true"
+            [(ngModel)]="noiOTinh"
+            [required]="true"
+            #noiOTP="ngModel"
+            (onChange)="
+              filterRegion(
+                noiOQuanHuyen,
+                filteredNOQuanHuyen,
+                noiOTinh,
+                'tinhThanhPhoId'
+              )
+            "
           >
           </p-dropdown>
+          <div *ngIf="noiOTP.errors && noiOTP.touched" class="text-red-500">
+            {{ getMessage(noiOTP.errors) }}
+          </div>
         </div>
 
         <div class="flex flex-col justify-center">
           <div class="mat-field-label">Quận huyện</div>
           <p-dropdown
             [style]="{ width: '100%' }"
-            [options]="qhNoio"
-            optionLabel="name"
+            [options]="filteredNOQuanHuyen"
+            optionLabel="tenQuanHuyen"
             optionValue="id"
             appendTo="body"
-            name="chnQH"
+            name="noiOHuyen"
             [disabled]="!is_edit"
             placeholder="&nbsp;"
             [filter]="true"
-            filterBy="label"
+            filterBy="tenQuanHuyen"
             [showClear]="true"
+            [required]="true"
+            [(ngModel)]="noiOHuyen"
+            #noiOQH="ngModel"
+            (onChange)="
+              filterRegion(
+                noiOPhuongXa,
+                filteredNOPhuongXa,
+                noiOHuyen,
+                'quanHuyenId'
+              )
+            "
           >
           </p-dropdown>
+          <div *ngIf="noiOQH.errors && noiOQH.touched" class="text-red-500">
+            {{ getMessage(noiOQH.errors) }}
+          </div>
         </div>
 
         <div class="flex flex-col justify-start">
           <div class="">Phường xã</div>
-          <input pInputText name="chnPX" type="text" class="w-full" />
+          <p-dropdown
+            [style]="{ width: '100%' }"
+            [options]="filteredNOPhuongXa"
+            optionLabel="tenXaPhuong"
+            optionValue="id"
+            appendTo="body"
+            name="noiOXa"
+            [disabled]="!is_edit"
+            placeholder="&nbsp;"
+            [filter]="true"
+            filterBy="tenXaPhuong"
+            [showClear]="true"
+            [required]="true"
+            [(ngModel)]="noiOXa"
+            #noiOxa="ngModel"
+          >
+          </p-dropdown>
+          <div *ngIf="noiOxa.errors && noiOxa.touched" class="text-red-500">
+            {{ getMessage(noiOxa.errors) }}
+          </div>
+        </div>
+
+        <div class="flex flex-col justify-start">
+          <div class="">Chi tiết</div>
+          <textarea
+            pInputText
+            [style]="{ width: '100%' }"
+            name="noiOChiTiet"
+            [disabled]="!is_edit"
+            required
+            [(ngModel)]="noiOChiTiet"
+            placeholder="Địa chỉ cụ thể"
+            #noiODetail="ngModel"
+          >
+          </textarea>
+          <div
+            *ngIf="noiODetail.errors && noiODetail.touched"
+            class="text-red-500"
+          >
+            {{ getMessage(noiODetail.errors) }}
+          </div>
         </div>
       </div>
     </div>

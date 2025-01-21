@@ -114,8 +114,22 @@ export class GiadinhformComponent implements OnInit {
     this.data.addNew = true;
   }
 
+  getMessage(errors: any): string {
+    if (errors.required) {
+      return 'Trường này là bắt buộc.';
+    }
+    if (errors.minlength) {
+      return `Trường này phải có ít nhất ${errors.minlength.requiredLength} ký tự.`;
+    }
+
+    if (errors.pattern) {
+      return 'Nhập sai định dạng';
+    }
+    return 'Có lỗi xảy ra.';
+  }
+
   saveAndClose(): void {
-    this.nhanThan.ngaySinh = this.ngaySinh
+    this.nhanThan.ngaySinh = this.ngaySinh;
 
     if (this.isEdit) {
       this.http

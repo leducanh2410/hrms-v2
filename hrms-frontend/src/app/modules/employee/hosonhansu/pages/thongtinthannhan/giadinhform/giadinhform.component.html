@@ -21,27 +21,43 @@
       </h2>
       <div class="grid grid-cols-2 gap-4 px-4">
         <div class="">
-          <div class="mat-field-label">Họ và tên</div>
+          <div class="mat-field-label">
+            Họ và tên<span class="font-bold text-red-500 text-lg">*</span>
+          </div>
           <input
             pInputText
             class="w-full"
             [ngModelOptions]="{ standalone: true }"
             [(ngModel)]="nhanThan.tenNguoiThan"
+            required
+            #hoTen="ngModel"
           />
+          <div *ngIf="hoTen.errors && hoTen.touched" class="text-red-500">
+            {{ getMessage(hoTen.errors) }}
+          </div>
         </div>
 
         <div class="">
-          <div class="mat-field-label">Quan hệ</div>
+          <div class="mat-field-label">
+            Quan hệ<span class="font-bold text-red-500 text-lg">*</span>
+          </div>
           <input
             pInputText
             class="w-full"
             name="quanHe"
             [(ngModel)]="nhanThan.moiQuanHe"
+            required
+            #quanHe="ngModel"
           />
+          <div *ngIf="quanHe.errors && quanHe.touched" class="text-red-500">
+            {{ getMessage(quanHe.errors) }}
+          </div>
         </div>
 
         <div class="">
-          <div class="mat-field-label">Giới tính</div>
+          <div class="mat-field-label">
+            Giới tính<span class="font-bold text-red-500 text-lg">*</span>
+          </div>
           <p-dropdown
             panelStyleClass="max-w-full"
             [style]="{ width: '100%' }"
@@ -55,7 +71,11 @@
             [required]="true"
             placeholder="&nbsp;"
             [(ngModel)]="nhanThan.gioiTinh"
+            #gioiTinh="ngModel"
           >
+            <div *ngIf="gioiTinh.errors && gioiTinh.touched" class="text-red-500">
+              {{ getMessage(gioiTinh.errors) }}
+            </div>
           </p-dropdown>
         </div>
 

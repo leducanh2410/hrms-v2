@@ -112,6 +112,20 @@ export class LuongdialogComponent implements OnInit, OnDestroy {
     }
   }
 
+  getMessage(errors: any): string {
+    if (errors.required) {
+      return 'Trường này là bắt buộc.';
+    }
+    if (errors.minlength) {
+      return `Trường này phải có ít nhất ${errors.minlength.requiredLength} ký tự.`;
+    }
+
+    if (errors.pattern) {
+      return 'Nhập sai định dạng';
+    }
+    return 'Có lỗi xảy ra.';
+  }
+
   async onSave(): Promise<void> {
     const luongRequest = {
       ngachLuongId: this.luong.ngachLuong.id,

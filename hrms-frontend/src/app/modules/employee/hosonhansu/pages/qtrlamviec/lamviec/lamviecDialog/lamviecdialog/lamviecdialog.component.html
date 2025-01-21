@@ -4,7 +4,7 @@
   #rightForm="ngForm"
   class="flex flex-col max-w-310 md:min-w-310 overflow-hidden max-h-[90vh]"
 >
-  <!-- Header --> 
+  <!-- Header -->
   <div
     class="flex flex-0 items-center justify-between h-12 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary"
   >
@@ -33,7 +33,12 @@
             [showOnFocus]="false"
             class="!w-full"
             [(ngModel)]="ngayHieuLuc"
+            [required]="true"
+            #ngayHL="ngModel"
           />
+          <div *ngIf="ngayHL.errors && ngayHL.touched" class="text-red-500">
+            {{ getMessage(ngayHL.errors) }}
+          </div>
         </div>
         <div class="flex flex-col justify-center">
           <div class="mat-field-label">
@@ -45,16 +50,19 @@
             [options]="listLoaiQTCT"
             optionLabel="tenLoaiQtct"
             optionValue="id"
-            name="vtricdanh"
+            name="loaiQtct"
             appendTo="body"
             [filter]="true"
             filterBy="name"
             [(ngModel)]="qtct?.loaiQtct.id"
-            (onChange)="onChangeChucdanh()"
             [required]="true"
             placeholder="&nbsp;"
+            #loaiQtct="ngModel"
           >
           </p-dropdown>
+          <div *ngIf="loaiQtct.errors && loaiQtct.touched" class="text-red-500">
+            {{ getMessage(loaiQtct.errors) }}
+          </div>
         </div>
       </div>
     </div>
@@ -71,41 +79,53 @@
             [style]="{ width: '100%' }"
             optionLabel="departmentName"
             optionValue="id"
-            name="vtricdanh"
+            name="phongBan"
             appendTo="body"
             [filter]="true"
             filterBy="name"
             [options]="listPhongBan"
             [(ngModel)]="qtct.department.id"
-            (onChange)="onChangeChucdanh()"
             [required]="true"
             placeholder="&nbsp;"
+            #phongBan="ngModel"
           >
           </p-dropdown>
+          <div *ngIf="phongBan.errors && phongBan.touched" class="text-red-500">
+            {{ getMessage(phongBan.errors) }}
+          </div>
         </div>
 
         <div class="">
-          <div class="mat-field-label">Chức danh</div>
+          <div class="mat-field-label">
+            Chức danh<span class="font-bold text-red-500 text-lg">*</span>
+          </div>
           <p-dropdown
             panelStyleClass="max-w-full"
             [style]="{ width: '100%' }"
             [options]="listChucdanh"
             optionLabel="tenchucanh"
             optionValue="id"
-            name="vtricdanh"
+            name="chucDanh"
             appendTo="body"
             [filter]="true"
             filterBy="name"
             [(ngModel)]="qtct.chucdanh.id"
-            (onChange)="onChangeChucdanh()"
             [required]="true"
             placeholder="&nbsp;"
+            #chucDanh="ngModel"
           >
           </p-dropdown>
+          <div *ngIf="chucDanh.errors && chucDanh.touched" class="text-red-500">
+            {{ getMessage(chucDanh.errors) }}
+          </div>
         </div>
 
         <div class="">
-          <div class="mat-field-label">Thành phần nhân sự</div>
+          <div class="mat-field-label">
+            Thành phần nhân sự<span class="font-bold text-red-500 text-lg"
+              >*</span
+            >
+          </div>
           <p-dropdown
             panelStyleClass="max-w-full"
             [style]="{ width: '100%' }"
@@ -117,131 +137,169 @@
             [filter]="true"
             filterBy="name"
             [(ngModel)]="qtct.thanhphannhansu.id"
-            (onChange)="onChangeChucdanh()"
             [required]="true"
             placeholder="&nbsp;"
+            #tpNhanSu="ngModel"
           >
           </p-dropdown>
+          <div *ngIf="tpNhanSu.errors && tpNhanSu.touched" class="text-red-500">
+            {{ getMessage(tpNhanSu.errors) }}
+          </div>
         </div>
 
         <div class="">
-          <div class="mat-field-label">Cấp độ nhân sự</div>
+          <div class="mat-field-label">
+            Cấp độ nhân sự<span class="font-bold text-red-500 text-lg">*</span>
+          </div>
           <p-dropdown
             panelStyleClass="max-w-full"
             [style]="{ width: '100%' }"
             [options]="listCapDoNS"
             optionLabel="tenCapdonhansu"
             optionValue="id"
-            name="vtricdanh"
+            name="capDoNS"
             appendTo="body"
             [filter]="true"
             filterBy="name"
             [(ngModel)]="qtct.capdonhansu.id"
-            (onChange)="onChangeChucdanh()"
             [required]="true"
             placeholder="&nbsp;"
+            #capDoNS="ngModel"
           >
           </p-dropdown>
+          <div *ngIf="capDoNS.errors && capDoNS.touched" class="text-red-500">
+            {{ getMessage(capDoNS.errors) }}
+          </div>
         </div>
 
         <div class="">
-          <div class="mat-field-label">Pháp nhân</div>
+          <div class="mat-field-label">
+            Pháp nhân<span class="font-bold text-red-500 text-lg">*</span>
+          </div>
           <p-dropdown
             panelStyleClass="max-w-full"
             [style]="{ width: '100%' }"
             [options]="listPhapNhan"
             optionLabel="tenPhapNhan"
             optionValue="id"
-            name="vtricdanh"
+            name="phapNhan"
             appendTo="body"
             [filter]="true"
             filterBy="name"
             [(ngModel)]="qtct.phapnhan.id"
-            (onChange)="onChangeChucdanh()"
             [required]="true"
             placeholder="&nbsp;"
+            #phapNhan="ngModel"
           >
           </p-dropdown>
+          <div *ngIf="phapNhan.errors && phapNhan.touched" class="text-red-500">
+            {{ getMessage(phapNhan.errors) }}
+          </div>
         </div>
 
         <div class="">
-          <div class="mat-field-label">Dòng xe</div>
+          <div class="mat-field-label">
+            Dòng xe<span class="font-bold text-red-500 text-lg">*</span>
+          </div>
           <p-dropdown
             panelStyleClass="max-w-full"
             [style]="{ width: '100%' }"
             [options]="listDongXe"
             optionLabel="tendongxe"
             optionValue="id"
-            name="vtricdanh"
+            name="dongXe"
             appendTo="body"
             [filter]="true"
             filterBy="name"
             [(ngModel)]="qtct.dongxe.id"
-            (onChange)="onChangeChucdanh()"
             [required]="true"
             placeholder="&nbsp;"
+            #dongXe="ngModel"
           >
           </p-dropdown>
+          <div *ngIf="dongXe.errors && dongXe.touched" class="text-red-500">
+            {{ getMessage(dongXe.errors) }}
+          </div>
         </div>
 
         <div class="">
-          <div class="mat-field-label">Loại lao động</div>
+          <div class="mat-field-label">
+            Loại lao động<span class="font-bold text-red-500 text-lg">*</span>
+          </div>
           <p-dropdown
             panelStyleClass="max-w-full"
             [style]="{ width: '100%' }"
             [options]="listLoaiLaoDong"
             optionLabel="tenLoailaodong"
             optionValue="id"
-            name="vtricdanh"
+            name="loaiLd"
             appendTo="body"
             [filter]="true"
             filterBy="name"
             [(ngModel)]="qtct.loailaodong.id"
-            (onChange)="onChangeChucdanh()"
             [required]="true"
             placeholder="&nbsp;"
+            #loaiLd="ngModel"
           >
           </p-dropdown>
+          <div *ngIf="loaiLd.errors && loaiLd.touched" class="text-red-500">
+            {{ getMessage(loaiLd.errors) }}
+          </div>
         </div>
 
         <div class="">
-          <div class="mat-field-label">Nghiệp vụ</div>
+          <div class="mat-field-label">
+            Nghiệp vụ<span class="font-bold text-red-500 text-lg">*</span>
+          </div>
           <p-dropdown
             panelStyleClass="max-w-full"
             [style]="{ width: '100%' }"
             [options]="listNghiepVu"
             optionLabel="tenNghiepvu"
             optionValue="id"
-            name="vtricdanh"
+            name="nghiepVu"
             appendTo="body"
             [filter]="true"
             filterBy="name"
             [(ngModel)]="qtct.nghiepvu.id"
-            (onChange)="onChangeChucdanh()"
             [required]="true"
             placeholder="&nbsp;"
+            #nghiepVu="ngModel"
           >
           </p-dropdown>
+          <div *ngIf="nghiepVu.errors && nghiepVu.touched" class="text-red-500">
+            {{ getMessage(nghiepVu.errors) }}
+          </div>
         </div>
 
         <div class="">
-          <div class="mat-field-label">Văn phòng làm việc</div>
+          <div class="mat-field-label">
+            Văn phòng làm việc<span class="font-bold text-red-500 text-lg"
+              >*</span
+            >
+          </div>
           <p-dropdown
             panelStyleClass="max-w-full"
             [style]="{ width: '100%' }"
             [options]="listVPLamViec"
             optionLabel="tenVanphonglamviec"
             optionValue="id"
-            name="vtricdanh"
+            name="vpLamViec"
             appendTo="body"
             [filter]="true"
             filterBy="name"
             [(ngModel)]="qtct.vanphonglamviec.id"
-            (onChange)="onChangeChucdanh()"
             [required]="true"
             placeholder="&nbsp;"
+            #vpLamViec="ngModel"
           >
           </p-dropdown>
+          <div
+            *ngIf="vpLamViec.errors && vpLamViec.touched"
+            class="text-red-500"
+          >
+            {{ getMessage(vpLamViec.errors) }}
+          </div>
         </div>
 
         <div class="">

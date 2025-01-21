@@ -17,6 +17,14 @@ export class llnsURL extends BaseURL {
     return `${this.getOrigin()}/employee/create`;
   }
 
+  static getNSByOfficeId(id){
+    return `${this.getOrigin()}/employee/findByOfficeId/${id}`;
+  }
+
+  static searchNhanSu(keyword){
+    return `${this.getOrigin()}/employee/searchEmployee/${keyword}`;
+  }
+
   // nhan than
   static createNhanThanByEmpId(id) {
     return `${this.getOrigin()}/family/createByEmployeeId/${id}`;
@@ -67,5 +75,17 @@ export class llnsURL extends BaseURL {
   // dang doan
   static updateDangDoan(id) {
     return `${this.getOrigin()}/military/update/${id}`;
+  }
+
+
+  // region
+  static getDSThanhPho(){
+    return `${this.getOrigin()}/master/getAllThanhPho`;
+  }
+  static getDSQuanHuyen(){
+    return `${this.getOrigin()}/master/getAllQuanHuyen`;
+  }
+  static getDSPhuongXa(){
+    return `${this.getOrigin()}/master/getAllPhuongXa`;
   }
 }
