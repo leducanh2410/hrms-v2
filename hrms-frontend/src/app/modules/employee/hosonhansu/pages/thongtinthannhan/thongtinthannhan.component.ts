@@ -15,6 +15,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { THONG_TIN_CHUNG } from '../../model/thongtinchung';
 import { NhanThan } from '../../model/nhanthan';
+import { ExportUtil } from '../../../../../core/utilities/exportExcel';
 
 interface Person {
   fullName: string;
@@ -43,6 +44,7 @@ export class ThongtinthannhanComponent implements OnInit {
   //nhansu: any = {donviId: 115, nsId : 115000000000002};
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
+  private exportUtil: ExportUtil = new ExportUtil();
 
   constructor(
     private _matDialog: MatDialog,
@@ -65,6 +67,14 @@ export class ThongtinthannhanComponent implements OnInit {
           this.listThanNhan = res.data;
         });
     }
+  }
+
+  exportExcel() {
+    
+    this.exportUtil.exportExcel(
+      this.listThanNhan,
+      'Danh sách nhân thân_' + Date.now()
+    );
   }
 
   add(): void {

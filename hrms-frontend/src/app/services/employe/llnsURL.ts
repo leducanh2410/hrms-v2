@@ -25,6 +25,14 @@ export class llnsURL extends BaseURL {
     return `${this.getOrigin()}/employee/searchEmployee/${keyword}`;
   }
 
+  static deleteNhanSu(id){
+    return `${this.getOrigin()}/employee/delete/${id}`;
+  }
+
+  static uploadAnhNS(id){
+    return `${this.getOrigin()}/employee/uploadAvatar/${id}`;
+  }
+
   // nhan than
   static createNhanThanByEmpId(id) {
     return `${this.getOrigin()}/family/createByEmployeeId/${id}`;

@@ -23,6 +23,7 @@ import { DanhGia } from '../../model/danhgia';
 import { THONG_TIN_CHUNG } from '../../model/thongtinchung';
 import { DotDanhGia } from '../../model/dotdanhgia';
 import { DanhGiaURL } from '../../../../../services/employe/danhgiaURL';
+import { ExportUtil } from '../../../../../core/utilities/exportExcel';
 
 @Component({
   selector: 'app-khenthuongkyluat',
@@ -102,6 +103,54 @@ export class KhenthuongKyluatComponent implements OnInit {
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
 
+  private exportUtil: ExportUtil = new ExportUtil();
+
+  xepLoai = [
+    {
+      name: 'A+',
+      id: 0,
+    },
+    {
+      name: 'A',
+      id: 1,
+    },
+    {
+      name: 'B',
+      id: 2,
+    },
+    {
+      name: 'B-',
+      id: 3,
+    },
+    {
+      name: 'C',
+      id: 2,
+    },
+    {
+      name: 'D',
+      id: 3,
+    },
+  ];
+
+  capDoDanhGia = [
+    {
+      name: 'Giỏi',
+      id: 0,
+    },
+    {
+      name: 'Khá',
+      id: 1,
+    },
+    {
+      name: 'Trung bình',
+      id: 2,
+    },
+    {
+      name: 'Yếu',
+      id: 3,
+    },
+  ];
+
   constructor(
     private _matDialog: MatDialog,
     private http: CommonApiService,
@@ -179,5 +228,26 @@ export class KhenthuongKyluatComponent implements OnInit {
           });
       }
     });
+  }
+
+  exportExcel() {
+    const excelData = this.listDanhGia?.map((danhGia) => {
+      return {
+        'Đợt đánh giá': danhGia.dotDanhGia.tenDotDanhGia,
+        'Thời gian đánh giá': danhGia.thoiGianTuNgay + '-' + danhGia.thoiGianDenNgay,
+        'Thời hạn': danhGia.thoiHan,
+        'Nhận xét': danhGia.nhanXet,
+        'Cá nhân đánh giá': danhGia.caNhanDanhGia,
+        'Cá nhân xếp loại': danhGia.caNhanXepLoai,
+        'Điểm mạnh': danhGia.diemManh,
+        'Hạn chế': danhGia.hanChe,
+        'Cần cải thiện': danhGia.canCaiThien,
+        'Điểm': danhGia.diem,
+        'Xếp loại': this.xepLoai.find(c => c.id == danhGia.xepLoai).name,
+        'Kết quả tăng lương': this.capDoDanhGia.find(c => c.id == danhGia.ketQuaTangLuong).name,
+        'Kết quả thưởng': this.capDoDanhGia.find(c => c.id == danhGia.ketQuaThuong).name,
+      };
+    });
+    this.exportUtil.exportExcel(excelData, 'Danh sách đánh giá_' + Date.now());
   }
 }

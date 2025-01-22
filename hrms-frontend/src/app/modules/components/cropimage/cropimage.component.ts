@@ -55,7 +55,25 @@ export class CropimageComponent implements OnInit {
   transform: ImageTransform = {};
 
   imageCropped(event: ImageCroppedEvent) {
-    this.croppedImage = event.base64;
+    this.getBase64FromBlob(event.blob).then((base64) => {
+      this.croppedImage = base64;
+    });
+  }
+
+  getBase64FromBlob(blob: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        resolve(reader.result as string); // Kết quả Base64
+      };
+
+      reader.onerror = (error) => {
+        reject(error);
+      };
+
+      reader.readAsDataURL(blob); // Đọc Blob và chuyển thành Base64
+    });
   }
 
   imageLoaded() {

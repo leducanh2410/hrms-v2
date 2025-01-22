@@ -37,35 +37,23 @@ import { DividerModule } from 'primeng/divider';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormnhansuModule } from '../../../../assets/lib/formnhansu/src/public-api';
-import { FormnhansuDonviModule } from '../../../../assets/lib/formnhansu-donvi/src/public-api';
-import { QuillModule } from 'ngx-quill';
 import { MatButtonModule } from '@angular/material/button';
-import { KhenthuongKyluatComponent } from './pages/khenthuongkyluat/khenthuongkyluat.component';
-import { KhenthuongformComponent } from './pages/khenthuongkyluat/khenthuongform/khenthuongform.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { KhoitaohosonsComponent } from './thongtinchung/khoitaohoso/khoitaohosons/khoitaohosons.component';
 import { FileUploadModule } from 'primeng/fileupload';
 import { FormphongbanModule } from '../../../../assets/lib/formphongban/src/public-api';
 import { FormdanhmucchungModule } from '../../../../assets/lib/formdanhmucchung/src/public-api';
 import { FormquyetdinhModule } from '../../../../assets/lib/formquyetdinh/src/public-api';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { FormnnghecnktModule } from '../../../../assets/lib/formnnghecnkt/src/public-api';
-import { QtrlamviecComponent } from './pages/qtrlamviec/qtrlamviec.component';
 import { FileviewModule } from '../../components/fileview/fileview.module';
-import { LamviecComponent } from './pages/qtrlamviec/lamviec/lamviec.component';
-import { VN_DATE_FORMATS_EDIT } from '../../../core/config/vn-date-formats';
 import {
-  MAT_MOMENT_DATE_FORMATS,
   MatMomentDateModule,
 } from '@angular/material-moment-adapter';
-import { LamviecdialogComponent } from './pages/qtrlamviec/lamviec/lamviecDialog/lamviecdialog/lamviecdialog.component';
-import { XacnhanpopupComponent } from './pages/xacnhanpopup/xacnhanpopup.component';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import {
-  MatAutocomplete,
   MatAutocompleteModule,
 } from '@angular/material/autocomplete';
 

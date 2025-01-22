@@ -4,17 +4,14 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { CommonApiService } from '../../../../../../services/commonHttp';
+import { CommonApiService } from '../../../../services/commonHttp';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { HSNhansuURL } from '../../../../../../services/employe/hosonhansuURL';
-import { MessageService } from '../../../../../../shared/message.services';
-import { FormphongbanComponent } from '../../../../../../../assets/lib/formphongban/src/public-api';
-import { User } from '../../../../../../../assets/lib/formnhansu-donvi/src/lib/ngxstore/user.types';
+import { MessageService } from '../../../../shared/message.services';
+import { User } from '../../../../../assets/lib/formnhansu-donvi/src/lib/ngxstore/user.types';
 import { Store } from '@ngrx/store';
-import { API } from '../../../../../../core/config/app.config';
-import { APP_ACTION } from '../../../../../../ngxstore/actions/app.actions';
-import { AppState } from '../../../../../../ngxstore/state/app.state';
-import { FormnnghecnktComponent } from '../../../../../../../assets/lib/formnnghecnkt/src/public-api';
+import { API } from '../../../../core/config/app.config';
+import { APP_ACTION } from '../../../../ngxstore/actions/app.actions';
+import { AppState } from '../../../../ngxstore/state/app.state';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -25,7 +22,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { MatInputModule } from '@angular/material/input';
 import { CalendarModule } from 'primeng/calendar';
 import { InputTextModule } from 'primeng/inputtext';
-import { llnsURL } from '../../../../../../services/employe/llnsURL';
+import { llnsURL } from '../../../../services/employe/llnsURL';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -300,7 +297,6 @@ export class KhoitaohosonsComponent implements OnInit {
       .post(llnsURL.createNhanSu(), this.formData)
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((res) => {
-        this.onNavigatorHsns(res?.data);
         this.onClose();
       });
   }

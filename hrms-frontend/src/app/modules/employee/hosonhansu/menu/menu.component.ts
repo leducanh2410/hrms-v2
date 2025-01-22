@@ -43,7 +43,6 @@ export class MenuComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.sub = this.route.data.subscribe((data) => {
       if (data['type'] == 'khoitao') {
-        this.ttchung.khoitaohoso();
       } else if (data['type'] == 'capnhat') {
         this.ttchung.onChonNhansu();
       }

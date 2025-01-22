@@ -11,7 +11,6 @@ import { FormnhansuDonviComponent } from '../../../../../assets/lib/formnhansu-d
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ShareData } from '../../../../shared/shareservice.service';
 import { NHAN_SU } from '../../../../shared/appkeymessages';
-import { KhoitaohosonsComponent } from './khoitaohoso/khoitaohosons/khoitaohosons.component';
 import { MessageService } from '../../../../shared/message.services';
 import { Buttons } from '../../../../fuse/components/message-box/common';
 import { MessageBox } from '../../../../fuse/components/message-box/message-box.provider';
@@ -27,6 +26,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { ImageviewComponent } from '../../../components/imageview/imageview.component';
 import { HopDong } from '../model/hopdong';
 import { QtrinhlamviecBean } from '../model/qtrinhlamviec';
+import { llnsURL } from '../../../../services/employe/llnsURL';
 
 @Component({
   selector: 'app-thongtinchung',
@@ -187,42 +187,6 @@ export class ThongtinchungComponent implements OnInit, OnDestroy {
     this.shareData.sendMessage(NHAN_SU.TOGGLE_MENU, this.isHienthiMenu);
   }
 
-  async khoitaohoso() {
-    let is_close = await this.checkUpdatePage();
-    if (is_close != null && is_close) {
-      const dialogRef = this._matDialog.open(KhoitaohosonsComponent, {
-        width: '900px',
-        disableClose: true,
-        data: {
-          donvi: this.user_info?.tendonvi,
-          donviKyhdld: this.user_info?.tendonvi,
-          donviId: this.user_info?.iddonvi,
-        },
-      });
-      dialogRef.afterClosed().subscribe((result) => {
-        if (result && result.id) {
-         
-        }
-      });
-    }
-  }
-
-  async suathongtin() {
-    let is_close = await this.checkUpdatePage();
-    if (is_close != null && is_close) {
-      const dialogRef = this._matDialog.open(KhoitaohosonsComponent, {
-        width: '900px',
-        disableClose: true,
-        data: this.nsInfo,
-      });
-      dialogRef.afterClosed().subscribe((result) => {
-        if (result && result.id) {
-          
-        }
-      });
-    }
-  }
-
   async xoahoso() {
     let is_close = await this.checkUpdatePage();
     if (is_close != null && is_close) {
@@ -230,53 +194,50 @@ export class ThongtinchungComponent implements OnInit, OnDestroy {
         `Bạn có chắc chắn muốn xóa không?`,
         Buttons.YesNo
       );
-      dialog.dialogResult$.subscribe((result) => {
-       
-      });
+      dialog.dialogResult$.subscribe((result) => {});
     }
   }
-
 
   myUploader(event, fileForm) {
     this.uploadedFiles.push(event);
     this._fileForm = fileForm;
+    console.log(this._fileForm);
+
     let file =
       this.uploadedFiles[this.uploadedFiles.length - 1].currentFiles[0];
-    console.log(file);
 
     const dialogRef = this._matDialog.open(CropimageComponent, {
       width: '900px',
       data: file,
     });
 
-    // dialogRef.afterClosed().subscribe((result: string) => {
-    //   if (result) {
-    //     this.nsInfo.fileAttach = {
-    //       fileName: file.name,
-    //       fileContent: result,
-    //     };
-    //     let anhCu = this.nsInfo.anhNs;
-    //     this.nsInfo.anhNs = null;
-    //     this.http
-    //       .post(HSNhansuURL.saveAnhNs(), this.nsInfo)
-    //       .pipe(takeUntil(this._unsubscribeAll))
-    //       .subscribe((res: any) => {
-    //         if (!res || !res.state) {
-    //           this.messageService.showErrorMessage(
-    //             'Hệ thống',
-    //             'Cập nhật thông tin không thành công'
-    //           );
-    //           this.nsInfo.anhNs = anhCu;
-    //           return;
-    //         }
-    //         this.messageService.showSuccessMessage(
-    //           'Hệ thống',
-    //           'Cập nhật thông tin thành công'
-    //         );
-    //         this.nsInfo.anhNs = result;
-    //       });
-    //   }
-    // });
+    dialogRef.afterClosed().subscribe((result: string) => {
+      if (result) {
+        const file = new File([result], 'avatar.png', { type: 'image/png' });
+        const formData = new FormData();
+        formData.append('avatar', file);
+        let anhCu = this.nsInfo.avatar;
+        this.nsInfo.avatar = null;
+        this.http
+          .put(llnsURL.uploadAnhNS(this.nsInfo.id), formData)
+          .pipe(takeUntil(this._unsubscribeAll))
+          .subscribe((res: any) => {
+            if (!res || !res.state) {
+              this.messageService.showErrorMessage(
+                'Hệ thống',
+                'Cập nhật thông tin không thành công'
+              );
+              this.nsInfo.avatar = anhCu;
+              return;
+            }
+            this.messageService.showSuccessMessage(
+              'Hệ thống',
+              'Cập nhật thông tin thành công'
+            );
+            this.nsInfo.avatar = result;
+          });
+      }
+    });
     fileForm.clear();
     //
   }

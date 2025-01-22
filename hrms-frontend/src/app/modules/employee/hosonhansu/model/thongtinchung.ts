@@ -13,6 +13,7 @@ export class THONG_TIN_CHUNG {
   id: number; // int, không null
   employeeName: string; // varchar(255)
   employeeCode: string; // varchar(255)
+  avatar: string;
   birthday: string; // string
   gender: number; // int
   cccdNumber: string; // varchar(255)
@@ -39,11 +40,13 @@ export class THONG_TIN_CHUNG {
   families: NhanThan[];
   dangDoan: DangDoan;
   trangThai: boolean;
+  deleteFg: boolean;
 
   constructor(
     id: number = 0,
     employeeName: string = '',
     employeeCode: string = '',
+    avatar : string = '',
     birthday: string = '',
     gender: number = 0,
     cccdNumber: string = '',
@@ -69,11 +72,13 @@ export class THONG_TIN_CHUNG {
     trinhDoTinHoc: TrinhDoTinHoc[] = [],
     families: NhanThan[] = [],
     dangDoan: DangDoan = new DangDoan(),
-    trangThai: boolean = false
+    trangThai: boolean = false,
+    deleteFg: boolean = false
   ) {
     this.id = id;
     this.employeeName = employeeName;
     this.employeeCode = employeeCode;
+    this.avatar = avatar;
     this.birthday = birthday;
     this.gender = gender;
     this.cccdNumber = cccdNumber;
@@ -100,5 +105,6 @@ export class THONG_TIN_CHUNG {
     this.families = families;
     this.dangDoan = dangDoan;
     this.trangThai = trangThai;
+    this.deleteFg = deleteFg
   }
 }

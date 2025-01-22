@@ -25,6 +25,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NumberFormatPipe } from '../../../../../shared/formatNumber';
 import { Luong } from '../../model/luong';
+import { ExportUtil } from '../../../../../core/utilities/exportExcel';
 
 @Component({
   selector: 'app-qtrluong',
@@ -44,6 +45,7 @@ export class QtrluongComponent implements OnInit, OnChanges {
   listLuong: Luong[] = [];
   dataPhucap: any[];
   model: THONG_TIN_CHUNG;
+  private exportUtil: ExportUtil = new ExportUtil();
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
@@ -80,7 +82,7 @@ export class QtrluongComponent implements OnInit, OnChanges {
       disableClose: true,
       data: {
         nsID: this.nsInfo?.id,
-        addNew: true
+        addNew: true,
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
@@ -128,5 +130,18 @@ export class QtrluongComponent implements OnInit, OnChanges {
           });
       }
     });
+  }
+
+  exportExcel() {
+    const excelData = this.listLuong?.map((luong) => {
+      return {
+        'Ngày hiệu lực': luong.ngayHieuLuc,
+        'Lương thu nhập': luong.luongThuNhap,
+        'Thâm niên': luong.thamNien,
+        'Kiêm nhiệm': luong.kiemNhiem,
+        'Trạng thái': luong.trangThai ? 'Duyệt' : 'Chưa duyệt',
+      };
+    });
+    this.exportUtil.exportExcel(excelData, 'Danh sách lương_' + Date.now());
   }
 }

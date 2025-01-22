@@ -41,6 +41,10 @@ import { FormdonviTreeComponent } from '../../../../assets/lib/formdonvi-tree/sr
 import { THONG_TIN_CHUNG } from '../hosonhansu/model/thongtinchung';
 import { QtrinhlamviecBean } from '../hosonhansu/model/qtrinhlamviec';
 import { MatIconModule } from '@angular/material/icon';
+import { Buttons } from '../../../fuse/components/message-box/common';
+import { KhoitaohosonsComponent } from './khoitaohoso/khoitaohosons.component';
+import { ExportUtil } from '../../../core/utilities/exportExcel';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-dsnhansu',
@@ -64,6 +68,7 @@ import { MatIconModule } from '@angular/material/icon';
     NgxExtendedPdfViewerModule,
     StoreModule,
     MatIconModule,
+    InputTextModule,
   ],
   providers: [],
 })
@@ -71,6 +76,7 @@ export class DsnhansuComponent implements OnInit, OnDestroy {
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   private user!: User;
   keySearch: string = '';
+  private exportUtil: ExportUtil = new ExportUtil();
 
   //
   public donvis: any[] = [];
@@ -163,6 +169,74 @@ export class DsnhansuComponent implements OnInit, OnDestroy {
     }
 
     return rowData[field];
+  }
+
+  exportExcel() {
+    const excelData = this.listNhansu?.map((ns) => {
+      return {
+        Tên: ns.employeeName,
+        'Mã nhân viên': ns.employeeCode,
+        'Ngày sinh': ns.birthday,
+        'Giới tính': ns.gender === 1 ? 'Nam' : 'Nữ',
+        'Số cccd': ns.cccdNumber,
+        'Nơi cấp': ns.cccdNoicap,
+        'Ngày cấp': ns.cccdNgaycap,
+        'Tình trạng hôn nhân': ns.marriageStatus,
+        'Nơi sinh': ns.noiSinh,
+        'Quê quán': ns.queQuan,
+        'Quốc tịch': ns.nationality,
+        'Dân tộc': ns.ethnic,
+        'Mã số thuế': ns.maSoThue,
+        'Ngày vào làm': ns.ngayVaoLam,
+        'Tôn giáo': ns.tongiao,
+        'Trạng thái': ns.deleteFg ? 'Đã nghỉ việc' : 'Đang làm việc',
+      };
+    });
+    this.exportUtil.exportExcel(
+      excelData,
+      'Danh sách nhân sự_' + Date.now()
+    );
+  }
+
+  async khoitaohoso() {
+    const dialogRef = this._matDialog.open(KhoitaohosonsComponent, {
+      width: '900px',
+      disableClose: true,
+      data: {},
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result && result.id) {
+        this.fetchListNhansu();
+      }
+    });
+  }
+
+  deleteNhanSu(id) {
+    let dialog = this.mb.showDefault(
+      'Bạn có chắc chắn muốn muốn xóa thông tin không?',
+      Buttons.YesNo
+    );
+    dialog.dialogResult$.subscribe(async (result) => {
+      if (result) {
+        this.http
+          .delete(llnsURL.deleteNhanSu(id))
+          .pipe(takeUntil(this._unsubscribeAll))
+          .subscribe((res: any) => {
+            if (res.state == 200) {
+              this.messageService.showSuccessMessage(
+                'Hệ thống',
+                'Xóa thành công'
+              );
+              this.fetchListNhansu();
+              return;
+            }
+            this.messageService.showErrorMessage(
+              'Hệ thống',
+              'Xóa thông tin không thành công'
+            );
+          });
+      }
+    });
   }
 
   fetchListNhansu() {

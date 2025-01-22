@@ -12,6 +12,7 @@
             color="primary"
             class="mx-1"
             mat-flat-button
+            (click)="exportExcel()"
           >
             <i class="fa-regular fa-file-excel" matTooltip="Xuất excel"></i>
           </button>
@@ -56,7 +57,7 @@
                 <th style="width: 8%" class="text-black border font-bold">Vùng miền</th>
                 <th style="width: 8%" class="text-black border font-bold">Đắt đỏ</th> -->
             <th style="width: 8%" class="text-black border font-bold">
-              Phụ cấp
+              Kiêm nhiệm
             </th>
             <th style="width: 8%" class="text-black border font-bold">
               Ngày cập nhật
@@ -91,7 +92,7 @@
                 </td>
                 <td class="border">{{ luong.vungMien | currency : "VND" }}</td>
                 <td class="border">{{ luong.datDo | currency : "VND" }}</td> -->
-            <td class="border">{{ luong.phuCap | currency : "VND" }}</td>
+            <td class="border">{{ luong.kiemNhiem | currency : "VND" }}</td>
             <td class="border">
               {{ luong.updatedAt | date : "dd/MM/yyyy" }}
             </td>

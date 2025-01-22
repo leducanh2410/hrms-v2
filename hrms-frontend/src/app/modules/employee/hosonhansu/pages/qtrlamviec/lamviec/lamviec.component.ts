@@ -23,6 +23,7 @@ import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { QtrinhlamviecBean } from '../../../model/qtrinhlamviec';
 import { llnsURL } from '../../../../../../services/employe/llnsURL';
+import { ExportUtil } from '../../../../../../core/utilities/exportExcel';
 
 @Component({
   selector: 'app-lamviec',
@@ -34,6 +35,7 @@ export class LamviecComponent implements OnInit, OnChanges {
   @Input('nsInfo') nsInfo: THONG_TIN_CHUNG;
 
   listQuaTrinhLamViec: QtrinhlamviecBean[];
+  private exportUtil: ExportUtil = new ExportUtil();
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
@@ -56,6 +58,31 @@ export class LamviecComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.loadData();
+  }
+
+  exportExcel() {
+    const excelData = this.listQuaTrinhLamViec.map((qtr) => {
+      return {
+        'Ngày hiệu lực': qtr.ngayHieuLuc,
+        'Ngày quyết định': qtr.ngayQuyetDinh,
+        'Loại qtct': qtr.loaiQtct.tenLoaiQtct,
+        'Phòng ban': qtr.department.departmentName,
+        'Chức danh': qtr.chucdanh.tenchucanh,
+        'Thành phần nhân sự': qtr.thanhphannhansu.tenThanhphannhansu,
+        'Cấp độ nhân sự': qtr.capdonhansu.tenCapdonhansu,
+        'Dòng xe': qtr.dongxe.tendongxe,
+        'Loại lao động': qtr.loailaodong.tenLoailaodong,
+        'Nghiệp vụ': qtr.nghiepvu.tenNghiepvu,
+        'Pháp nhân': qtr.phapnhan.tenPhapNhan,
+        'Văn phòng làm việc': qtr.vanphonglamviec.tenVanphonglamviec,
+        'Ghi chú': qtr.ghiChu,
+      };
+    });
+
+    this.exportUtil.exportExcel(
+      excelData,
+      'Danh sách quá trình làm việc_' + Date.now()
+    );
   }
 
   loadData(): void {
