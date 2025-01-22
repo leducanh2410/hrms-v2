@@ -213,7 +213,9 @@ export class ThongtinchungComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((result: string) => {
       if (result) {
-        const file = new File([result], 'avatar.png', { type: 'image/png' });
+        const file = new File([result], `${this.nsInfo.employeeCode}.png`, {
+          type: 'image/png',
+        });
         const formData = new FormData();
         formData.append('avatar', file);
         let anhCu = this.nsInfo.avatar;
@@ -234,7 +236,7 @@ export class ThongtinchungComponent implements OnInit, OnDestroy {
               'Hệ thống',
               'Cập nhật thông tin thành công'
             );
-            this.nsInfo.avatar = result;
+            this.nsInfo = res.data
           });
       }
     });

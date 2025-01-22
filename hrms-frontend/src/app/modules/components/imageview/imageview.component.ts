@@ -25,7 +25,7 @@ export class ImageviewComponent implements OnInit, OnChanges {
 
   ngOnChanges(): void {
     if (this.imageSource) {
-      this.imageSrc = 'http://localhost:8080/api/v1' + this.imageSource;
+      this.imageSrc = 'http://localhost:8080/api/v1/' + this.imageSource;
       // if (this.type.toUpperCase() === 'URL') {
       //   this.imageSrc = this.imageSource;
       // } else if (this.type.toUpperCase() === 'BASE64') {

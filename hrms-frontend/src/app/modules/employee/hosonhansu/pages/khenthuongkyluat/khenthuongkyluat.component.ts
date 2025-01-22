@@ -169,7 +169,9 @@ export class KhenthuongKyluatComponent implements OnInit {
       .get(DanhGiaURL.getDanhGiaByEmpId(this.nhansu.id))
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((res: any) => {
-        if (res.state == 200) this.listDanhGia = res.data;
+        if (res.state == 200) {
+          this.listDanhGia = res.data;
+        }
       });
   }
 
@@ -234,7 +236,8 @@ export class KhenthuongKyluatComponent implements OnInit {
     const excelData = this.listDanhGia?.map((danhGia) => {
       return {
         'Đợt đánh giá': danhGia.dotDanhGia.tenDotDanhGia,
-        'Thời gian đánh giá': danhGia.thoiGianTuNgay + '-' + danhGia.thoiGianDenNgay,
+        'Thời gian đánh giá':
+          danhGia.thoiGianTuNgay + '-' + danhGia.thoiGianDenNgay,
         'Thời hạn': danhGia.thoiHan,
         'Nhận xét': danhGia.nhanXet,
         'Cá nhân đánh giá': danhGia.caNhanDanhGia,
@@ -242,10 +245,14 @@ export class KhenthuongKyluatComponent implements OnInit {
         'Điểm mạnh': danhGia.diemManh,
         'Hạn chế': danhGia.hanChe,
         'Cần cải thiện': danhGia.canCaiThien,
-        'Điểm': danhGia.diem,
-        'Xếp loại': this.xepLoai.find(c => c.id == danhGia.xepLoai).name,
-        'Kết quả tăng lương': this.capDoDanhGia.find(c => c.id == danhGia.ketQuaTangLuong).name,
-        'Kết quả thưởng': this.capDoDanhGia.find(c => c.id == danhGia.ketQuaThuong).name,
+        Điểm: danhGia.diem,
+        'Xếp loại': this.xepLoai.find((c) => c.id == danhGia.xepLoai).name,
+        'Kết quả tăng lương': this.capDoDanhGia.find(
+          (c) => c.id == danhGia.ketQuaTangLuong
+        ).name,
+        'Kết quả thưởng': this.capDoDanhGia.find(
+          (c) => c.id == danhGia.ketQuaThuong
+        ).name,
       };
     });
     this.exportUtil.exportExcel(excelData, 'Danh sách đánh giá_' + Date.now());
